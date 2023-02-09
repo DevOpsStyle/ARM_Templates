@@ -1,0 +1,105 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+           "location": {
+               "type": "string"
+            },
+           "networkInterfaceName": {
+            "type": "string"
+            },
+            "enableAcceleratedNetworking": {
+                "type": "bool"
+            },
+            "subnetName": {
+                "type": "string"
+            },
+            "virtualNetworkId": {
+                "type": "string"
+            },
+            "virtualMachineName": {
+                "type": "string"
+            },
+            "virtualMachineComputerName": {
+                "type": "string"
+            },
+            "virtualMachineRG": {
+                "type": "string"
+            },
+            "osDiskType": {
+                "type": "string"
+            },
+            "osDiskDeleteOption": {
+                "type": "string"
+            },
+            "virtualMachineSize": {
+                "type": "string"
+            },
+            "nicDeleteOption": {
+                "type": "string"
+            },
+            "adminUsername": {
+                "type": "string"
+            },
+            "adminPassword": {
+                "type": "secureString"
+            },
+            "patchMode": {
+                "type": "string"
+            },
+            "enableHotpatching": {
+                "type": "bool"
+            },
+           "vmList": {
+               "type": "string"
+           },
+           "domainJoinUserName": {
+               "value": "string"
+           },
+           "domainJoinUserPassword": {
+               "value": "secureString"
+           },
+           "domainFQDN": {
+               "value": "string"
+           }
+    },
+    "variables": {
+        "linked-template": "https://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/main/createvm.json",
+        "linked-template-two": "https://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/main/adjoin.json"
+    },
+    "resources": [
+        {
+            "name": "virtualmachine",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('linked-template')]",
+                    "contentVersion": "1.0.0.0"
+                }
+            }
+        },
+        {
+            "name": "identity",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','virtualmachine')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('linked-template-two')]",
+                    "contentVersion": "1.0.0.0"
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "adminUsername": {
+            "type": "string",
+            "value": "[parameters('adminUsername')]"
+        }
+    }
+}
