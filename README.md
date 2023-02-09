@@ -33,3 +33,15 @@ This template can be used for the deployment of different Azure VMs and join the
 | Domain Join User Password | Password of the Account used for the Domain Join | \\ |
 | Domain FQDN | full FQDN of the domain | Example: Contoso.com |
 | OU Path | Specific the OU were the VM will be placed | Example: OU=newvm,DC=contoso,DC=com |
+
+<h3> Deployment and Result </h3>
+
+The Deployment consist in 2 slot:
+- Create VM
+- Join VM to the AD Domain
+
+![alt text](https://ibb.co/rfrHYhY)
+
+After the deploy the IT Administrator can found the Computer Object in the specified OU:
+
+![alt text](https://ibb.co/v38fkMx)
