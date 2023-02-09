@@ -27,10 +27,6 @@
                 "type": "string",
                 "defaultValue": "NewVM"
             },
-            "virtualMachineComputerName": {
-                "type": "string",
-                "defaultValue": "NewVM"
-            },
             "virtualMachineRG": {
                 "type": "string",
                 "metadata": {
@@ -103,8 +99,9 @@
             },
             "enableHotpatching": {
                 "type": "bool",
+                "defaultValue": false,
                 "metadata": {
-                    "description": "HotPatching only available for certains OS System."
+                    "description": "HotPatching only available for certains OS System. We suggest to set this vaule to false"
                 }
             }
     },
@@ -173,7 +170,7 @@
                     ]
                 },
                 "osProfile": {
-                    "computerName": "[parameters('virtualMachineComputerName')]",
+                    "computerName": "[parameters('virtualMachineName')]",
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]",
                     "windowsConfiguration": {

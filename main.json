@@ -27,10 +27,6 @@
                 "type": "string",
                 "defaultValue": "NewVM"
             },
-            "virtualMachineComputerName": {
-                "type": "string",
-                "defaultValue": "NewVM"
-            },
             "virtualMachineRG": {
                 "type": "string",
                 "metadata": {
@@ -103,8 +99,9 @@
             },
             "enableHotpatching": {
                 "type": "bool",
+                "defaultValue": false,
                 "metadata": {
-                    "description": "HotPatching only available for certains OS System."
+                    "description": "HotPatching only available for certains OS System. We suggest to set this vaule to false"
                 }
             },
            "domainJoinUserName": {
@@ -150,7 +147,6 @@
                     "subnetName": {"value": "[parameters('subnetName')]"},
                     "virtualNetworkId": {"value": "[parameters('virtualNetworkId')]"},
                     "virtualMachineName": {"value": "[parameters('virtualMachineName')]"},
-                    "virtualMachineComputerName": {"value": "[parameters('virtualMachineComputerName')]"},
                     "virtualMachineRG": {"value": "[parameters('virtualMachineRG')]"},
                     "osDiskType": {"value": "[parameters('osDiskType')]"},
                     "osDiskDeleteOption": {"value": "[parameters('osDiskDeleteOption')]"},
