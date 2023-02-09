@@ -9,7 +9,7 @@ This template can be used for the deployment of different Azure VMs and join the
 <h3>Required Parameters</h3>
 
 | **Parameters** | **Information** | **Note** |
-| ------------- | ------------- |
+| ------------- | ------------- | ------------- |
 | Region  | Based on RG  | If the RG was already created will be shown the location of the RG |
 | Network Interface Name | The name to assign to the new NIC | The name need to be available |
 | Enable Accelerated Networking | Feature that increase the performance of the Network Interface | Available only for certains SKU |
