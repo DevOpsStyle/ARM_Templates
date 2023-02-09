@@ -1,74 +1,6 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {
-           "location": {
-               "type": "string"
-            },
-           "networkInterfaceName": {
-                "type": "string"
-            },
-            "enableAcceleratedNetworking": {
-                "type": "bool"
-            },
-            "subnetName": {
-                "type": "string"
-            },
-            "virtualNetworkId": {
-                "type": "string"
-            },
-            "virtualMachineName": {
-                "type": "string"
-            },
-            "virtualMachineComputerName": {
-                "type": "string"
-            },
-            "virtualMachineRG": {
-                "type": "string"
-            },
-            "osDiskType": {
-                "type": "string"
-            },
-            "osDiskDeleteOption": {
-                "type": "string"
-            },
-            "virtualMachineSize": {
-                "type": "string"
-            },
-            "nicDeleteOption": {
-                "type": "string"
-            },
-            "adminUsername": {
-                "type": "string"
-            },
-            "adminPassword": {
-                "type": "secureString"
-            },
-            "patchMode": {
-                "type": "string"
-            },
-            "enableAutomaticUpdates": {
-            "type": "bool",
-            "metadata": {
-                "description": "If Patch Mode is Manual set this value to false"
-                }
-            },
-            "enableHotpatching": {
-                "type": "bool"
-            },
-           "domainJoinUserName": {
-               "type": "string"
-           },
-           "domainJoinUserPassword": {
-               "type": "secureString"
-           },
-           "domainFQDN": {
-               "type": "string"
-           },
-           "ouPath": {
-                "type": "string"
-           }
-    },
     "variables": {
         "linked-template": "https://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/main/createvm.json",
         "linked-template-two": "https://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/main/adjoin.json"
@@ -83,25 +15,6 @@
                 "templateLink": {
                     "uri": "[variables('linked-template')]",
                     "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "location": {"value": "[parameters('location')]"},
-                    "networkInterfaceName": {"value": "[parameters('networkInterfaceName')]"},
-                    "enableAcceleratedNetworking": {"value": "[parameters('enableAcceleratedNetworking')]"},
-                    "subnetName": {"value": "[parameters('subnetName')]"},
-                    "virtualNetworkId": {"value": "[parameters('virtualNetworkId')]"},
-                    "virtualMachineName": {"value": "[parameters('virtualMachineName')]"},
-                    "virtualMachineComputerName": {"value": "[parameters('virtualMachineComputerName')]"},
-                    "virtualMachineRG": {"value": "[parameters('virtualMachineRG')]"},
-                    "osDiskType": {"value": "[parameters('osDiskType')]"},
-                    "osDiskDeleteOption": {"value": "[parameters('osDiskDeleteOption')]"},
-                    "virtualMachineSize": {"value": "[parameters('virtualMachineSize')]"},
-                    "nicDeleteOption": {"value": "[parameters('nicDeleteOption')]"},
-                    "adminUsername": {"value": "[parameters('adminUsername')]"},
-                    "adminPassword": {"value": "[parameters('adminPassword')]"},
-                    "patchMode": {"value": "[parameters('patchMode')]"},
-                    "enableAutomaticUpdates": {"value": "[parameters('enableAutomaticUpdates')]"},
-                    "enableHotpatching": {"value": "[parameters('enableHotpatching')]"}
                 }
             }
         },
@@ -117,22 +30,8 @@
                 "templateLink": {
                     "uri": "[variables('linked-template-two')]",
                     "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "location": {"value": "[parameters('location')]"},
-                    "virtualMachineName": {"value": "[parameters('virtualMachineName')]"},
-                    "domainJoinUserName": {"value": "[parameters('domainJoinUserName')]"},
-                    "domainJoinUserPassword": {"value": "[parameters('domainJoinUserPassword')]"},
-                    "domainFQDN": {"value": "[parameters('domainFQDN')]"},
-                    "ouPath": {"value": "[parameters('ouPath')]"}
                 }
             }
         }
-    ],
-    "outputs": {
-        "adminUsername": {
-            "type": "string",
-            "value": "[parameters('adminUsername')]"
-        }
-    }
+    ]
 }
