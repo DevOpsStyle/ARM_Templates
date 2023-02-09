@@ -50,9 +50,6 @@
             "enableHotpatching": {
                 "type": "bool"
             },
-           "vmList": {
-               "type": "string"
-           },
            "domainJoinUserName": {
                "type": "string"
            },
@@ -116,7 +113,7 @@
                 },
                 "parameters": {
                     "location": {"value": "[parameters('location')]"},
-                    "vmList": {"value": "[parameters('vmList')]"},
+                    "virtualMachineName": {"value": "[parameters('virtualMachineName')]"},
                     "domainJoinUserName": {"value": "[parameters('domainJoinUserName')]"},
                     "domainJoinUserPassword": {"value": "[parameters('domainJoinUserPassword')]"},
                     "domainFQDN": {"value": "[parameters('domainFQDN')]"},
