@@ -3,59 +3,92 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
-            "type": "string"
-        },
-        "networkInterfaceName": {
-            "type": "string"
-        },
-        "enableAcceleratedNetworking": {
-            "type": "bool"
-        },
-        "subnetName": {
-            "type": "string"
-        },
-        "virtualNetworkId": {
-            "type": "string"
-        },
-        "virtualMachineName": {
-            "type": "string"
-        },
-        "virtualMachineComputerName": {
-            "type": "string"
-        },
-        "virtualMachineRG": {
-            "type": "string"
-        },
-        "osDiskType": {
-            "type": "string"
-        },
-        "osDiskDeleteOption": {
-            "type": "string"
-        },
-        "virtualMachineSize": {
-            "type": "string"
-        },
-        "nicDeleteOption": {
-            "type": "string"
-        },
-        "adminUsername": {
-            "type": "string"
-        },
-        "adminPassword": {
-            "type": "secureString"
-        },
-        "patchMode": {
-            "type": "string"
-        },
-        "enableAutomaticUpdates": {
+               "type": "string"
+            },
+           "networkInterfaceName": {
+                "type": "string"
+            },
+            "enableAcceleratedNetworking": {
+                "type": "bool"
+            },
+            "subnetName": {
+                "type": "string"
+            },
+            "virtualNetworkId": {
+                "type": "string",
+                "metadata": {
+                    "description": "Insert the full path of the Virtual Network ID. Example: /subscriptions/5518a56e-5192-4c31-9c52-9acd05a5045e/resourceGroups/management-rg/providers/Microsoft.Network/virtualNetworks/Prd-network"
+                }
+            },
+            "virtualMachineName": {
+                "type": "string",
+                "defaultValue": "NewVM"
+            },
+            "virtualMachineComputerName": {
+                "type": "string",
+                "defaultValue": "NewVM"
+            },
+            "virtualMachineRG": {
+                "type": "string",
+                "metadata": {
+                    "description": "Insert the name of the RG where the VM have to be deployed"
+                }
+            },
+            "osDiskType": {
+                "type": "string",
+                "defaultValue": "StandardSSD_LRS",
+                "allowedValues": [
+                    "Standard_LRS",
+                    "Premium_LRS",
+                    "StandardSSD_LRS",
+                    "UltraSSD_LRS",
+                    "Premium_ZRS",
+                    "StandardSSD_ZRS",
+                    "PremiumV2_LRS"
+                ]
+            },
+            "osDiskDeleteOption": {
+                "type": "string",
+                "defaultValue": "Delete",
+                "metadata": {
+                    "description": "Delete option will delete the Disk when the resource will be deleted"
+                }
+            },
+            "virtualMachineSize": {
+                "type": "string",
+                "defaultValue": "Standard_D2ads_v5"
+            },
+            "nicDeleteOption": {
+                "type": "string",
+                "defaultValue": "Delete",
+                "metadata": {
+                    "description": "Delete option will delete the NIC when the resource will be deleted"
+                }
+            },
+            "adminUsername": {
+                "type": "string"
+            },
+            "adminPassword": {
+                "type": "secureString"
+            },
+            "patchMode": {
+                "type": "string",
+                "defaultValue": "Manual",
+                "allowedValues": [
+                    "Manual",
+                    "AutomaticByOS",
+                    "AutomaticByPlatform"
+                ]
+            },
+            "enableAutomaticUpdates": {
             "type": "bool",
             "metadata": {
                 "description": "If Patch Mode is Manual set this value to false"
+                }
+            },
+            "enableHotpatching": {
+                "type": "bool"
             }
-        },
-        "enableHotpatching": {
-            "type": "bool"
-        }
     },
     "variables": {
         "vnetId": "[parameters('virtualNetworkId')]",

@@ -17,28 +17,24 @@
       "defaultValue": "[resourceGroup().location]"
     },
     "domainJoinUserName": {
-      "type": "string",
-      "metadata": {
-        "description": "Domain NetBiosName plus User name of a domain user with sufficient rights to perfom domain join operation. E.g. domain\\username"
-      }
+               "type": "string"
     },
     "domainJoinUserPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Domain user password"
-      }
+        "type": "secureString"
     },
     "domainFQDN": {
-      "type": "string",
-      "metadata": {
-        "description": "Domain FQDN where the virtual machine will be joined"
-      }
+        "type": "string",
+        "defaultValue": "contoso.com",
+         "metadata": {
+             "description": "During the VM creation the domain need to be available to the NIC. Therefore deploy the VM in a Vnet with connectivity to your domain"
+         }
     },
     "ouPath": {
-      "type": "string",
-      "metadata": {
-        "description": "Specifies an organizational unit (OU) for the domain account. Enter the full distinguished name of the OU in quotation marks. Example: \"OU=testOU; DC=domain; DC=Domain; DC=com\""
-      }
+         "type": "string",
+         "defaultValue": "OU=newvm,DC=contoso,DC=com",
+         "metadata": {
+             "description": "Provide the OU where the VM will be joined"
+         }
     }
   },
   "variables": {
