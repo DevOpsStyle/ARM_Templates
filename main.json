@@ -61,6 +61,9 @@
            },
            "domainFQDN": {
                "type": "string"
+           },
+           "ouPath": {
+                "type": "string"
            }
     },
     "variables": {
@@ -77,11 +80,29 @@
                 "templateLink": {
                     "uri": "[variables('linked-template')]",
                     "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {"value": "[parameters('location')]"},
+                    "networkInterfaceName": {"value": "[parameters('networkInterfaceName')]"},
+                    "enableAcceleratedNetworking": {"value": "[parameters('enableAcceleratedNetworking')]"},
+                    "subnetName": {"value": "[parameters('subnetName')]"},
+                    "virtualNetworkId": {"value": "[parameters('virtualNetworkId')]"},
+                    "virtualMachineName": {"value": "[parameters('virtualMachineName')]"},
+                    "virtualMachineComputerName": {"value": "[parameters('virtualMachineComputerName')]"},
+                    "virtualMachineRG": {"value": "[parameters('virtualMachineRG')]"},
+                    "osDiskType": {"value": "[parameters('osDiskType')]"},
+                    "osDiskDeleteOption": {"value": "[parameters('osDiskDeleteOption')]"},
+                    "virtualMachineSize": {"value": "[parameters('virtualMachineSize')]"},
+                    "nicDeleteOption": {"value": "[parameters('nicDeleteOption')]"},
+                    "adminUsername": {"value": "[parameters('adminUsername')]"},
+                    "adminPassword": {"value": "[parameters('adminPassword')]"},
+                    "patchMode": {"value": "[parameters('patchMode')]"},
+                    "enableHotpatching": {"value": "[parameters('enableHotpatching')]"}
                 }
             }
         },
         {
-            "name": "identity",
+            "name": "domainjoin",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "dependsOn": [
@@ -92,6 +113,14 @@
                 "templateLink": {
                     "uri": "[variables('linked-template-two')]",
                     "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {"value": "[parameters('location')]"},
+                    "vmList": {"value": "[parameters('vmList')]"},
+                    "domainJoinUserName": {"value": "[parameters('domainJoinUserName')]"},
+                    "domainJoinUserPassword": {"value": "[parameters('domainJoinUserPassword')]"},
+                    "domainFQDN": {"value": "[parameters('domainFQDN')]"},
+                    "ouPath": {"value": "[parameters('ouPath')]"}
                 }
             }
         }
