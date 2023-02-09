@@ -93,6 +93,7 @@
             },
             "enableAutomaticUpdates": {
             "type": "bool",
+            "defaultValue": false,
             "metadata": {
                 "description": "If Patch Mode is Manual set this value to false"
                 }
