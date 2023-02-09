@@ -40,8 +40,8 @@ The Deployment consist in 2 slot:
 - Create VM
 - Join VM to the AD Domain
 
-<img src="https://ibb.co/rfrHYhY" alt="Deployment" title="Deployment">
+<img src="https://i.ibb.co/935W606/deployment.jpg" alt="Deployment" title="Deployment">
 
 After the deploy the IT Administrator can found the Computer Object in the specified OU:
 
-<img src="https://ibb.co/v38fkMx" alt="Post Deployment" title="Post Deployment">
+<img src="https://i.ibb.co/GWjGRrv/computer.jpg" alt="Post Deployment" title="Post Deployment">
