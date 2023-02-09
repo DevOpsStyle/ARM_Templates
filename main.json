@@ -47,6 +47,12 @@
             "patchMode": {
                 "type": "string"
             },
+            "enableAutomaticUpdates": {
+            "type": "bool",
+            "metadata": {
+                "description": "If Patch Mode is Manual set this value to false"
+                }
+            },
             "enableHotpatching": {
                 "type": "bool"
             },
@@ -94,6 +100,7 @@
                     "adminUsername": {"value": "[parameters('adminUsername')]"},
                     "adminPassword": {"value": "[parameters('adminPassword')]"},
                     "patchMode": {"value": "[parameters('patchMode')]"},
+                    "enableAutomaticUpdates": {"value": "[parameters('enableAutomaticUpdates')]"},
                     "enableHotpatching": {"value": "[parameters('enableHotpatching')]"}
                 }
             }

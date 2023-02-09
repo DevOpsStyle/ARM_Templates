@@ -47,6 +47,12 @@
         "patchMode": {
             "type": "string"
         },
+        "enableAutomaticUpdates": {
+            "type": "String",
+            "metadata": {
+                "description": "If Patch Mode is Manual set this value to false"
+            }
+        },
         "enableHotpatching": {
             "type": "bool"
         }
@@ -120,7 +126,7 @@
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]",
                     "windowsConfiguration": {
-                        "enableAutomaticUpdates": true,
+                        "enableAutomaticUpdates": "[parameters('enableAutomaticUpdates')]",
                         "provisionVmAgent": true,
                         "patchSettings": {
                             "enableHotpatching": "[parameters('enableHotpatching')]",
