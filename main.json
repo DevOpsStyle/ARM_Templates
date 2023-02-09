@@ -6,7 +6,7 @@
                "type": "string"
             },
            "networkInterfaceName": {
-            "type": "string"
+                "type": "string"
             },
             "enableAcceleratedNetworking": {
                 "type": "bool"
@@ -54,13 +54,13 @@
                "type": "string"
            },
            "domainJoinUserName": {
-               "value": "string"
+               "type": "string"
            },
            "domainJoinUserPassword": {
-               "value": "secureString"
+               "type": "secureString"
            },
            "domainFQDN": {
-               "value": "string"
+               "type": "string"
            }
     },
     "variables": {
