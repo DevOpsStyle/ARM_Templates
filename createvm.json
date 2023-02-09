@@ -48,7 +48,7 @@
             "type": "string"
         },
         "enableAutomaticUpdates": {
-            "type": "String",
+            "type": "bool",
             "metadata": {
                 "description": "If Patch Mode is Manual set this value to false"
             }
