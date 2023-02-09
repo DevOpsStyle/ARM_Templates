@@ -141,7 +141,7 @@
                     "adminUsername": {"value": "[parameters('adminUsername')]"},
                     "adminPassword": {"value": "[parameters('adminPassword')]"},
                     "patchMode": {"value": "[parameters('patchMode')]"},
-                    "enableAutomaticUpdates": {"value": "[parameters('patchMode')]"},
+                    "enableAutomaticUpdates": {"value": "[parameters('enableAutomaticUpdates')]"},
                     "enableHotpatching": {"value": "[parameters('enableHotpatching')]"}
                 }
             }
