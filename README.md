@@ -45,3 +45,5 @@ The Deployment consist in 2 slot:
 After the deploy the IT Administrator can found the Computer Object in the specified OU:
 
 <img src="https://i.ibb.co/GWjGRrv/computer.jpg" alt="Post Deployment" title="Post Deployment">
+
+P.S. In case you have some open point... yes I called the VM "OldVM".
