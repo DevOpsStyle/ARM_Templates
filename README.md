@@ -47,3 +47,11 @@ After the deploy the IT Administrator can found the Computer Object in the speci
 <img src="https://i.ibb.co/GWjGRrv/computer.jpg" alt="Post Deployment" title="Post Deployment">
 
 P.S. In case you have some open point... yes I called the VM "OldVM".
+
+<h2>ChatGPT Sentinel Integration</h2>
+
+This template can be used for the deployment of a Logic App in order to be triggered by Sentinel during the creation of an incident.
+
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2Fmain.json" target="_blank">
+  <img src="https://aka.ms/deploytoazurebutton"/>
+</a>
