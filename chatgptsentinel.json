@@ -20,44 +20,11 @@
                             "type": "Object"
                         }
                     },
-                    "triggers": {
-                        "Microsoft_Sentinel_incident": {
-                            "type": "ApiConnectionWebhook",
-                            "inputs": {
-                                "body": {
-                                    "callback_url": "@{listCallbackUrl()}"
-                                },
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['azuresentinel']['connectionId']"
-                                    }
-                                },
-                                "path": "/incident-creation"
-                            }
-                        }
-                    },
+                    "triggers": {},
                     "actions": {
                         "For_each": {
                             "foreach": "@body('Parse_JSON')?['choices']",
-                            "actions": {
-                                "Add_comment_to_incident_(V3)": {
-                                    "runAfter": {},
-                                    "type": "ApiConnection",
-                                    "inputs": {
-                                        "body": {
-                                            "incidentArmId": "@triggerBody()?['object']?['id']",
-                                            "message": "<p>@{items('For_each')?['text']}</p>"
-                                        },
-                                        "host": {
-                                            "connection": {
-                                                "name": "@parameters('$connections')['azuresentinel']['connectionId']"
-                                            }
-                                        },
-                                        "method": "post",
-                                        "path": "/Incidents/Comment"
-                                    }
-                                }
-                            },
+                            "actions": {},
                             "runAfter": {
                                 "Parse_JSON": [
                                     "Succeeded"
@@ -183,17 +150,7 @@
                     },
                     "outputs": {}
                 },
-                "parameters": {
-                    "$connections": {
-                        "value": {
-                            "azuresentinel": {
-                                "connectionId": "/subscriptions/1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30/resourceGroups/OpenAI/providers/Microsoft.Web/connections/azuresentinel",
-                                "connectionName": "azuresentinel",
-                                "id": "/subscriptions/1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30/providers/Microsoft.Web/locations/westeurope/managedApis/azuresentinel"
-                            }
-                        }
-                    }
-                }
+                "parameters": {}
             }
         }
     ]
