@@ -55,3 +55,37 @@ This template can be used for the deployment of a Logic App in order to be trigg
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2Fchatgptsentinel.json" target="_blank">
   <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
+
+<h3>Required Connector</h3>
+<h4>Sentinel Connector</h4>
+When the deployment is completed ho in your Logic App and create the Sentinel connector based on Sentinel Incident following the screen below:
+
+<img src="https://i.ibb.co/8gLdy3Q/trigger-1.jpg" alt="InitialTrigger" title="InitialTrigger">
+
+The last configuration is in the "for each" cycle. Click on "Add ad Action" and select "Add a comment to incident (V3)" following the screen below:
+
+<img src="https://i.ibb.co/B3pwXBr/trigger-2.jpg" alt="ForCicle" title="ForCicle">
+
+Now configure the connector following the screen:
+
+<img src="https://i.ibb.co/3FJ42TP/trigger-3.jpg" alt="AddComment" title="AddComment">
+
+<h4>Http Connector</h4>
+
+Change the URI string inside the HTTP block. Insert the endpoint name and model name following the example below (In my example the endpoint name is OPENAISERVICE and the model name is SUPPORTENGINEER):
+
+<img src="https://i.ibb.co/bF6J2MY/trigger-4-http.jpg" alt="Uri" title="Uri">
+
+| **Parameters** | **Information** | **Note** |
+| ------------- | ------------- | ------------- |
+| Question  | Insert the Question for OpenAI  | The parameter is inside the first variable. Put your question in the "value" attribute |
+| api-key | The name to assign to the new NIC | The name need to be available |
+| changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
+| changemodelname | Insert the model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
+
+<h3>Required Parameters</h3>
+
+| **Parameters** | **Information** | **Note** |
+| ------------- | ------------- | ------------- |
+| Region  | Based on RG  | If the RG was already created will be shown the location of the RG |
+| Network Interface Name | The name to assign to the new NIC | The name need to be available |
