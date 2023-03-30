@@ -52,6 +52,6 @@ P.S. In case you have some open point... yes I called the VM "OldVM".
 
 This template can be used for the deployment of a Logic App in order to be triggered by Sentinel during the creation of an incident.
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2Fmain.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2Fchatgptsentinel.json" target="_blank">
   <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
