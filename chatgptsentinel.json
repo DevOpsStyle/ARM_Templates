@@ -29,7 +29,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                                        "name": ""
                                     }
                                 },
                                 "path": "/incident-creation"
@@ -50,7 +50,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                                                "name": ""
                                             }
                                         },
                                         "method": "post",
