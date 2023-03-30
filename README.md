@@ -77,6 +77,12 @@ Change the URI string inside the HTTP block. Insert the endpoint name and model 
 
 <img src="https://i.ibb.co/bF6J2MY/trigger-4-http.jpg" alt="Uri" title="Uri">
 
+<h3>Question</h3>
+
+As already shared, the variable Question is the string that will be sent to OpenAI's private endpoint service. This represents the 'human question' to be addressed to the artificial intelligence. Write the Question following what you need to ask. Below an example:
+
+<img src="https://i.ibb.co/3FJ42TP/trigger-5.jpg" alt="Uri" title="Uri">
+
 | **Parameters** | **Information** | **Note** |
 | ------------- | ------------- | ------------- |
 | Question  | Insert the Question for OpenAI  | The parameter is inside the first "Initialize Variable". Put your question in the "value" attribute |
