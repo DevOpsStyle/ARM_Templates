@@ -29,7 +29,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": ""
+                                        "name": "@parameters('$connections')['azuresentinel']['connectionId']"
                                     }
                                 },
                                 "path": "/incident-creation"
@@ -50,7 +50,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": ""
+                                                "name": "@parameters('$connections')['azuresentinel']['connectionId']"
                                             }
                                         },
                                         "method": "post",
@@ -187,9 +187,9 @@
                     "$connections": {
                         "value": {
                             "azuresentinel": {
-                                "connectionId": "",
-                                "connectionName": "",
-                                "id": ""
+                                "connectionId": "/subscriptions/1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30/resourceGroups/OpenAI/providers/Microsoft.Web/connections/azuresentinel",
+                                "connectionName": "azuresentinel",
+                                "id": "/subscriptions/1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30/providers/Microsoft.Web/locations/westeurope/managedApis/azuresentinel"
                             }
                         }
                     }
