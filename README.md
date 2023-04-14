@@ -66,6 +66,13 @@ P.S. In case you have some open point... yes I called the VM "OldVM".
 
 <h3>ChatGPT Sentinel Integration: Configuration</h3>
 
+| **Parameters** | **Information** | **Note** |
+| ------------- | ------------- | ------------- |
+| Question  | Insert the Question for OpenAI  | The parameter is inside the first "Initialize Variable". Put your question in the "value" attribute |
+| api-key | The name to assign to the new NIC | The parameter is inside the second "Initialize Variable". Put your question in the "value" attribute  |
+| changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
+| changemodelname | Insert the model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
+
 <h3>Required Connector</h3>
 <h4>Sentinel Connector</h4>
 
@@ -93,14 +100,14 @@ As already shared, the variable Question is the string that will be sent to Open
 
 <img src="https://i.ibb.co/3FJ42TP/trigger-5.jpg" alt="Uri" title="Uri">
 
+<h3>ChatGPT Advisor Cost Integration: Configuration</h3>
+
 | **Parameters** | **Information** | **Note** |
 | ------------- | ------------- | ------------- |
 | Question  | Insert the Question for OpenAI  | The parameter is inside the first "Initialize Variable". Put your question in the "value" attribute |
 | api-key | The name to assign to the new NIC | The parameter is inside the second "Initialize Variable". Put your question in the "value" attribute  |
 | changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 | changemodelname | Insert the model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
-
-<h3>ChatGPT Advisor Cost Integration: Configuration</h3>
 
 <h3>Required Identity</h3>
 <h4>Managed Identity</h4>
@@ -113,24 +120,11 @@ When the Managed identity is created ensure to configure the first HTTP module t
 
 <img src="https://i.ibb.co/pw86mGz/Use-the-managed-identity.jpg" alt="managedidentity" title="managedidentity">
 
-<h4>Http Connector</h4>
+<h4>Http 2 Connector</h4>
 
-Change the URI string inside the HTTP block. Insert the endpoint name and model name following the example below (In my example the endpoint name is OPENAISERVICE and the model name is SUPPORTENGINEER):
+Change the URI string inside the HTTP 2 block. Insert the endpoint name and model name following the example below (In my example the endpoint name is OPENAISERVICE and the model name is SUPPORTENGINEER):
 
 <img src="https://i.ibb.co/bF6J2MY/trigger-4-http.jpg" alt="Uri" title="Uri">
-
-<h3>Question</h3>
-
-As already shared, the variable Question is the string that will be sent to OpenAI's private endpoint service. This represents the 'human question' to be addressed to the artificial intelligence. Write the Question following what you need to ask. Below an example:
-
-<img src="https://i.ibb.co/3FJ42TP/trigger-5.jpg" alt="Uri" title="Uri">
-
-| **Parameters** | **Information** | **Note** |
-| ------------- | ------------- | ------------- |
-| Question  | Insert the Question for OpenAI  | The parameter is inside the first "Initialize Variable". Put your question in the "value" attribute |
-| api-key | The name to assign to the new NIC | The parameter is inside the second "Initialize Variable". Put your question in the "value" attribute  |
-| changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
-| changemodelname | Insert the model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 
 <h3>Send Email</h3>
 
