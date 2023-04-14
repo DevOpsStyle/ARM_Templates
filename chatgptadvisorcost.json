@@ -138,7 +138,7 @@
                                     "api-key": "@variables('api-key')"
                                 },
                                 "method": "POST",
-                                "uri": "https://openaisentinel.openai.azure.com/openai/deployments/OpenEngineer/completions?api-version=2022-12-01"
+                                "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/completions?api-version=2022-12-01"
                             }
                         },
                         "Initialize_variable": {
