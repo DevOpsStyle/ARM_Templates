@@ -69,7 +69,7 @@ P.S. In case you have some open point... yes I called the VM "OldVM".
 | **Parameters** | **Information** | **Note** |
 | ------------- | ------------- | ------------- |
 | Question  | Insert the Question for OpenAI  | The parameter is inside the first "Initialize Variable". Put your question in the "value" attribute |
-| api-key | The name to assign to the new NIC | The parameter is inside the second "Initialize Variable". Put your question in the "value" attribute  |
+| api-key | The API code for manage your OpenAI service | The parameter is inside the second "Initialize Variable". Put your question in the "value" attribute  |
 | changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 | changemodelname | Insert the model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 
@@ -104,10 +104,11 @@ As already shared, the variable Question is the string that will be sent to Open
 
 | **Parameters** | **Information** | **Note** |
 | ------------- | ------------- | ------------- |
-| Question  | Insert the Question for OpenAI  | The parameter is inside the first "Initialize Variable". Put your question in the "value" attribute |
-| api-key | The name to assign to the new NIC | The parameter is inside the second "Initialize Variable". Put your question in the "value" attribute  |
+| Question  | Insert the Question for OpenAI  | The parameter is inside the first "Initialize Variable 4". Put your question in the "value" attribute |
+| api-key | The API code for manage your OpenAI service | The parameter is inside "Initialize Variable 3". Put your question in the "value" attribute  |
 | changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 | changemodelname | Insert the model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
+
 
 <h3>Required Identity</h3>
 <h4>Managed Identity</h4>
