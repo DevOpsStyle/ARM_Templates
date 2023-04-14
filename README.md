@@ -18,7 +18,7 @@ This template can be used for the deployment of a Logic App in order to be trigg
 
 This template can be used for the deployment of a Logic App in order to be triggered by Azure Advisor during the creation of a new recommendation related cost saving.
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2Fchatgptsentinel.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2Fchatgptadvisorcost.json" target="_blank">
   <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
 
