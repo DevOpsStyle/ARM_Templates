@@ -6,7 +6,23 @@ This template can be used for the deployment of different Azure VMs and join the
   <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
 
-<h3>Required Parameters</h3>
+<h2>ChatGPT Sentinel Integration</h2>
+
+This template can be used for the deployment of a Logic App in order to be triggered by Sentinel during the creation of an incident.
+
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2Fchatgptsentinel.json" target="_blank">
+  <img src="https://aka.ms/deploytoazurebutton"/>
+</a>
+
+<h2>ChatGPT Advisor Cost Integration</h2>
+
+This template can be used for the deployment of a Logic App in order to be triggered by Azure Advisor during the creation of a new recommendation related cost saving.
+
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2Fchatgptsentinel.json" target="_blank">
+  <img src="https://aka.ms/deploytoazurebutton"/>
+</a>
+
+<h3>Deploy Azure VM and join to legacy Domain: Configuration</h3>
 
 | **Parameters** | **Information** | **Note** |
 | ------------- | ------------- | ------------- |
@@ -48,13 +64,7 @@ After the deploy the IT Administrator can found the Computer Object in the speci
 
 P.S. In case you have some open point... yes I called the VM "OldVM".
 
-<h2>ChatGPT Sentinel Integration</h2>
-
-This template can be used for the deployment of a Logic App in order to be triggered by Sentinel during the creation of an incident.
-
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2Fchatgptsentinel.json" target="_blank">
-  <img src="https://aka.ms/deploytoazurebutton"/>
-</a>
+<h3>ChatGPT Sentinel Integration: Configuration</h3>
 
 <h3>Required Connector</h3>
 <h4>Sentinel Connector</h4>
