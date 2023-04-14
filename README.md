@@ -99,3 +99,41 @@ As already shared, the variable Question is the string that will be sent to Open
 | api-key | The name to assign to the new NIC | The parameter is inside the second "Initialize Variable". Put your question in the "value" attribute  |
 | changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 | changemodelname | Insert the model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
+
+<h3>ChatGPT Advisor Cost Integration: Configuration</h3>
+
+<h3>Required Identity</h3>
+<h4>Managed Identity</h4>
+
+When the deployment is completed go in your Logic App and create a Managed Identity following the example below:
+
+<img src="https://i.ibb.co/kSnwJ1G/managed-identity.jpg" alt="InitialTrigger" title="InitialTrigger">
+
+When the Managed identity is created ensure to configure the first HTTP module to use them:
+
+<img src="https://i.ibb.co/pw86mGz/Use-the-managed-identity.jpg" alt="managedidentity" title="managedidentity">
+
+<h4>Http Connector</h4>
+
+Change the URI string inside the HTTP block. Insert the endpoint name and model name following the example below (In my example the endpoint name is OPENAISERVICE and the model name is SUPPORTENGINEER):
+
+<img src="https://i.ibb.co/bF6J2MY/trigger-4-http.jpg" alt="Uri" title="Uri">
+
+<h3>Question</h3>
+
+As already shared, the variable Question is the string that will be sent to OpenAI's private endpoint service. This represents the 'human question' to be addressed to the artificial intelligence. Write the Question following what you need to ask. Below an example:
+
+<img src="https://i.ibb.co/3FJ42TP/trigger-5.jpg" alt="Uri" title="Uri">
+
+| **Parameters** | **Information** | **Note** |
+| ------------- | ------------- | ------------- |
+| Question  | Insert the Question for OpenAI  | The parameter is inside the first "Initialize Variable". Put your question in the "value" attribute |
+| api-key | The name to assign to the new NIC | The parameter is inside the second "Initialize Variable". Put your question in the "value" attribute  |
+| changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
+| changemodelname | Insert the model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
+
+<h3>Send Email</h3>
+
+When the data elaboration is completed you can send results using e-mail. In order to achieve that insert the Send an email (V2) module at the end and configure the module following the screen:
+
+<img src="https://i.ibb.co/6rtQsGD/email.jpg" alt="email" title="email">
