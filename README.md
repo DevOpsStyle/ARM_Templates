@@ -104,8 +104,8 @@ As already shared, the variable Question is the string that will be sent to Open
 
 | **Parameters** | **Information** | **Note** |
 | ------------- | ------------- | ------------- |
-| Question  | Insert the Question for OpenAI  | The parameter is inside the first "Initialize Variable 4". Put your question in the "value" attribute |
-| api-key | The API code for manage your OpenAI service | The parameter is inside "Initialize Variable 3". Put your question in the "value" attribute  |
+| Question  | Insert the Question for OpenAI  | The parameter is inside "Question variable". Put your question in the "value" attribute |
+| api-key | The API code for manage your OpenAI service | The parameter is inside "API-KEY variable". Put your question in the "value" attribute  |
 | changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 | changemodelname | Insert the model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 
@@ -117,13 +117,13 @@ When the deployment is completed go in your Logic App and create a Managed Ident
 
 <img src="https://i.ibb.co/kSnwJ1G/managed-identity.jpg" alt="InitialTrigger" title="InitialTrigger">
 
-When the Managed identity is created ensure to configure the first HTTP module to use them:
+When the Managed identity is created ensure to configure the first HTTP module (Get Recommendation) to use them:
 
 <img src="https://i.ibb.co/pw86mGz/Use-the-managed-identity.jpg" alt="managedidentity" title="managedidentity">
 
 <h4>Http 2 Connector</h4>
 
-Change the URI string inside the HTTP 2 block. Insert the endpoint name and model name following the example below (In my example the endpoint name is OPENAISERVICE and the model name is SUPPORTENGINEER):
+Change the URI string inside the "Send recommendation to OpenAI" block. Insert the endpoint name and model name following the example below (In my example the endpoint name is OPENAISERVICE and the model name is SUPPORTENGINEER):
 
 <img src="https://i.ibb.co/bF6J2MY/trigger-4-http.jpg" alt="Uri" title="Uri">
 
