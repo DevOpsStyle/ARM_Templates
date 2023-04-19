@@ -131,4 +131,4 @@ Change the URI string inside the HTTP 2 block. Insert the endpoint name and mode
 
 When the data elaboration is completed you can send results using e-mail. In order to achieve that insert the Send an email (V2) module at the end and configure the module following the screen:
 
-<img src="https://i.ibb.co/6rtQsGD/email.jpg" alt="email" title="email">
+<img src="https://i.ibb.co/NCQ9W99/email.jpg" alt="email" title="email">
