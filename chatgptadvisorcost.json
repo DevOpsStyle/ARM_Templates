@@ -17,12 +17,7 @@
                 "definition": {
                     "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
                     "contentVersion": "1.0.0.0",
-                    "parameters": {
-                        "$connections": {
-                            "defaultValue": {},
-                            "type": "Object"
-                        }
-                    },
+                    "parameters": {},
                     "triggers": {
                         "manual": {
                             "type": "Request",
@@ -109,7 +104,7 @@
                                     {
                                         "name": "api-key",
                                         "type": "string",
-                                        "value": "Replace With API-KEY"
+                                        "value": "Replace with API-KEY"
                                     }
                                 ]
                             }
@@ -546,29 +541,6 @@
                                         "value": "Please consider this CSV: @{body('Create_CSV_table')}\nCreate a long detailed description of every item with their Name."
                                     }
                                 ]
-                            }
-                        },
-                        "Send_an_email_(V2)": {
-                            "runAfter": {
-                                "Format_the_response_for_the_E-mail": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "body": {
-                                    "Body": "<p>Hello Team.<br>\n<br>\nAzure OpenAI Service have evaluated new Recommendation based on Azure Advisor in order to save Azure Costs.<br>\n<br>\nBelow a short description:<br>\n<br>\n---------------------------------<br>\n@{variables('EmailContent')}<br>\n---------------------------------<br>\n<br>\nFollow this link for further information: https://aka.ms/azureadvisordashboard</p>",
-                                    "Importance": "Normal",
-                                    "Subject": "New Cost Recommendation",
-                                    "To": "email@email.com"
-                                },
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['office365']['connectionId']"
-                                    }
-                                },
-                                "method": "post",
-                                "path": "/v2/Mail"
                             }
                         },
                         "Send_recommendation_to_OpenAI": {
