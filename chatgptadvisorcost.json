@@ -1,13 +1,18 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {},
+    "parameters": {
+        "workflows_CostAdvisorOpenAI_name": {
+            "defaultValue": "CostAdvisorOpenAI",
+            "type": "String"
+        }
+    },
     "variables": {},
     "resources": [
         {
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
-            "name": "CostAdvisorOpenAI",
+            "name": "[parameters('workflows_CostAdvisorOpenAI_name')]",
             "location": "[resourceGroup().location]",
             "identity": {
                 "type": "SystemAssigned"
@@ -560,7 +565,7 @@
                                     "api-key": "@variables('api-key')"
                                 },
                                 "method": "POST",
-                                "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/completions?api-version=2022-12-01"
+                               "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/completions?api-version=2022-12-01"
                             }
                         }
                     },
