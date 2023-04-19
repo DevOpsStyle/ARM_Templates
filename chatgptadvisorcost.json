@@ -1,187 +1,84 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {
-        "workflows_CostAdvisorOpenAI_name": {
-            "defaultValue": "CostAdvisorOpenAI",
-            "type": "String"
-        }
-    },
+    "parameters": {},
     "variables": {},
     "resources": [
         {
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
-            "name": "[parameters('workflows_CostAdvisorOpenAI_name')]",
+            "name": "CostAdvisorOpenAI",
             "location": "[resourceGroup().location]",
+            "identity": {
+                "type": "SystemAssigned"
+            },
             "properties": {
                 "state": "Enabled",
                 "definition": {
                     "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
                     "contentVersion": "1.0.0.0",
-                    "parameters": {},
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
                     "triggers": {
                         "manual": {
                             "type": "Request",
                             "kind": "Http",
                             "inputs": {
+                                "method": "GET",
                                 "schema": {
                                     "properties": {
-                                        "properties": {
+                                        "data": {
                                             "properties": {
-                                                "data": {
-                                                    "properties": {
-                                                        "properties": {
-                                                            "properties": {
-                                                                "alertContext": {
-                                                                    "properties": {
-                                                                        "properties": {
-                                                                            "properties": {},
-                                                                            "type": "object"
-                                                                        },
-                                                                        "type": {
-                                                                            "type": "string"
-                                                                        }
-                                                                    },
-                                                                    "type": "object"
-                                                                },
-                                                                "essentials": {
-                                                                    "properties": {
-                                                                        "properties": {
-                                                                            "properties": {
-                                                                                "alertContextVersion": {
-                                                                                    "properties": {
-                                                                                        "type": {
-                                                                                            "type": "string"
-                                                                                        }
-                                                                                    },
-                                                                                    "type": "object"
-                                                                                },
-                                                                                "alertId": {
-                                                                                    "properties": {
-                                                                                        "type": {
-                                                                                            "type": "string"
-                                                                                        }
-                                                                                    },
-                                                                                    "type": "object"
-                                                                                },
-                                                                                "alertRule": {
-                                                                                    "properties": {
-                                                                                        "type": {
-                                                                                            "type": "string"
-                                                                                        }
-                                                                                    },
-                                                                                    "type": "object"
-                                                                                },
-                                                                                "alertTargetIDs": {
-                                                                                    "properties": {
-                                                                                        "items": {
-                                                                                            "properties": {
-                                                                                                "type": {
-                                                                                                    "type": "string"
-                                                                                                }
-                                                                                            },
-                                                                                            "type": "object"
-                                                                                        },
-                                                                                        "type": {
-                                                                                            "type": "string"
-                                                                                        }
-                                                                                    },
-                                                                                    "type": "object"
-                                                                                },
-                                                                                "description": {
-                                                                                    "properties": {
-                                                                                        "type": {
-                                                                                            "type": "string"
-                                                                                        }
-                                                                                    },
-                                                                                    "type": "object"
-                                                                                },
-                                                                                "essentialsVersion": {
-                                                                                    "properties": {
-                                                                                        "type": {
-                                                                                            "type": "string"
-                                                                                        }
-                                                                                    },
-                                                                                    "type": "object"
-                                                                                },
-                                                                                "firedDateTime": {
-                                                                                    "properties": {
-                                                                                        "type": {
-                                                                                            "type": "string"
-                                                                                        }
-                                                                                    },
-                                                                                    "type": "object"
-                                                                                },
-                                                                                "monitorCondition": {
-                                                                                    "properties": {
-                                                                                        "type": {
-                                                                                            "type": "string"
-                                                                                        }
-                                                                                    },
-                                                                                    "type": "object"
-                                                                                },
-                                                                                "monitoringService": {
-                                                                                    "properties": {
-                                                                                        "type": {
-                                                                                            "type": "string"
-                                                                                        }
-                                                                                    },
-                                                                                    "type": "object"
-                                                                                },
-                                                                                "originAlertId": {
-                                                                                    "properties": {
-                                                                                        "type": {
-                                                                                            "type": "string"
-                                                                                        }
-                                                                                    },
-                                                                                    "type": "object"
-                                                                                },
-                                                                                "resolvedDateTime": {
-                                                                                    "properties": {
-                                                                                        "type": {
-                                                                                            "type": "string"
-                                                                                        }
-                                                                                    },
-                                                                                    "type": "object"
-                                                                                },
-                                                                                "severity": {
-                                                                                    "properties": {
-                                                                                        "type": {
-                                                                                            "type": "string"
-                                                                                        }
-                                                                                    },
-                                                                                    "type": "object"
-                                                                                },
-                                                                                "signalType": {
-                                                                                    "properties": {
-                                                                                        "type": {
-                                                                                            "type": "string"
-                                                                                        }
-                                                                                    },
-                                                                                    "type": "object"
-                                                                                }
-                                                                            },
-                                                                            "type": "object"
-                                                                        },
-                                                                        "type": {
-                                                                            "type": "string"
-                                                                        }
-                                                                    },
-                                                                    "type": "object"
-                                                                }
-                                                            },
-                                                            "type": "object"
-                                                        },
-                                                        "type": {
-                                                            "type": "string"
-                                                        }
-                                                    },
+                                                "alertContext": {
+                                                    "properties": {},
                                                     "type": "object"
                                                 },
-                                                "schemaId": {
+                                                "essentials": {
                                                     "properties": {
-                                                        "type": {
+                                                        "alertContextVersion": {
+                                                            "type": "string"
+                                                        },
+                                                        "alertId": {
+                                                            "type": "string"
+                                                        },
+                                                        "alertRule": {
+                                                            "type": "string"
+                                                        },
+                                                        "alertTargetIDs": {
+                                                            "items": {
+                                                                "type": "string"
+                                                            },
+                                                            "type": "array"
+                                                        },
+                                                        "description": {
+                                                            "type": "string"
+                                                        },
+                                                        "essentialsVersion": {
+                                                            "type": "string"
+                                                        },
+                                                        "firedDateTime": {
+                                                            "type": "string"
+                                                        },
+                                                        "monitorCondition": {
+                                                            "type": "string"
+                                                        },
+                                                        "monitoringService": {
+                                                            "type": "string"
+                                                        },
+                                                        "originAlertId": {
+                                                            "type": "string"
+                                                        },
+                                                        "resolvedDateTime": {
+                                                            "type": "string"
+                                                        },
+                                                        "severity": {
+                                                            "type": "string"
+                                                        },
+                                                        "signalType": {
                                                             "type": "string"
                                                         }
                                                     },
@@ -190,7 +87,7 @@
                                             },
                                             "type": "object"
                                         },
-                                        "type": {
+                                        "schemaId": {
                                             "type": "string"
                                         }
                                     },
@@ -200,6 +97,40 @@
                         }
                     },
                     "actions": {
+                        "API-KEY_variable": {
+                            "runAfter": {
+                                "Create_CSV_table": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "api-key",
+                                        "type": "string",
+                                        "value": "Replace with API-KEY"
+                                    }
+                                ]
+                            }
+                        },
+                        "Append_suggestions_to_Result_variable": {
+                            "runAfter": {
+                                "For_each_2": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "Result",
+                                        "type": "string",
+                                        "value": "@{variables('Suggestion')}"
+                                    }
+                                ]
+                            }
+                        },
                         "Append_to_string_variable": {
                             "runAfter": {
                                 "Parse_JSON": [
@@ -212,6 +143,38 @@
                                 "value": "@body('Parse_JSON')"
                             }
                         },
+                        "Content_Variable": {
+                            "runAfter": {
+                                "Get__Recommendation": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "content",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Create_Array_variable": {
+                            "runAfter": {
+                                "Append_to_string_variable": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "Items",
+                                        "type": "array"
+                                    }
+                                ]
+                            }
+                        },
                         "Create_CSV_table": {
                             "runAfter": {
                                 "For_each": [
@@ -222,6 +185,22 @@
                             "inputs": {
                                 "format": "CSV",
                                 "from": "@variables('Items')"
+                            }
+                        },
+                        "Create_variable_with_suggestions": {
+                            "runAfter": {
+                                "Parse_JSON_3": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "Suggestion",
+                                        "type": "array"
+                                    }
+                                ]
                             }
                         },
                         "For_each": {
@@ -276,13 +255,30 @@
                                 }
                             },
                             "runAfter": {
-                                "Initialize_variable_5": [
+                                "Create_variable_with_suggestions": [
                                     "Succeeded"
                                 ]
                             },
                             "type": "Foreach"
                         },
-                        "HTTP": {
+                        "Format_the_response_for_the_E-mail": {
+                            "runAfter": {
+                                "Append_suggestions_to_Result_variable": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "EmailContent",
+                                        "type": "string",
+                                        "value": "@{replace(variables('Result'), '\\n', ' ')}"
+                                    }
+                                ]
+                            }
+                        },
+                        "Get__Recommendation": {
                             "runAfter": {},
                             "type": "Http",
                             "inputs": {
@@ -293,134 +289,15 @@
                                 "uri": "https://management.azure.com/subscriptions/1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30/providers/Microsoft.Advisor/recommendations?api-version=2022-10-01"
                             }
                         },
-                        "HTTP_2": {
-                            "runAfter": {
-                                "Initialize_variable_4": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "Http",
-                            "inputs": {
-                                "body": {
-                                    "max_tokens": 1400,
-                                    "prompt": "@{variables('question')}"
-                                },
-                                "headers": {
-                                    "Content-Type": "application/json",
-                                    "api-key": "@variables('api-key')"
-                                },
-                                "method": "POST",
-                                "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/completions?api-version=2022-12-01"
-                            }
-                        },
-                        "Initialize_variable": {
-                            "runAfter": {
-                                "HTTP": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "content",
-                                        "type": "string"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_variable_2": {
-                            "runAfter": {
-                                "Append_to_string_variable": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "Items",
-                                        "type": "array"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_variable_3": {
-                            "runAfter": {
-                                "Create_CSV_table": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "api-key",
-                                        "type": "string",
-                                        "value": "ReplaceWithAPIKey"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_variable_4": {
-                            "runAfter": {
-                                "Initialize_variable_3": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "question",
-                                        "type": "string",
-                                        "value": "Please consider this CSV: @{body('Create_CSV_table')}\nCreate a long detailed description of every item with their Name."
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_variable_5": {
-                            "runAfter": {
-                                "Parse_JSON_3": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "Suggestion",
-                                        "type": "array"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_variable_6": {
-                            "runAfter": {
-                                "For_each_2": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "Result",
-                                        "type": "string",
-                                        "value": "@{variables('Suggestion')}"
-                                    }
-                                ]
-                            }
-                        },
                         "Parse_JSON": {
                             "runAfter": {
-                                "Initialize_variable": [
+                                "Content_Variable": [
                                     "Succeeded"
                                 ]
                             },
                             "type": "ParseJson",
                             "inputs": {
-                                "content": "@body('HTTP')",
+                                "content": "@body('Get__Recommendation')",
                                 "schema": {
                                     "properties": {
                                         "id": {
@@ -495,7 +372,7 @@
                         },
                         "Parse_JSON_2": {
                             "runAfter": {
-                                "Initialize_variable_2": [
+                                "Create_Array_variable": [
                                     "Succeeded"
                                 ]
                             },
@@ -590,13 +467,13 @@
                         },
                         "Parse_JSON_3": {
                             "runAfter": {
-                                "HTTP_2": [
+                                "Send_recommendation_to_OpenAI": [
                                     "Succeeded"
                                 ]
                             },
                             "type": "ParseJson",
                             "inputs": {
-                                "content": "@body('HTTP_2')",
+                                "content": "@body('Send_recommendation_to_OpenAI')",
                                 "schema": {
                                     "properties": {
                                         "choices": {
@@ -652,6 +529,50 @@
                                     },
                                     "type": "object"
                                 }
+                            }
+                        },
+                        "Question_variable": {
+                            "runAfter": {
+                                "API-KEY_variable": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "question",
+                                        "type": "string",
+                                        "value": "Please consider this CSV: @{body('Create_CSV_table')}\nCreate a long detailed description of every item with their Name."
+                                    }
+                                ]
+                            }
+                        },
+                        "Send_an_email_(V2)": {
+                            "runAfter": {
+                                "Format_the_response_for_the_E-mail": [
+                                    "Succeeded"
+                                ]
+                            }
+                        },
+                        "Send_recommendation_to_OpenAI": {
+                            "runAfter": {
+                                "Question_variable": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Http",
+                            "inputs": {
+                                "body": {
+                                    "max_tokens": 1400,
+                                    "prompt": "@{variables('question')}"
+                                },
+                                "headers": {
+                                    "Content-Type": "application/json",
+                                    "api-key": "@variables('api-key')"
+                                },
+                                "method": "POST",
+                                "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/completions?api-version=2022-12-01"
                             }
                         }
                     },
