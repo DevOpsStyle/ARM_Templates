@@ -174,6 +174,10 @@ The Send-Email(V2) module must be triggered when the previous 2 tasks are comple
 
 <img src="https://i.ibb.co/2KBZ766/sendemailconfigurationrunafter.jpg" alt="sendemailconfigurationrunafter" title="sendemailconfigurationrunafter">
 
-Ensure that the Workflow Setting related "High throughput" is enabled. Logic Apps are usually used for script that not require a long rung. With this option you can extend the execution up to 15 minutes. If you have too much resources in your environment another way to complete the assessment is to run the Logic App under the Resources Groupe you need to analyze. In order to do that replace the "list resources by subscription" module with "list resources by resource group" module:
+Ensure that the Workflow Setting related "High throughput" is enabled. Logic Apps are usually used for script that not require a long rung. With this option you can extend the execution up to 15 minutes. 
+
+<img src="https://i.ibb.co/s2xmcHr/runtimeoptions.jpg" alt="runtimeoptions" title="runtimeoptions">
+
+If you have too much resources in your environment another way to complete the assessment is to run the Logic App under the Resources Groupe you need to analyze. In order to do that replace the "list resources by subscription" module with "list resources by resource group" module:
 
 <img src="https://i.ibb.co/BfB4KGq/listresourcesbyresourcegroup.jpg" alt="listresourcesbyresourcegroup" title="listresourcesbyresourcegroup">
