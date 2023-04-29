@@ -326,7 +326,7 @@
                                     "type": "SetVariable",
                                     "inputs": {
                                         "name": "Question",
-                                        "value": "Hello, Can you create for me a detailed report on what type of resources I have using this output: @{items('For_each_Resource')}.\nStart with the Name of User, the Surname, The mobile phone, The Location and any other type of useles information."
+                                        "value": "Hello, Can you create for me a detailed report on what type of resources I have using this output: @{items('For_each_Resource')}.\nExplain what type of resource is, in what resource group is and how I can manage it. If possibile send me documentation from Microsoft Docs and information about the billing of the resource.  You can add any kind of information you consider useful."
                                     }
                                 }
                             },
