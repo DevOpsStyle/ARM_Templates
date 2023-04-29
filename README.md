@@ -22,6 +22,14 @@ This template can be used for the deployment of a Logic App in order to be trigg
   <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
 
+<h2>ChatGPT Tenant Subscription Resources Assessment</h2>
+
+This template can be used for the deployment of a Logic App which can help during Subscription Assessment.
+
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2FTenantSubAssessment.json" target="_blank">
+  <img src="https://aka.ms/deploytoazurebutton"/>
+</a>
+
 <h3>Deploy Azure VM and join to legacy Domain: Configuration</h3>
 
 | **Parameters** | **Information** | **Note** |
