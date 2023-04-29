@@ -140,3 +140,40 @@ Change the URI string inside the "Send recommendation to OpenAI" block. Insert t
 When the data elaboration is completed you can send results using e-mail. In order to achieve that insert the Send an email (V2) module at the end and configure the module following the screen:
 
 <img src="https://i.ibb.co/NCQ9W99/email.jpg" alt="email" title="email">
+
+<h3>ChatGPT Tenant Subscription Resources Assessment</h3>
+
+| **Parameters** | **Information** | **Note** |
+| ------------- | ------------- | ------------- |
+| Question  | Insert the Question for OpenAI  | The parameter is inside the first "Initialize Variable". Put your question in the "value" attribute |
+| api-key | The API code for manage your OpenAI service | The parameter is inside the second "Initialize Variable". Put your question in the "value" attribute  |
+| Question-users  | Insert the Question for OpenAI  | The parameter is inside the first "Initialize Variable". Put your question in the "value" attribute |
+| api-key-users | The API code for manage your OpenAI service | The parameter is inside the second "Initialize Variable". Put your question in the "value" attribute |
+| changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
+| changemodelname | Insert the model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
+
+<h3>Required Connector</h3>
+
+When the deployment is completed go in your Logic App and create the Subscription connector based on the screen below:
+
+<img src="https://i.ibb.co/KV0WG4N/listresourcesbysubscription.jpg" alt="SubscriptionConnector" title="SubscriptionConnector">
+
+Configure the Graph-API Connector using as example the screen below. Keep in mind that you must create a new Application under your Azure Tenant in order to start Graph-API request. The new application must have all the delegation permission for GraphAPI communication. For help follow this link: <a href="https://techcommunity.microsoft.com/t5/integrations-on-azure-blog/calling-graph-api-from-azure-logic-apps-using-delegated/ba-p/1997666" target="_blank"> 
+
+<img src="https://i.ibb.co/9VDHgBB/getuserlistconfiguration.jpg" alt="GraphAPI" title="GraphAPI">
+
+Regarding the HTTP Connector, these are used for send request to OpenAI Service. You have to configure the api-key and api-key-users that are the secret used for the OpenAI Connections. Also you have to manage the endpoint and model name of the Connector following the example below: 
+
+<img src="https://i.ibb.co/bF6J2MY/trigger-4-http.jpg" alt="HTTP" title="HTTP">
+
+Now is the time to configure the Send-Email(V2) module. This module will be used for send result to an e-mail address. You can use other module if needed.
+
+<img src="https://i.ibb.co/SxBvQ95/sendemailconfiguration.jpg" alt="SendEmail" title="SendEmail">
+
+The Send-Email(V2) module must be triggered when the previous 2 tasks are completed:
+
+<img src="https://i.ibb.co/2KBZ766/sendemailconfigurationrunafter.jpg" alt="sendemailconfigurationrunafter" title="sendemailconfigurationrunafter">
+
+Ensure that the Workflow Setting related "High throughput" is enabled. Logic Apps are usually used for script that not require a long rung. With this option you can extend the execution up to 15 minutes. If you have too much resources in your environment another way to complete the assessment is to run the Logic App under the Resources Groupe you need to analyze. In order to do that replace the "list resources by subscription" module with "list resources by resource group" module:
+
+<img src="https://i.ibb.co/BfB4KGq/listresourcesbyresourcegroup.jpg" alt="listresourcesbyresourcegroup" title="listresourcesbyresourcegroup">
