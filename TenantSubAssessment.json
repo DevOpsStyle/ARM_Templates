@@ -667,7 +667,7 @@
                                     "connection": {}
                                 },
                                 "method": "get",
-                                "path": "/subscriptions/@{encodeURIComponent('1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30')}/resources",
+                                "path": "",
                                 "queries": {
                                     "x-ms-api-version": "2016-06-01"
                                 }
