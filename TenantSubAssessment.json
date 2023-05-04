@@ -207,7 +207,7 @@
                             }
                         },
                         "For_each_Resource": {
-                            "foreach": "@body('List_resources_by_subscription')?['value']",
+                            "foreach": "",
                             "actions": {
                                 "For_Each_Response": {
                                     "foreach": "@body('Parse_JSON')?['choices']",
