@@ -145,18 +145,20 @@ When the data elaboration is completed you can send results using e-mail. In ord
 
 | **Parameters** | **Information** | **Note** |
 | ------------- | ------------- | ------------- |
-| Question  | Insert the Question for OpenAI  | The parameter is inside the first "Initialize Variable". Put your question in the "value" attribute |
 | api-key | The API code for manage your OpenAI service | The parameter is inside the second "Initialize Variable". Put your question in the "value" attribute  |
-| Question-users  | Insert the Question for OpenAI  | The parameter is inside the first "Initialize Variable". Put your question in the "value" attribute |
 | api-key-users | The API code for manage your OpenAI service | The parameter is inside the second "Initialize Variable". Put your question in the "value" attribute |
 | changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 | changemodelname | Insert the model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 
 <h3>Required Connector</h3>
 
-When the deployment is completed go in your Logic App and create the Subscription connector based on the screen below:
+When the deployment is completed go in your Logic App and create the Subscription connector "List Resources by subscription" based on the screen below, between modules "When HTTP request is received" and "Create Report Variable":
 
 <img src="https://i.ibb.co/KV0WG4N/listresourcesbysubscription.jpg" alt="SubscriptionConnector" title="SubscriptionConnector">
+
+For the cycle "For Each Resource" change the item with "value" following the example below:
+
+<img src="https://i.ibb.co/s5XCKp7/foreachresource.jpg" alt="foreachresource" title="foreachresource">
 
 Configure the Graph-API Connector using as example the screen below. Keep in mind that you must create a new Application under your Azure Tenant in order to start Graph-API request. The new application must have all the delegation permission for GraphAPI communication. For help follow this link: <a href="https://techcommunity.microsoft.com/t5/integrations-on-azure-blog/calling-graph-api-from-azure-logic-apps-using-delegated/ba-p/1997666" target="_blank"> 
 
@@ -166,11 +168,15 @@ Regarding the HTTP Connector, these are used for send request to OpenAI Service.
 
 <img src="https://i.ibb.co/bF6J2MY/trigger-4-http.jpg" alt="HTTP" title="HTTP">
 
-Now is the time to configure the Send-Email(V2) module. This module will be used for send result to an e-mail address. You can use other module if needed.
+Now is the time to configure the Send-Email(V2) module. This module will be used for send result to an e-mail address. Place this module in the end of Logic App. Follow the configuration below:
+
+<img src="https://i.ibb.co/S7zdmD9/sendemail.jpg" alt="sendemail" title="sendemail">
+
+Body part:
 
 <img src="https://i.ibb.co/SxBvQ95/sendemailconfiguration.jpg" alt="SendEmail" title="SendEmail">
 
-The Send-Email(V2) module must be triggered when the previous 2 tasks are completed:
+Run After Configuration:
 
 <img src="https://i.ibb.co/2KBZ766/sendemailconfigurationrunafter.jpg" alt="sendemailconfigurationrunafter" title="sendemailconfigurationrunafter">
 
