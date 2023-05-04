@@ -7,7 +7,7 @@
         {
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
-            "name": "ResourceAssessment2",
+            "name": "ResourceAssessment",
             "location": "[resourceGroup().location]",
             "identity": {
                 "type": "SystemAssigned"
@@ -28,7 +28,7 @@
                     "actions": {
                         "Create_Api-Key-Users_Variable": {
                             "runAfter": {
-                                "Create_Question_Variable_for_Users": [
+                                "Format_Json_Values": [
                                     "Succeeded"
                                 ]
                             },
@@ -73,38 +73,6 @@
                                         "name": "FinalOutput",
                                         "type": "string",
                                         "value": "@{variables('Report')}"
-                                    }
-                                ]
-                            }
-                        },
-                        "Create_Question_Variable": {
-                            "runAfter": {
-                                "Create_Api-Key_Variable": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "Question",
-                                        "type": "string"
-                                    }
-                                ]
-                            }
-                        },
-                        "Create_Question_Variable_for_Users": {
-                            "runAfter": {
-                                "Format_Json_Values": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "QuestionUsers",
-                                        "type": "string"
                                     }
                                 ]
                             }
@@ -187,7 +155,7 @@
                         },
                         "Create_Response_Variable": {
                             "runAfter": {
-                                "Create_Question_Variable": [
+                                "Create_Api-Key_Variable": [
                                     "Succeeded"
                                 ]
                             },
