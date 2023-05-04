@@ -147,11 +147,7 @@
                             }
                         },
                         "Create_Report_Variable": {
-                            "runAfter": {
-                                "List_resources_by_subscription": [
-                                    "Succeeded"
-                                ]
-                            },
+                            "runAfter": {},
                             "type": "InitializeVariable",
                             "inputs": {
                                 "variables": [
