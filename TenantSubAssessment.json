@@ -1,18 +1,13 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {
-        "workflows_ResourceAssessment_name": {
-            "defaultValue": "ResourceAssessment",
-            "type": "String"
-        }
-    },
+    "parameters": {},
     "variables": {},
     "resources": [
         {
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
-            "name": "[parameters('workflows_ResourceAssessment_name')]",
+            "name": "ResourceAssessment",
             "location": "[resourceGroup().location]",
             "identity": {
                 "type": "SystemAssigned"
@@ -647,9 +642,9 @@
                             "inputs": {
                                 "authentication": {
                                     "audience": "https://graph.microsoft.com",
-                                    "clientId": "AppClientID",
-                                    "secret": "AppSecret",
-                                    "tenant": "TenantID",
+                                    "clientId": "Replace With Client ID",
+                                    "secret": "Replace With Secret ID",
+                                    "tenant": "Replace With Tenant ID",
                                     "type": "ActiveDirectoryOAuth"
                                 },
                                 "headers": {
@@ -667,7 +662,7 @@
                                     "connection": {}
                                 },
                                 "method": "get",
-                                "path": "",
+                                "path": "/subscriptions/@{encodeURIComponent('1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30')}/resources",
                                 "queries": {
                                     "x-ms-api-version": "2016-06-01"
                                 }
@@ -722,7 +717,7 @@
                                     "Body": "<p>Hello,<br>\n<br>\nHere the result of the assessment for the selected subscription:<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\n<strong>Total Number of user in Azure Active Directory:</strong> @{variables('NumerOfUsers')}<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\n<strong>Users Information:</strong><br>\n<br>\n<br>\n@{variables('FinalUserReportV')}<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\n<strong>Resources:</strong><br>\n<br>\n@{variables('FormatReport4')}<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\nKind Regards</p>",
                                     "Importance": "Normal",
                                     "Subject": "Assessment on Resource based on selected Subscription",
-                                    "To": "email@mail.com"
+                                    "To": "mail@mail.com"
                                 },
                                 "host": {
                                     "connection": {}
@@ -768,7 +763,8 @@
                     },
                     "outputs": {}
                 },
-                "parameters": {}
+                "parameters": {
+                    "$connections": {}
             }
         }
     ]
