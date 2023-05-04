@@ -207,7 +207,7 @@
                             }
                         },
                         "For_each_Resource": {
-                            "foreach": "item",
+                            "foreach": "@body('Parse_JSON')?['choices']",
                             "actions": {
                                 "For_Each_Response": {
                                     "foreach": "@body('Parse_JSON')?['choices']",
