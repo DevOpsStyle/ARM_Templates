@@ -657,7 +657,18 @@
                         "List_resources_by_subscription": {
                             "runAfter": {},
                             "type": "ApiConnection",
-                            "inputs": {}
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['arm']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/subscriptions/@{encodeURIComponent('subid')}/resources",
+                                "queries": {
+                                    "x-ms-api-version": "2016-06-01"
+                                }
+                            }
                         },
                         "NumerOfUsers": {
                             "runAfter": {
@@ -708,10 +719,12 @@
                                     "Body": "<p>Hello,<br>\n<br>\nHere the result of the assessment for the selected subscription:<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\n<strong>Total Number of user in Azure Active Directory:</strong> @{variables('NumerOfUsers')}<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\n<strong>Users Information:</strong><br>\n<br>\n<br>\n@{variables('FinalUserReportV')}<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\n<strong>Resources:</strong><br>\n<br>\n@{variables('FormatReport4')}<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\nKind Regards</p>",
                                     "Importance": "Normal",
                                     "Subject": "Assessment on Resource based on selected Subscription",
-                                    "To": "mail@mail.com"
+                                    "To": "email@email.com"
                                 },
                                 "host": {
-                                    "connection": {}
+                                    "connection": {
+                                        "name": "@parameters('$connections')['office365']['connectionId']"
+                                    }
                                 },
                                 "method": "post",
                                 "path": "/v2/Mail"
@@ -755,7 +768,20 @@
                     "outputs": {}
                 },
                 "parameters": {
-                    "$connections": {}
+                    "$connections": {
+                        "value": {
+                            "arm": {
+                                "connectionId": "/subscriptions/subid/resourceGroups/ResourceAssessment_group/providers/Microsoft.Web/connections/arm",
+                                "connectionName": "arm",
+                                "id": "/subscriptions/subid/providers/Microsoft.Web/locations/westeurope/managedApis/arm"
+                            },
+                            "office365": {
+                                "connectionId": "/subscriptions/subid/resourceGroups/ResourceAssessment_group/providers/Microsoft.Web/connections/office365",
+                                "connectionName": "office365",
+                                "id": "/subscriptions/subid/providers/Microsoft.Web/locations/westeurope/managedApis/office365"
+                            }
+                        }
+                    }
                 }
             }
         }
