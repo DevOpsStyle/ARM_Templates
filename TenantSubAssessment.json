@@ -1,14 +1,27 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {},
+    "parameters": {
+        "workflows_ResourceAssessment_name": {
+            "defaultValue": "ResourceAssessment",
+            "type": "String"
+        },
+        "connections_arm_externalid": {
+            "defaultValue": "/subscriptions/1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30/resourceGroups/ResourceAssessment_group/providers/Microsoft.Web/connections/arm",
+            "type": "String"
+        },
+        "connections_office365_externalid": {
+            "defaultValue": "/subscriptions/1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30/resourceGroups/ResourceAssessment_group/providers/Microsoft.Web/connections/office365",
+            "type": "String"
+        }
+    },
     "variables": {},
     "resources": [
         {
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
-            "name": "ResourceAssessment",
-            "location": "[resourceGroup().location]",
+            "name": "[parameters('workflows_ResourceAssessment_name')]",
+            "location": "westeurope",
             "identity": {
                 "type": "SystemAssigned"
             },
@@ -43,7 +56,7 @@
                                     {
                                         "name": "Api-Key-Users",
                                         "type": "string",
-                                        "value": "Replace With API KEY"
+                                        "value": "673bccafc3934ba785659b0c9efbd4ea"
                                     }
                                 ]
                             }
@@ -60,7 +73,7 @@
                                     {
                                         "name": "Api-Key",
                                         "type": "string",
-                                        "value": "Replace With API KEY"
+                                        "value": "673bccafc3934ba785659b0c9efbd4ea"
                                     }
                                 ]
                             }
@@ -147,7 +160,11 @@
                             }
                         },
                         "Create_Report_Variable": {
-                            "runAfter": {},
+                            "runAfter": {
+                                "List_resources_by_subscription": [
+                                    "Succeeded"
+                                ]
+                            },
                             "type": "InitializeVariable",
                             "inputs": {
                                 "variables": [
@@ -207,7 +224,7 @@
                             }
                         },
                         "For_each_Resource": {
-                            "foreach": "@body('Parse_JSON')?['choices']",
+                            "foreach": "@body('List_resources_by_subscription')?['value']",
                             "actions": {
                                 "For_Each_Response": {
                                     "foreach": "@body('Parse_JSON')?['choices']",
@@ -305,7 +322,7 @@
                                             "api-key": "@variables('Api-Key')"
                                         },
                                         "method": "POST",
-                                        "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/completions?api-version=2022-12-01"
+                                        "uri": "https://openaisentinel.openai.azure.com/openai/deployments/assessment/completions?api-version=2022-12-01"
                                     }
                                 }
                             },
@@ -363,7 +380,7 @@
                                             "api-key": "@variables('Api-Key-Users')"
                                         },
                                         "method": "POST",
-                                        "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/completions?api-version=2022-12-01"
+                                        "uri": "https://openaisentinel.openai.azure.com/openai/deployments/assessment/completions?api-version=2022-12-01"
                                     }
                                 },
                                 "Parse_JSON_2": {
@@ -638,9 +655,9 @@
                             "inputs": {
                                 "authentication": {
                                     "audience": "https://graph.microsoft.com",
-                                    "clientId": "Replace With Client ID",
-                                    "secret": "Replace With Secret ID",
-                                    "tenant": "Replace With Tenant ID",
+                                    "clientId": "130bc48d-3d74-468a-8474-bd8ef12244f7",
+                                    "secret": "WZa8Q~yufKYsUJc-YsDUlhcgN8rNPojYXE6ekb6s",
+                                    "tenant": "db61cb1c-bb0d-4cec-9b86-130e07efdd53",
                                     "type": "ActiveDirectoryOAuth"
                                 },
                                 "headers": {
@@ -648,6 +665,22 @@
                                 },
                                 "method": "GET",
                                 "uri": "https://graph.microsoft.com/v1.0/users"
+                            }
+                        },
+                        "List_resources_by_subscription": {
+                            "runAfter": {},
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['arm']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/subscriptions/@{encodeURIComponent('1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30')}/resources",
+                                "queries": {
+                                    "x-ms-api-version": "2016-06-01"
+                                }
                             }
                         },
                         "NumerOfUsers": {
@@ -682,6 +715,32 @@
                                         "value": "@{variables('RawOutputUsers')}"
                                     }
                                 ]
+                            }
+                        },
+                        "Send_an_email_(V2)": {
+                            "runAfter": {
+                                "Formatting_Output_Final_Part": [
+                                    "Succeeded"
+                                ],
+                                "Formatting_User_Report_Final_Part": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "Body": "<p>Hello,<br>\n<br>\nHere the result of the assessment for the selected subscription:<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\n<strong>Total Number of user in Azure Active Directory:</strong> @{variables('NumerOfUsers')}<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\n<strong>Users Information:</strong><br>\n<br>\n<br>\n@{variables('FinalUserReportV')}<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\n<strong>Resources:</strong><br>\n<br>\n@{variables('FormatReport4')}<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\nKind Regards</p>",
+                                    "Importance": "Normal",
+                                    "Subject": "Assessment on Resource based on selected Subscription",
+                                    "To": "tommasosacco@microsoft.com"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['office365']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/v2/Mail"
                             }
                         },
                         "Start_Creation_Final_Users_Report": {
@@ -722,7 +781,20 @@
                     "outputs": {}
                 },
                 "parameters": {
-                    "$connections": {}
+                    "$connections": {
+                        "value": {
+                            "arm": {
+                                "connectionId": "[parameters('connections_arm_externalid')]",
+                                "connectionName": "arm",
+                                "id": "/subscriptions/1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30/providers/Microsoft.Web/locations/westeurope/managedApis/arm"
+                            },
+                            "office365": {
+                                "connectionId": "[parameters('connections_office365_externalid')]",
+                                "connectionName": "office365",
+                                "id": "/subscriptions/1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30/providers/Microsoft.Web/locations/westeurope/managedApis/office365"
+                            }
+                        }
+                    }
                 }
             }
         }
