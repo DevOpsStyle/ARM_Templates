@@ -657,16 +657,7 @@
                         "List_resources_by_subscription": {
                             "runAfter": {},
                             "type": "ApiConnection",
-                            "inputs": {
-                                "host": {
-                                    "connection": {}
-                                },
-                                "method": "get",
-                                "path": "/subscriptions/@{encodeURIComponent('1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30')}/resources",
-                                "queries": {
-                                    "x-ms-api-version": "2016-06-01"
-                                }
-                            }
+                            "inputs": {}
                         },
                         "NumerOfUsers": {
                             "runAfter": {
