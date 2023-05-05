@@ -1,5 +1,7 @@
 <h2>Deploy Azure VM and join to legacy Domain</h2>
 
+<a href="https://github.com/DevOpsStyle/ARM_Templates#deploy-azure-vm-and-join-to-legacy-domain-configuration" target="_blank">Configuration</a>
+
 This template can be used for the deployment of different Azure VMs and join these to AD (Only Windows).
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2Fmain.json" target="_blank">
@@ -7,6 +9,8 @@ This template can be used for the deployment of different Azure VMs and join the
 </a>
 
 <h2>ChatGPT Sentinel Integration</h2>
+
+<a href="https://github.com/DevOpsStyle/ARM_Templates#chatgpt-sentinel-integration-configuration" target="_blank">Configuration</a>
 
 This template can be used for the deployment of a Logic App in order to be triggered by Sentinel during the creation of an incident.
 
@@ -16,6 +20,8 @@ This template can be used for the deployment of a Logic App in order to be trigg
 
 <h2>ChatGPT Advisor Cost Integration</h2>
 
+<a href="https://github.com/DevOpsStyle/ARM_Templates#chatgpt-advisor-cost-integration-configuration" target="_blank">Configuration</a>
+
 This template can be used for the deployment of a Logic App in order to be triggered by Azure Advisor during the creation of a new recommendation related cost saving.
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2Fchatgptadvisorcost.json" target="_blank">
@@ -23,6 +29,8 @@ This template can be used for the deployment of a Logic App in order to be trigg
 </a>
 
 <h2>ChatGPT Tenant Subscription Resources Assessment</h2>
+
+<a href="https://github.com/DevOpsStyle/ARM_Templates#chatgpt-tenant-subscription-resources-assessment-1" target="_blank">Configuration</a>
 
 This template can be used for the deployment of a Logic App which can help during Subscription Assessment.
 
