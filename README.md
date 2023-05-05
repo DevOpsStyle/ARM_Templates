@@ -112,6 +112,7 @@ As already shared, the variable Question is the string that will be sent to Open
 
 | **Parameters** | **Information** | **Note** |
 | ------------- | ------------- | ------------- |
+| changesubid  | Insert the subscription id | You can found the Sub id in different ways, one of them is to get the Subscription ID inside "Subscription" services in the Azure Portal  |
 | Question  | Insert the Question for OpenAI  | The parameter is inside "Question variable". Put your question in the "value" attribute |
 | api-key | The API code for manage your OpenAI service | The parameter is inside "API-KEY variable". Put your question in the "value" attribute  |
 | changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
@@ -127,9 +128,9 @@ When the deployment is completed go in your Logic App and create a Managed Ident
 
 When the Managed identity is created ensure to configure the first HTTP module (Get Recommendation) to use them:
 
-<img src="https://i.ibb.co/pw86mGz/Use-the-managed-identity.jpg" alt="managedidentity" title="managedidentity">
+<img src="https://i.ibb.co/jbTJqGZ/get-recommendation-list.jpg" alt="get-recommendation-list" title="get-recommendation-list">
 
-<h4>Http 2 Connector</h4>
+<h4>Http Send recommendation to OpenAI Connector</h4>
 
 Change the URI string inside the "Send recommendation to OpenAI" block. Insert the endpoint name and model name following the example below (In my example the endpoint name is OPENAISERVICE and the model name is SUPPORTENGINEER):
 
@@ -137,7 +138,9 @@ Change the URI string inside the "Send recommendation to OpenAI" block. Insert t
 
 <h3>Send Email</h3>
 
-When the data elaboration is completed you can send results using e-mail. In order to achieve that insert the Send an email (V2) module at the end and configure the module following the screen:
+When the data elaboration is completed you can send results using e-mail. In order to achieve that insert the Send an email (V2) module at the end inside the last For Cycle. Put the module under "True" condition and configure the module following the screen:
+
+<img src="https://i.ibb.co/MCQPHwC/emailform.jpg" alt="emailform" title="emailform">
 
 <img src="https://i.ibb.co/NCQ9W99/email.jpg" alt="email" title="email">
 
