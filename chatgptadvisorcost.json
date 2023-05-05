@@ -187,6 +187,23 @@
                                 "from": "@variables('Items')"
                             }
                         },
+                        "Create_Count_Variable": {
+                            "runAfter": {
+                                "Parse_JSON_2": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "Count",
+                                        "type": "integer",
+                                        "value": 0
+                                    }
+                                ]
+                            }
+                        },
                         "Create_variable_with_suggestions": {
                             "runAfter": {
                                 "Parse_JSON_3": [
@@ -209,7 +226,11 @@
                                 "Condition": {
                                     "actions": {
                                         "Append_to_array_variable": {
-                                            "runAfter": {},
+                                            "runAfter": {
+                                                "Increment_variable": [
+                                                    "Succeeded"
+                                                ]
+                                            },
                                             "type": "AppendToArrayVariable",
                                             "inputs": {
                                                 "name": "Items",
@@ -218,6 +239,14 @@
                                                     "Name": "@{items('For_each')?['properties']?['impactedValue']}",
                                                     "Solution": "@{items('For_each')?['properties']?['shortDescription']?['solution']}"
                                                 }
+                                            }
+                                        },
+                                        "Increment_variable": {
+                                            "runAfter": {},
+                                            "type": "IncrementVariable",
+                                            "inputs": {
+                                                "name": "Count",
+                                                "value": 1
                                             }
                                         }
                                     },
@@ -236,7 +265,7 @@
                                 }
                             },
                             "runAfter": {
-                                "Parse_JSON_2": [
+                                "Create_Count_Variable": [
                                     "Succeeded"
                                 ]
                             },
@@ -288,6 +317,25 @@
                                 "method": "GET",
                                 "uri": "https://management.azure.com/subscriptions/1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30/providers/Microsoft.Advisor/recommendations?api-version=2022-10-01"
                             }
+                        },
+                        "If_Recommendation_are_available": {
+                            "actions": {},
+                            "runAfter": {
+                                "Format_the_response_for_the_E-mail": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "expression": {
+                                "and": [
+                                    {
+                                        "greater": [
+                                            "@variables('Count')",
+                                            0
+                                        ]
+                                    }
+                                ]
+                            },
+                            "type": "If"
                         },
                         "Parse_JSON": {
                             "runAfter": {
@@ -565,7 +613,7 @@
                                     "api-key": "@variables('api-key')"
                                 },
                                 "method": "POST",
-                               "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/completions?api-version=2022-12-01"
+                                "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/completions?api-version=2022-12-01"
                             }
                         }
                     },
