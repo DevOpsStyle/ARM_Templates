@@ -315,7 +315,7 @@
                                     "type": "ManagedServiceIdentity"
                                 },
                                 "method": "GET",
-                                "uri": "https://management.azure.com/subscriptions/1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30/providers/Microsoft.Advisor/recommendations?api-version=2022-10-01"
+                                "uri": "https://management.azure.com/subscriptions/changesubid/providers/Microsoft.Advisor/recommendations?api-version=2022-10-01"
                             }
                         },
                         "If_Recommendation_are_available": {
