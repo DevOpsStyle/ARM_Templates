@@ -1113,6 +1113,20 @@
 							"uri": "https://graph.microsoft.com/v1.0/users"
 						}
 					},
+					"Initialize_variable": {
+						"runAfter": {
+							"Create_Connection_Report_String": [
+								"Succeeded"
+							]
+						},
+						"type": "InitializeVariable",
+						"inputs": {
+							"variables": [{
+								"name": "ConnectionsArrayRespose",
+								"type": "array"
+							}]
+						}
+					},
 					"NumerOfUsers": {
 						"runAfter": {
 							"Create_Report_Array_for_Users": [
@@ -1155,35 +1169,6 @@
 						"inputs": {
 							"name": "ConnectionsReport",
 							"value": "@{variables('ConnectionsArrayRespose')}"
-						}
-					},
-					"Send_an_email_(V2)_2": {
-						"runAfter": {
-							"Format_Connections_4": [
-								"Succeeded"
-							],
-							"Formatting_Output_Final_Part": [
-								"Succeeded"
-							],
-							"Formatting_User_Report_Final_Part": [
-								"Succeeded"
-							]
-						},
-						"type": "ApiConnection",
-						"inputs": {
-							"body": {
-								"Body": "<p>Hello,<br>\n<br>\nHere the result of the assessment for the selected subscription:<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\nTotal Number of user in Azure Active Directory: @{variables('NumerOfUsers')}<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\nUsers Information:<br>\n<br>\n<br>\n@{variables('FinalUserReportV')}<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\nResources:<br>\n<br>\n@{variables('FormatReport4')}<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\nConnections:<br>\n<br>\n@{variables('FormatConnections4')}<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\nKind Regards</p>",
-								"Importance": "Normal",
-								"Subject": "assessment subscription",
-								"To": "tommasosacco@microsoft.com"
-							},
-							"host": {
-								"connection": {
-									"name": "@parameters('$connections')['office365']['connectionId']"
-								}
-							},
-							"method": "post",
-							"path": "/v2/Mail"
 						}
 					},
 					"Start_Creation_Final_Users_Report": {
