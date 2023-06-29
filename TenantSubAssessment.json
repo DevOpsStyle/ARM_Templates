@@ -33,7 +33,7 @@
                     "actions": {
                         "Create_Api-Key-Users_Variable": {
                             "runAfter": {
-                                "Format_Json_Values": [
+                                "Create_Question_Variable_for_Users": [
                                     "Succeeded"
                                 ]
                             },
@@ -65,10 +65,43 @@
                                 ]
                             }
                         },
+                        "Create_Connection_Question_Variable": {
+                            "runAfter": {
+                                "Api-Key_Connections": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "ConnectionQuestion",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Create_Connection_Report_String": {
+                            "runAfter": {
+                                "Create_Connection_Question_Variable": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "ConnectionsReport",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
                         "Create_FinalOutput_Variable": {
                             "runAfter": {
                                 "For_each_Resource": [
-                                    "Succeeded"
+                                    "Succeeded",
+                                    "Failed"
                                 ]
                             },
                             "type": "InitializeVariable",
@@ -78,6 +111,38 @@
                                         "name": "FinalOutput",
                                         "type": "string",
                                         "value": "@{variables('Report')}"
+                                    }
+                                ]
+                            }
+                        },
+                        "Create_Question_Variable": {
+                            "runAfter": {
+                                "Create_Api-Key_Variable": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "Question",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Create_Question_Variable_for_Users": {
+                            "runAfter": {
+                                "Format_Json_Values": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "QuestionUsers",
+                                        "type": "string"
                                     }
                                 ]
                             }
@@ -115,7 +180,11 @@
                             }
                         },
                         "Create_Report_Variable": {
-                            "runAfter": {},
+                            "runAfter": {
+                                "List_resources_by_subscription": [
+                                    "Succeeded"
+                                ]
+                            },
                             "type": "InitializeVariable",
                             "inputs": {
                                 "variables": [
@@ -160,7 +229,7 @@
                         },
                         "Create_Response_Variable": {
                             "runAfter": {
-                                "Create_Api-Key_Variable": [
+                                "Create_Question_Variable": [
                                     "Succeeded"
                                 ]
                             },
@@ -174,9 +243,412 @@
                                 ]
                             }
                         },
-                        "For_each_Resource": {
-                            "foreach": "@variables('Report')",
+                        "For_Each_RG": {
+                            "foreach": "@body('List_resource_groups')?['value']",
                             "actions": {
+                                "For_Any_Responses": {
+                                    "foreach": "@body('Parse_Connections_Response')?['value']",
+                                    "actions": {
+                                        "Connections_Response": {
+                                            "runAfter": {
+                                                "Invoke_OpenAI_Help": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ParseJson",
+                                            "inputs": {
+                                                "content": "@body('Invoke_OpenAI_Help')",
+                                                "schema": {
+                                                    "properties": {
+                                                        "body": {
+                                                            "properties": {
+                                                                "choices": {
+                                                                    "items": {
+                                                                        "properties": {
+                                                                            "finish_reason": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "index": {
+                                                                                "type": "integer"
+                                                                            },
+                                                                            "logprobs": {},
+                                                                            "text": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "text",
+                                                                            "index",
+                                                                            "finish_reason",
+                                                                            "logprobs"
+                                                                        ],
+                                                                        "type": "object"
+                                                                    },
+                                                                    "type": "array"
+                                                                },
+                                                                "created": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "id": {
+                                                                    "type": "string"
+                                                                },
+                                                                "model": {
+                                                                    "type": "string"
+                                                                },
+                                                                "object": {
+                                                                    "type": "string"
+                                                                },
+                                                                "usage": {
+                                                                    "properties": {
+                                                                        "completion_tokens": {
+                                                                            "type": "integer"
+                                                                        },
+                                                                        "prompt_tokens": {
+                                                                            "type": "integer"
+                                                                        },
+                                                                        "total_tokens": {
+                                                                            "type": "integer"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "headers": {
+                                                            "properties": {
+                                                                "Access-Control-Allow-Origin": {
+                                                                    "type": "string"
+                                                                },
+                                                                "Cache-Control": {
+                                                                    "type": "string"
+                                                                },
+                                                                "Content-Length": {
+                                                                    "type": "string"
+                                                                },
+                                                                "Content-Type": {
+                                                                    "type": "string"
+                                                                },
+                                                                "Date": {
+                                                                    "type": "string"
+                                                                },
+                                                                "Openai-Model": {
+                                                                    "type": "string"
+                                                                },
+                                                                "Openai-Processing-Ms": {
+                                                                    "type": "string"
+                                                                },
+                                                                "Strict-Transport-Security": {
+                                                                    "type": "string"
+                                                                },
+                                                                "X-Accel-Buffering": {
+                                                                    "type": "string"
+                                                                },
+                                                                "X-Content-Type-Options": {
+                                                                    "type": "string"
+                                                                },
+                                                                "X-Ms-Client-Request-Id": {
+                                                                    "type": "string"
+                                                                },
+                                                                "X-Request-ID": {
+                                                                    "type": "string"
+                                                                },
+                                                                "apim-request-id": {
+                                                                    "type": "string"
+                                                                },
+                                                                "x-ms-region": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "statusCode": {
+                                                            "type": "integer"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            }
+                                        },
+                                        "For_Each_Connection_Status": {
+                                            "foreach": "@body('Connections_Response')?['choices']",
+                                            "actions": {
+                                                "Append_to_array_variable": {
+                                                    "runAfter": {},
+                                                    "type": "AppendToArrayVariable",
+                                                    "inputs": {
+                                                        "name": "ConnectionsArrayRespose",
+                                                        "value": "@{items('For_Each_Connection_Status')?['text']} </br>\n</br>"
+                                                    }
+                                                }
+                                            },
+                                            "runAfter": {
+                                                "Connections_Response": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "Foreach"
+                                        },
+                                        "Get_Information_about_Connection": {
+                                            "runAfter": {},
+                                            "type": "Http",
+                                            "inputs": {
+                                                "authentication": {
+                                                    "type": "ManagedServiceIdentity"
+                                                },
+                                                "method": "GET",
+                                                "uri": "https://management.azure.com/subscriptions/1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30/resourceGroups/@{items('For_Each_RG')?['name']}/providers/Microsoft.Network/connections/@{items('For_Any_Responses')?['name']}?api-version=2022-09-01"
+                                            }
+                                        },
+                                        "Invoke_OpenAI_Help": {
+                                            "runAfter": {
+                                                "Set_variable_Question": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "Http",
+                                            "inputs": {
+                                                "body": {
+                                                    "max_tokens": 1400,
+                                                    "prompt": "@variables('ConnectionQuestion')"
+                                                },
+                                                "headers": {
+                                                    "Content-Type": "application/json",
+                                                    "api-key": "@variables('apy-key-connections')"
+                                                },
+                                                "method": "POST",
+                                                "uri": "https://openaisentinel.openai.azure.com/openai/deployments/assessment/completions?api-version=2022-12-01"
+                                            }
+                                        },
+                                        "Set_variable_Question": {
+                                            "runAfter": {
+                                                "Get_Information_about_Connection": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "ConnectionQuestion",
+                                                "value": "Can you descrive the status of the connection reported here: @{body('Get_Information_about_Connection')}. Please insert the connection name, the resource group where is placed and any other type of useful information.\n"
+                                            }
+                                        }
+                                    },
+                                    "runAfter": {
+                                        "Parse_Connections_Response": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Foreach"
+                                },
+                                "Get_All_Connection_From_RG": {
+                                    "runAfter": {},
+                                    "type": "Http",
+                                    "inputs": {
+                                        "authentication": {
+                                            "type": "ManagedServiceIdentity"
+                                        },
+                                        "method": "GET",
+                                        "uri": "https://management.azure.com/subscriptions/1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30/resourceGroups/@{items('For_Each_RG')?['name']}/providers/Microsoft.Network/connections?api-version=2022-09-01"
+                                    }
+                                },
+                                "Parse_Connections_Response": {
+                                    "runAfter": {
+                                        "Get_All_Connection_From_RG": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ParseJson",
+                                    "inputs": {
+                                        "content": "@body('Get_All_Connection_From_RG')",
+                                        "schema": {
+                                            "properties": {
+                                                "body": {
+                                                    "properties": {
+                                                        "value": {
+                                                            "items": {
+                                                                "properties": {
+                                                                    "etag": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "id": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "location": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "name": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "properties": {
+                                                                        "properties": {
+                                                                            "authorizationKey": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "connectionMode": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "connectionType": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "dpdTimeoutSeconds": {
+                                                                                "type": "integer"
+                                                                            },
+                                                                            "egressBytesTransferred": {
+                                                                                "type": "integer"
+                                                                            },
+                                                                            "enableBgp": {
+                                                                                "type": "boolean"
+                                                                            },
+                                                                            "enablePrivateLinkFastPath": {
+                                                                                "type": "boolean"
+                                                                            },
+                                                                            "expressRouteGatewayBypass": {
+                                                                                "type": "boolean"
+                                                                            },
+                                                                            "gatewayCustomBgpIpAddresses": {
+                                                                                "type": "array"
+                                                                            },
+                                                                            "ingressBytesTransferred": {
+                                                                                "type": "integer"
+                                                                            },
+                                                                            "ipsecPolicies": {
+                                                                                "type": "array"
+                                                                            },
+                                                                            "packetCaptureDiagnosticState": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "peer": {
+                                                                                "properties": {
+                                                                                    "id": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "provisioningState": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "resourceGuid": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "routingWeight": {
+                                                                                "type": "integer"
+                                                                            },
+                                                                            "trafficSelectorPolicies": {
+                                                                                "type": "array"
+                                                                            },
+                                                                            "useLocalAzureIpAddress": {
+                                                                                "type": "boolean"
+                                                                            },
+                                                                            "usePolicyBasedTrafficSelectors": {
+                                                                                "type": "boolean"
+                                                                            },
+                                                                            "virtualNetworkGateway1": {
+                                                                                "properties": {
+                                                                                    "id": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    "type": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "name",
+                                                                    "id",
+                                                                    "etag",
+                                                                    "type",
+                                                                    "location",
+                                                                    "properties"
+                                                                ],
+                                                                "type": "object"
+                                                            },
+                                                            "type": "array"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "headers": {
+                                                    "properties": {
+                                                        "Cache-Control": {
+                                                            "type": "string"
+                                                        },
+                                                        "Content-Length": {
+                                                            "type": "string"
+                                                        },
+                                                        "Content-Type": {
+                                                            "type": "string"
+                                                        },
+                                                        "Date": {
+                                                            "type": "string"
+                                                        },
+                                                        "Expires": {
+                                                            "type": "string"
+                                                        },
+                                                        "Pragma": {
+                                                            "type": "string"
+                                                        },
+                                                        "Strict-Transport-Security": {
+                                                            "type": "string"
+                                                        },
+                                                        "Vary": {
+                                                            "type": "string"
+                                                        },
+                                                        "X-Content-Type-Options": {
+                                                            "type": "string"
+                                                        },
+                                                        "x-ms-correlation-request-id": {
+                                                            "type": "string"
+                                                        },
+                                                        "x-ms-original-request-ids": {
+                                                            "type": "string"
+                                                        },
+                                                        "x-ms-ratelimit-remaining-subscription-reads": {
+                                                            "type": "string"
+                                                        },
+                                                        "x-ms-request-id": {
+                                                            "type": "string"
+                                                        },
+                                                        "x-ms-routing-request-id": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "statusCode": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Initialize_variable": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "For_each_Resource": {
+                            "foreach": "@body('List_resources_by_subscription')?['value']",
+                            "actions": {
+                                "Delay": {
+                                    "runAfter": {},
+                                    "type": "Wait",
+                                    "inputs": {
+                                        "interval": {
+                                            "count": 1,
+                                            "unit": "Second"
+                                        }
+                                    }
+                                },
                                 "For_Each_Response": {
                                     "foreach": "@body('Parse_JSON')?['choices']",
                                     "actions": {
@@ -261,12 +733,16 @@
                                     }
                                 },
                                 "Send_Query_to_Azure_OpenAI": {
-                                    "runAfter": {},
+                                    "runAfter": {
+                                        "Delay": [
+                                            "Succeeded"
+                                        ]
+                                    },
                                     "type": "Http",
                                     "inputs": {
                                         "body": {
                                             "max_tokens": 1400,
-                                            "prompt": "Create for me a detailed report on what type of resources I have using this output:@{items('For_each_Resource')}. Explain what type of resource is, his name, in what resource group is and how the resource works. Explain to me if is a IaaS, PaaS or SaaS resource. If possibile send me documentation from Microsoft Docs and information about the billing of the resource."
+                                            "prompt": "Create a detailed report on what type of resources I have using this output:@{items('For_each_Resource')}. Explain what type of resource is, the resource name, in what resource group is and how the resource works. Explain to me if is a IaaS, PaaS or SaaS resource. If possibile send me documentation from Microsoft Docs and information about the billing of the resource."
                                         },
                                         "headers": {
                                             "Content-Type": "application/json",
@@ -405,6 +881,74 @@
                                 ]
                             },
                             "type": "Foreach"
+                        },
+                        "Format_Connections_1": {
+                            "runAfter": {
+                                "Prepare_Report_for_Connections": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "FormatConnection1",
+                                        "type": "string",
+                                        "value": "@{replace(variables('ConnectionsReport'), '\\n', ' ')}"
+                                    }
+                                ]
+                            }
+                        },
+                        "Format_Connections_2": {
+                            "runAfter": {
+                                "Format_Connections_1": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "FormatConnections2",
+                                        "type": "string",
+                                        "value": "@{replace(variables('FormatConnection1'), '[\"', '')}"
+                                    }
+                                ]
+                            }
+                        },
+                        "Format_Connections_3": {
+                            "runAfter": {
+                                "Format_Connections_2": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "FormatConnections3",
+                                        "type": "string",
+                                        "value": "@{replace(variables('FormatConnections2'), '\"]', '')}"
+                                    }
+                                ]
+                            }
+                        },
+                        "Format_Connections_4": {
+                            "runAfter": {
+                                "Format_Connections_3": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "FormatConnections4",
+                                        "type": "string",
+                                        "value": "@{replace(variables('FormatConnections3'), '\",\"', ' ')}"
+                                    }
+                                ]
+                            }
                         },
                         "Format_Json_Values": {
                             "runAfter": {
@@ -638,7 +1182,8 @@
                         "Populate_FinalRawOutputUsers": {
                             "runAfter": {
                                 "For_each_User": [
-                                    "Succeeded"
+                                    "Succeeded",
+                                    "Failed"
                                 ]
                             },
                             "type": "InitializeVariable",
@@ -650,6 +1195,48 @@
                                         "value": "@{variables('RawOutputUsers')}"
                                     }
                                 ]
+                            }
+                        },
+                        "Prepare_Report_for_Connections": {
+                            "runAfter": {
+                                "For_Each_RG": [
+                                    "Succeeded",
+                                    "Failed"
+                                ]
+                            },
+                            "type": "SetVariable",
+                            "inputs": {
+                                "name": "ConnectionsReport",
+                                "value": "@{variables('ConnectionsArrayRespose')}"
+                            }
+                        },
+                        "Send_an_email_(V2)_2": {
+                            "runAfter": {
+                                "Format_Connections_4": [
+                                    "Succeeded"
+                                ],
+                                "Formatting_Output_Final_Part": [
+                                    "Succeeded"
+                                ],
+                                "Formatting_User_Report_Final_Part": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "Body": "<p>Hello,<br>\n<br>\nHere the result of the assessment for the selected subscription:<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\nTotal Number of user in Azure Active Directory: @{variables('NumerOfUsers')}<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\nUsers Information:<br>\n<br>\n<br>\n@{variables('FinalUserReportV')}<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\nResources:<br>\n<br>\n@{variables('FormatReport4')}<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\nConnections:<br>\n<br>\n@{variables('FormatConnections4')}<br>\n<br>\n------------------------------------------------------------------------<br>\n<br>\nKind Regards</p>",
+                                    "Importance": "Normal",
+                                    "Subject": "assessment subscription",
+                                    "To": "tommasosacco@microsoft.com"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['office365']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/v2/Mail"
                             }
                         },
                         "Start_Creation_Final_Users_Report": {
@@ -690,7 +1277,6 @@
                     "outputs": {}
                 },
                 "parameters": {}
-            }
         }
     ]
 }
