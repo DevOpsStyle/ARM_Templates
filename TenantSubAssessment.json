@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "workflows_ResourceAssessmenttoedit_name": {
-            "defaultValue": "ResourceAssessmenttoedit",
+            "defaultValue": "ResourcesAssessment",
             "type": "String"
         }
     },
@@ -13,7 +13,7 @@
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
             "name": "[parameters('workflows_ResourceAssessmenttoedit_name')]",
-            "location": "westeurope",
+            "location": "[resourceGroup().location]",
             "identity": {
                 "type": "SystemAssigned"
             },
