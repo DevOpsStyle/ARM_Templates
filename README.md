@@ -156,45 +156,64 @@ When the data elaboration is completed you can send results using e-mail. In ord
 
 | **Parameters** | **Information** | **Note** |
 | ------------- | ------------- | ------------- |
-| api-key | The API code for manage your OpenAI service | The parameter is inside the second "Initialize Variable". Put your question in the "value" attribute  |
-| api-key-users | The API code for manage your OpenAI service | The parameter is inside the second "Initialize Variable". Put your question in the "value" attribute |
+| api-key | The API code for manage your OpenAI service | Get this value from your OpenAI Service  |
+| api-key-users | The API code for manage your OpenAI service | Get this value from your OpenAI Service |
+| apy-key-connections | The API code for manage your OpenAI service | Get this value from your OpenAI Service |
 | changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
-| changemodelname | Insert the model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
+| changemodelname | Insert the OpenAI model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
+
 
 <h3>Required Connector</h3>
 
-When the deployment is completed go in your Logic App and create the Subscription connector "List Resources by subscription" based on the screen below, between modules "When HTTP request is received" and "Create Report Variable":
+When the deployment is completed go in your Logic App and create the Subscription connector "List Resources by subscription" and "List Resource Groups" based on the screen below. Keep attention to pur "List Resources by subscription" above "Create Report Variable" and "List Resource Groups" above "Api-Key Connections":
 
-<img src="https://i.ibb.co/KV0WG4N/listresourcesbysubscription.jpg" alt="SubscriptionConnector" title="SubscriptionConnector">
+<img src="https://i.ibb.co/5BhrQ9B/list-resource-for-sub-and-rg-1.jpg" alt="ListResources" title="ListResources">
 
-For the cycle "For Each Resource" change the item with "value" following the example below:
+For the List Resource Group pipeline branch, ensure that the "For Each RG" Cycle have inside the "value" of the output "List Resource Groups":
 
-<img src="https://i.ibb.co/s5XCKp7/foreachresource.jpg" alt="foreachresource" title="foreachresource">
+<img src="https://i.ibb.co/R9wPDH4/For-Each-RG-value-list-rg-2.jpg" alt="ForEachRG" title="ForEachRG">
 
-Configure the Graph-API Connector using as example the screen below. Keep in mind that you must create a new Application under your Azure Tenant in order to start Graph-API request. The new application must have all the delegation permission for GraphAPI communication. For help follow this link: <a href="https://techcommunity.microsoft.com/t5/integrations-on-azure-blog/calling-graph-api-from-azure-logic-apps-using-delegated/ba-p/1997666" target="_blank"> 
+Regarding the Cycle "For Any Responses" ensure to cycle inside "value" of "Parse Connections Response":
 
-<img src="https://i.ibb.co/9VDHgBB/getuserlistconfiguration.jpg" alt="GraphAPI" title="GraphAPI">
+<img src="https://i.ibb.co/LN35Z3g/for-any-response-3.jpg" alt="Foranyresponse" title="Foranyresponse">
 
-Regarding the HTTP Connector, these are used for send request to OpenAI Service. You have to configure the api-key and api-key-users that are the secret used for the OpenAI Connections. Also you have to manage the endpoint and model name of the Connector following the example below: 
+The Cycle "For Each Connection Status" loop inside the "Choices" of Connections Response:
 
-<img src="https://i.ibb.co/bF6J2MY/trigger-4-http.jpg" alt="HTTP" title="HTTP">
+<img src="https://i.ibb.co/hKL9tkL/for-each-connection-status-4.jpg" alt="Foreachconnections" title="Foreachconnections">
 
-Now is the time to configure the Send-Email(V2) module. This module will be used for send result to an e-mail address. Place this module in the end of Logic App. Follow the configuration below:
+For the List Resources by subscription pipeline branch, ensure that the "For Each Resource" Cycle have inside the "value" of the output "List Resources by subscription":
 
-<img src="https://i.ibb.co/S7zdmD9/sendemail.jpg" alt="sendemail" title="sendemail">
+<img src="https://i.ibb.co/0ByCZ0L/for-each-resource-5.jpg" alt="ForEachRG" title="ForEachRG">
 
-Body part:
+Inside this Cycle we have a Delay resource. The resource scope is to slow down the OpenAI request in order to not face with Quota Limit issues. If you have enough quota you can delete this.
 
-<img src="https://i.ibb.co/SxBvQ95/sendemailconfiguration.jpg" alt="SendEmail" title="SendEmail">
+<img src="https://i.ibb.co/zhqCywq/delay-6.jpg" alt="Delay" title="Delay">
 
-Run After Configuration:
+For the Cicle "For Each Response" cycle inside the "Choices" of Parse Json:
 
-<img src="https://i.ibb.co/2KBZ766/sendemailconfigurationrunafter.jpg" alt="sendemailconfigurationrunafter" title="sendemailconfigurationrunafter">
+<img src="https://i.ibb.co/d4GT9bx/for-each-response-7.jp" alt="ForEachResponse" title="ForEachResponse">
 
-Ensure that the Workflow Setting related "High throughput" is enabled. Logic Apps are usually used for script that not require a long rung. With this option you can extend the execution up to 15 minutes. 
+For the Get User List pipeline branch, ensure to populate the module with all the required filed. Ensure to have a Service Principal with all the required permission <a href=https://learn.microsoft.com/en-us/graph/api/user-get?view=graph-rest-1.0&tabs=http>reported here</a>  and <a href=https://learn.microsoft.com/en-us/azure/purview/create-service-principal-azure>here</a>. For a tutorial please refer to <a href=https://techcommunity.microsoft.com/t5/azure-integration-services-blog/calling-graph-api-from-azure-logic-apps-using-delegated/ba-p/1997666>this link</a>:
 
-<img src="https://i.ibb.co/s2xmcHr/runtimeoptions.jpg" alt="runtimeoptions" title="runtimeoptions">
+<img src="https://i.ibb.co/Rb9VBf7/get-user-list-8.jpg" alt="GetUserList" title="GetUserList">
 
-If you have too much resources in your environment another way to complete the assessment is to run the Logic App under the Resources Groupe you need to analyze. In order to do that replace the "list resources by subscription" module with "list resources by resource group" module:
+Check the Cycle "For Each User" ensure to cycle inside Values of "Format_Json_Values":
 
-<img src="https://i.ibb.co/BfB4KGq/listresourcesbyresourcegroup.jpg" alt="listresourcesbyresourcegroup" title="listresourcesbyresourcegroup">
+<img src="https://i.ibb.co/h2PZz9p/for-each-user-9.jpg" alt="Foreachuser" title="Foreachuser">
+
+Regarding "For Each Ouptut" Cycle ensure to cycle inside choices of "Parse Json 2":
+
+<img src="https://i.ibb.co/Ch2k36H/for-each-output-9.jpg" alt="Foreachoutput" title="Foreachoutput">
+
+Last step, the E-mail. For this template we chose to send assessment via E-Mail. This is a configuration Enxample. Place the module "Send Email(V2)" at the end point with the following configuration regarding "Run After":
+
+<img src="https://i.ibb.co/71pYWRg/send-email-10.jpg alt="RunAfter" title="RunAfter">
+
+For the body of the E-Mail you can follow this example:
+
+<img src="https://i.ibb.co/D1hhFkc/email-11.jpg" alt="Email" title="Email">
+
+
+<h2>DISCLAIMER</h2>
+
+All models listed should be understood as a basic configuration in which the customer can create its own logical application.
