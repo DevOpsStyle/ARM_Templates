@@ -207,7 +207,7 @@ Regarding "For Each Ouptut" Cycle ensure to cycle inside choices of "Parse Json 
 
 Last step, the E-mail. For this template we chose to send assessment via E-Mail. This is a configuration Enxample. Place the module "Send Email(V2)" at the end point with the following configuration regarding "Run After":
 
-<img src="https://i.ibb.co/71pYWRg/send-email-10.jpg alt="RunAfter" title="RunAfter">
+<img src="https://i.ibb.co/71pYWRg/send-email-10.jpg" alt="RunAfter" title="RunAfter">
 
 For the body of the E-Mail you can follow this example:
 
