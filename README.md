@@ -193,7 +193,7 @@ For the Cicle "For Each Response" cycle inside the "Choices" of Parse Json:
 
 <img src="https://i.ibb.co/d4GT9bx/for-each-response-7.jpg" alt="ForEachResponse" title="ForEachResponse">
 
-For the Get User List pipeline branch, ensure to populate the module with all the required filed. Ensure to have a Service Principal with all the required permission <a href=https://learn.microsoft.com/en-us/graph/api/user-get?view=graph-rest-1.0&tabs=http>reported here</a>  and <a href=https://learn.microsoft.com/en-us/azure/purview/create-service-principal-azure>here</a>. For a tutorial please refer to <a href=https://techcommunity.microsoft.com/t5/azure-integration-services-blog/calling-graph-api-from-azure-logic-apps-using-delegated/ba-p/1997666>this link</a>:
+For the Get User List pipeline branch, ensure to populate the module with all the required filed. Ensure to have a Service Principal with all the required permission <a href=https://learn.microsoft.com/en-us/graph/api/user-get?>reported here</a>  and <a href=https://learn.microsoft.com/en-us/azure/purview/create-service-principal-azure>here</a>. For a tutorial please refer to <a href=https://techcommunity.microsoft.com/t5/azure-integration-services-blog/calling-graph-api-from-azure-logic-apps-using-delegated/ba-p/1997666>this link</a>:
 
 <img src="https://i.ibb.co/Rb9VBf7/get-user-list-8.jpg" alt="GetUserList" title="GetUserList">
 
