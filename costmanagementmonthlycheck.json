@@ -1,0 +1,1040 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_costmanagementmonthlycheck_name": {
+            "defaultValue": "costmanagementmonthlycheck",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('workflows_costmanagementmonthlycheck_name')]",
+            "location": "[resourceGroup().location]",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "triggers": {
+                        "manual": {
+                            "type": "Request",
+                            "kind": "Http",
+                            "inputs": {}
+                        }
+                    },
+                    "actions": {
+                        "Actual_Month_Report": {
+                            "runAfter": {
+                                "Download_report_actual_month": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ParseJson",
+                            "inputs": {
+                                "content": "@body('Download_report_actual_month')",
+                                "schema": {
+                                    "properties": {
+                                        "body": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "manifest": {
+                                                    "properties": {
+                                                        "blobCount": {
+                                                            "type": "integer"
+                                                        },
+                                                        "blobs": {
+                                                            "items": {
+                                                                "properties": {
+                                                                    "blobLink": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "byteCount": {
+                                                                        "type": "integer"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "blobLink",
+                                                                    "byteCount"
+                                                                ],
+                                                                "type": "object"
+                                                            },
+                                                            "type": "array"
+                                                        },
+                                                        "byteCount": {
+                                                            "type": "integer"
+                                                        },
+                                                        "compressData": {
+                                                            "type": "boolean"
+                                                        },
+                                                        "dataFormat": {
+                                                            "type": "string"
+                                                        },
+                                                        "manifestVersion": {
+                                                            "type": "string"
+                                                        },
+                                                        "requestContext": {
+                                                            "properties": {
+                                                                "requestBody": {
+                                                                    "properties": {
+                                                                        "billingPeriod": {},
+                                                                        "invoiceId": {},
+                                                                        "metric": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "timePeriod": {
+                                                                            "properties": {
+                                                                                "end": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "start": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                },
+                                                                "requestScope": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "status": {
+                                                    "type": "string"
+                                                },
+                                                "validTill": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "headers": {
+                                            "properties": {
+                                                "Cache-Control": {
+                                                    "type": "string"
+                                                },
+                                                "Content-Type": {
+                                                    "type": "string"
+                                                },
+                                                "Date": {
+                                                    "type": "string"
+                                                },
+                                                "Expires": {
+                                                    "type": "string"
+                                                },
+                                                "Pragma": {
+                                                    "type": "string"
+                                                },
+                                                "Strict-Transport-Security": {
+                                                    "type": "string"
+                                                },
+                                                "Transfer-Encoding": {
+                                                    "type": "string"
+                                                },
+                                                "Vary": {
+                                                    "type": "string"
+                                                },
+                                                "X-Content-Type-Options": {
+                                                    "type": "string"
+                                                },
+                                                "X-Powered-By": {
+                                                    "type": "string"
+                                                },
+                                                "session-id": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-client-request-id": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-correlation-request-id": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-ratelimit-remaining-subscription-reads": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-request-id": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-routing-request-id": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "Create_ActualMonthDownload": {
+                            "runAfter": {
+                                "Actual_Month_Report": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "ActualMonthDownload",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Create_LastMonthDownload": {
+                            "runAfter": {
+                                "Last_Month_Report": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "LastMonthDownload",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Download_report_actual_month": {
+                            "runAfter": {
+                                "Query_ultimi_30_giorni": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Http",
+                            "inputs": {
+                                "authentication": {
+                                    "type": "ManagedServiceIdentity"
+                                },
+                                "body": {
+                                    "metric": "ActualCost",
+                                    "timePeriod": {
+                                        "end": "@{variables('currentdate')}",
+                                        "start": "@{variables('olddate')}"
+                                    }
+                                },
+                                "method": "POST",
+                                "uri": "https://management.azure.com/subscriptions/replace-with-sub-id/providers/Microsoft.CostManagement/generateCostDetailsReport?api-version=2023-03-01"
+                            }
+                        },
+                        "Download_report_last_month": {
+                            "runAfter": {
+                                "Query_-60_-30_giorni_precedenti": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Http",
+                            "inputs": {
+                                "authentication": {
+                                    "type": "ManagedServiceIdentity"
+                                },
+                                "body": {
+                                    "metric": "ActualCost",
+                                    "timePeriod": {
+                                        "end": "@{variables('currentdate')}",
+                                        "start": "@{variables('olddate')}"
+                                    }
+                                },
+                                "method": "POST",
+                                "uri": "https://management.azure.com/subscriptions/replace-with-sub-id/providers/Microsoft.CostManagement/generateCostDetailsReport?api-version=2023-03-01"
+                            }
+                        },
+                        "For_each": {
+                            "foreach": "@body('Parse_JSON')?['choices']",
+                            "actions": {},
+                            "runAfter": {
+                                "Parse_JSON": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "Get_Actual_Month_Download_Link": {
+                            "foreach": "@body('Actual_Month_Report')?['manifest']?['blobs']",
+                            "actions": {
+                                "Set_variable_ActualMothDownload": {
+                                    "runAfter": {},
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "ActualMonthDownload",
+                                        "value": "@items('Get_Actual_Month_Download_Link')?['blobLink']"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Create_ActualMonthDownload": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "Get_Last_Month_Download_Link": {
+                            "foreach": "@body('Last_Month_Report')?['manifest']?['blobs']",
+                            "actions": {
+                                "Set_variable_LastMothDownload": {
+                                    "runAfter": {},
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "LastMonthDownload",
+                                        "value": "@items('Get_Last_Month_Download_Link')?['blobLink']"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Create_LastMonthDownload": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "Imposto_data_odierna": {
+                            "runAfter": {},
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "currentdate",
+                                        "type": "string",
+                                        "value": "@{utcNow('yyyy-MM-dd')}"
+                                    }
+                                ]
+                            }
+                        },
+                        "Imposto_data_odierna_-30_giorni": {
+                            "runAfter": {
+                                "Imposto_data_odierna": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "olddate",
+                                        "type": "string",
+                                        "value": "@{subtractFromTime(utcNow('yyyy-MM-dd'),30,'Day','yyyy-MM-dd')}"
+                                    }
+                                ]
+                            }
+                        },
+                        "Last_Month_Report": {
+                            "runAfter": {
+                                "Download_report_last_month": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ParseJson",
+                            "inputs": {
+                                "content": "@body('Download_report_last_month')",
+                                "schema": {
+                                    "properties": {
+                                        "body": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "manifest": {
+                                                    "properties": {
+                                                        "blobCount": {
+                                                            "type": "integer"
+                                                        },
+                                                        "blobs": {
+                                                            "items": {
+                                                                "properties": {
+                                                                    "blobLink": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "byteCount": {
+                                                                        "type": "integer"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "blobLink",
+                                                                    "byteCount"
+                                                                ],
+                                                                "type": "object"
+                                                            },
+                                                            "type": "array"
+                                                        },
+                                                        "byteCount": {
+                                                            "type": "integer"
+                                                        },
+                                                        "compressData": {
+                                                            "type": "boolean"
+                                                        },
+                                                        "dataFormat": {
+                                                            "type": "string"
+                                                        },
+                                                        "manifestVersion": {
+                                                            "type": "string"
+                                                        },
+                                                        "requestContext": {
+                                                            "properties": {
+                                                                "requestBody": {
+                                                                    "properties": {
+                                                                        "billingPeriod": {},
+                                                                        "invoiceId": {},
+                                                                        "metric": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "timePeriod": {
+                                                                            "properties": {
+                                                                                "end": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "start": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                },
+                                                                "requestScope": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "status": {
+                                                    "type": "string"
+                                                },
+                                                "validTill": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "headers": {
+                                            "properties": {
+                                                "Cache-Control": {
+                                                    "type": "string"
+                                                },
+                                                "Content-Type": {
+                                                    "type": "string"
+                                                },
+                                                "Date": {
+                                                    "type": "string"
+                                                },
+                                                "Expires": {
+                                                    "type": "string"
+                                                },
+                                                "Pragma": {
+                                                    "type": "string"
+                                                },
+                                                "Strict-Transport-Security": {
+                                                    "type": "string"
+                                                },
+                                                "Transfer-Encoding": {
+                                                    "type": "string"
+                                                },
+                                                "Vary": {
+                                                    "type": "string"
+                                                },
+                                                "X-Content-Type-Options": {
+                                                    "type": "string"
+                                                },
+                                                "X-Powered-By": {
+                                                    "type": "string"
+                                                },
+                                                "session-id": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-client-request-id": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-correlation-request-id": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-ratelimit-remaining-subscription-reads": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-request-id": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-routing-request-id": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "Parse_JSON": {
+                            "runAfter": {
+                                "Passo_i_risultati_a_OpenAI": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ParseJson",
+                            "inputs": {
+                                "content": "@body('Passo_i_risultati_a_OpenAI')",
+                                "schema": {
+                                    "properties": {
+                                        "body": {
+                                            "properties": {
+                                                "choices": {
+                                                    "items": {
+                                                        "properties": {
+                                                            "finish_reason": {
+                                                                "type": "string"
+                                                            },
+                                                            "index": {
+                                                                "type": "integer"
+                                                            },
+                                                            "logprobs": {},
+                                                            "text": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "text",
+                                                            "index",
+                                                            "finish_reason",
+                                                            "logprobs"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    "type": "array"
+                                                },
+                                                "created": {
+                                                    "type": "integer"
+                                                },
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "model": {
+                                                    "type": "string"
+                                                },
+                                                "object": {
+                                                    "type": "string"
+                                                },
+                                                "usage": {
+                                                    "properties": {
+                                                        "completion_tokens": {
+                                                            "type": "integer"
+                                                        },
+                                                        "prompt_tokens": {
+                                                            "type": "integer"
+                                                        },
+                                                        "total_tokens": {
+                                                            "type": "integer"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "headers": {
+                                            "properties": {
+                                                "Access-Control-Allow-Origin": {
+                                                    "type": "string"
+                                                },
+                                                "Cache-Control": {
+                                                    "type": "string"
+                                                },
+                                                "Content-Length": {
+                                                    "type": "string"
+                                                },
+                                                "Content-Type": {
+                                                    "type": "string"
+                                                },
+                                                "Date": {
+                                                    "type": "string"
+                                                },
+                                                "Openai-Model": {
+                                                    "type": "string"
+                                                },
+                                                "Openai-Processing-Ms": {
+                                                    "type": "string"
+                                                },
+                                                "Strict-Transport-Security": {
+                                                    "type": "string"
+                                                },
+                                                "X-Accel-Buffering": {
+                                                    "type": "string"
+                                                },
+                                                "X-Content-Type-Options": {
+                                                    "type": "string"
+                                                },
+                                                "X-Ms-Client-Request-Id": {
+                                                    "type": "string"
+                                                },
+                                                "X-Request-ID": {
+                                                    "type": "string"
+                                                },
+                                                "apim-request-id": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-region": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "Passo_i_risultati_a_OpenAI": {
+                            "runAfter": {
+                                "Set_Question": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Http",
+                            "inputs": {
+                                "body": {
+                                    "max_tokens": 500,
+                                    "prompt": " @{variables('Question')}"
+                                },
+                                "headers": {
+                                    "Content-Type": "application/json",
+                                    "api-key": "@variables('Api-Key')"
+                                },
+                                "method": "POST",
+                                "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/completions?api-version=2022-12-01"
+                            }
+                        },
+                        "Query_-60_-30_giorni_precedenti": {
+                            "runAfter": {
+                                "Setto_currentdate_-30_giorni": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Http",
+                            "inputs": {
+                                "authentication": {
+                                    "type": "ManagedServiceIdentity"
+                                },
+                                "body": {
+                                    "dataSet": {
+                                        "aggregation": {
+                                            "totalCost": {
+                                                "function": "Sum",
+                                                "name": "Cost"
+                                            },
+                                            "totalCostUSD": {
+                                                "function": "Sum",
+                                                "name": "CostUSD"
+                                            }
+                                        },
+                                        "granularity": "None",
+                                        "grouping": [
+                                            {
+                                                "name": "ServiceName",
+                                                "type": "Dimension"
+                                            }
+                                        ],
+                                        "sorting": [
+                                            {
+                                                "direction": "descending",
+                                                "name": "Cost"
+                                            }
+                                        ]
+                                    },
+                                    "timePeriod": {
+                                        "from": "@{variables('olddate')}T00:00:00.000Z",
+                                        "to": "@{variables('currentdate')}T23:59:59.000Z"
+                                    },
+                                    "timeframe": "Custom",
+                                    "type": "ActualCost"
+                                },
+                                "method": "POST",
+                                "uri": "https://management.azure.com/subscriptions/replace-with-sub-id/providers/Microsoft.CostManagement/query?api-version=2023-03-01"
+                            }
+                        },
+                        "Query_ultimi_30_giorni": {
+                            "runAfter": {
+                                "Imposto_data_odierna_-30_giorni": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Http",
+                            "inputs": {
+                                "authentication": {
+                                    "type": "ManagedServiceIdentity"
+                                },
+                                "body": {
+                                    "dataSet": {
+                                        "aggregation": {
+                                            "totalCost": {
+                                                "function": "Sum",
+                                                "name": "Cost"
+                                            },
+                                            "totalCostUSD": {
+                                                "function": "Sum",
+                                                "name": "CostUSD"
+                                            }
+                                        },
+                                        "granularity": "None",
+                                        "grouping": [
+                                            {
+                                                "name": "ServiceName",
+                                                "type": "Dimension"
+                                            }
+                                        ],
+                                        "sorting": [
+                                            {
+                                                "direction": "descending",
+                                                "name": "Cost"
+                                            }
+                                        ]
+                                    },
+                                    "timePeriod": {
+                                        "from": "@{variables('olddate')}T00:00:00.000Z",
+                                        "to": "@{variables('currentdate')}T23:59:59.000Z"
+                                    },
+                                    "timeframe": "Custom",
+                                    "type": "ActualCost"
+                                },
+                                "method": "POST",
+                                "uri": "https://management.azure.com/subscriptions/replace-with-sub-id/providers/Microsoft.CostManagement/query?api-version=2023-03-01"
+                            }
+                        },
+                        "Risultati_ultimi_-60_-30_giorni": {
+                            "runAfter": {
+                                "Get_Last_Month_Download_Link": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ParseJson",
+                            "inputs": {
+                                "content": "@body('Query_-60_-30_giorni_precedenti')",
+                                "schema": {
+                                    "properties": {
+                                        "body": {
+                                            "properties": {
+                                                "eTag": {},
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "location": {},
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "properties": {
+                                                    "properties": {
+                                                        "columns": {
+                                                            "items": {
+                                                                "properties": {
+                                                                    "name": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "type": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "name",
+                                                                    "type"
+                                                                ],
+                                                                "type": "object"
+                                                            },
+                                                            "type": "array"
+                                                        },
+                                                        "nextLink": {},
+                                                        "rows": {
+                                                            "items": {
+                                                                "type": "array"
+                                                            },
+                                                            "type": "array"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "sku": {},
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "headers": {
+                                            "properties": {
+                                                "Cache-Control": {
+                                                    "type": "string"
+                                                },
+                                                "Content-Type": {
+                                                    "type": "string"
+                                                },
+                                                "Date": {
+                                                    "type": "string"
+                                                },
+                                                "Expires": {
+                                                    "type": "string"
+                                                },
+                                                "Pragma": {
+                                                    "type": "string"
+                                                },
+                                                "Strict-Transport-Security": {
+                                                    "type": "string"
+                                                },
+                                                "Transfer-Encoding": {
+                                                    "type": "string"
+                                                },
+                                                "Vary": {
+                                                    "type": "string"
+                                                },
+                                                "X-Content-Type-Options": {
+                                                    "type": "string"
+                                                },
+                                                "X-Powered-By": {
+                                                    "type": "string"
+                                                },
+                                                "session-id": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-client-request-id": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-correlation-request-id": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-ratelimit-remaining-subscription-resource-requests": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-request-id": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-routing-request-id": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "Risultati_ultimi_30_giorni": {
+                            "runAfter": {
+                                "Get_Actual_Month_Download_Link": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ParseJson",
+                            "inputs": {
+                                "content": "@body('Query_ultimi_30_giorni')",
+                                "schema": {
+                                    "properties": {
+                                        "body": {
+                                            "properties": {
+                                                "eTag": {},
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "location": {},
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "properties": {
+                                                    "properties": {
+                                                        "columns": {
+                                                            "items": {
+                                                                "properties": {
+                                                                    "name": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "type": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "name",
+                                                                    "type"
+                                                                ],
+                                                                "type": "object"
+                                                            },
+                                                            "type": "array"
+                                                        },
+                                                        "nextLink": {},
+                                                        "rows": {
+                                                            "items": {
+                                                                "type": "array"
+                                                            },
+                                                            "type": "array"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "sku": {},
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "headers": {
+                                            "properties": {
+                                                "Cache-Control": {
+                                                    "type": "string"
+                                                },
+                                                "Content-Type": {
+                                                    "type": "string"
+                                                },
+                                                "Date": {
+                                                    "type": "string"
+                                                },
+                                                "Expires": {
+                                                    "type": "string"
+                                                },
+                                                "Pragma": {
+                                                    "type": "string"
+                                                },
+                                                "Strict-Transport-Security": {
+                                                    "type": "string"
+                                                },
+                                                "Transfer-Encoding": {
+                                                    "type": "string"
+                                                },
+                                                "Vary": {
+                                                    "type": "string"
+                                                },
+                                                "X-Content-Type-Options": {
+                                                    "type": "string"
+                                                },
+                                                "X-Powered-By": {
+                                                    "type": "string"
+                                                },
+                                                "session-id": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-client-request-id": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-correlation-request-id": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-ratelimit-remaining-subscription-resource-requests": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-request-id": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-routing-request-id": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "Set_Api-Key": {
+                            "runAfter": {
+                                "Risultati_ultimi_-60_-30_giorni": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "Api-Key",
+                                        "type": "string",
+                                        "value": "replace-with-apy-key"
+                                    }
+                                ]
+                            }
+                        },
+                        "Set_Question": {
+                            "runAfter": {
+                                "Set_Api-Key": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "Question",
+                                        "type": "string",
+                                        "value": "Last month resources cost: @{body('Risultati_ultimi_-60_-30_giorni')?['properties']?['rows']}. Current month resources cost: @{body('Risultati_ultimi_30_giorni')?['properties']?['rows']}. Describe only most important differences of costs between two months. following the example:\n\"Azure firewall this month cost 900$ compared to 450$ of last months, an increase of 50%\""
+                                    }
+                                ]
+                            }
+                        },
+                        "Setto_currentdate_-30_giorni": {
+                            "runAfter": {
+                                "Setto_olddate_su_-60_giorni": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "SetVariable",
+                            "inputs": {
+                                "name": "currentdate",
+                                "value": "@{subtractFromTime(utcNow('yyyy-MM-dd'),30,'Day','yyyy-MM-dd')}"
+                            }
+                        },
+                        "Setto_olddate_su_-60_giorni": {
+                            "runAfter": {
+                                "Risultati_ultimi_30_giorni": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "SetVariable",
+                            "inputs": {
+                                "name": "olddate",
+                                "value": "@{subtractFromTime(utcNow('yyyy-MM-dd'),60,'Day','yyyy-MM-dd')}"
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {}
+            }
+        }
+    ]
+}

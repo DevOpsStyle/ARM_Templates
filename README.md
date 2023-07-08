@@ -38,6 +38,16 @@ This template can be used for the deployment of a Logic App which can help durin
   <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
 
+<h2>CostManagement monitoring with Azure OpenAI Integration</h2>
+
+<a href="https://github.com/DevOpsStyle/ARM_Templates#deploy-azure-vm-and-join-to-legacy-domain-configuration" target="_blank">Configuration</a>
+
+This template can be used for the deployment of different Azure VMs and join these to AD (Only Windows).
+
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2Fmain.json" target="_blank">
+  <img src="https://aka.ms/deploytoazurebutton"/>
+</a>
+
 <h3>Deploy Azure VM and join to legacy Domain: Configuration</h3>
 
 | **Parameters** | **Information** | **Note** |
