@@ -40,11 +40,11 @@ This template can be used for the deployment of a Logic App which can help durin
 
 <h2>CostManagement monitoring with Azure OpenAI Integration</h2>
 
-<a href="https://github.com/DevOpsStyle/ARM_Templates#deploy-azure-vm-and-join-to-legacy-domain-configuration" target="_blank">Configuration</a>
+<a href="https://github.com/DevOpsStyle/ARM_Templates#CostManagement-monitoring-with-Azure-OpenAI-Integration-configuration" target="_blank">Configuration</a>
 
-This template can be used for the deployment of different Azure VMs and join these to AD (Only Windows).
+This template can be used for the deployment of a Cost Management Logic App using Azure OpenAI.
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2Fmain.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2Fcostmanagementmonthlycheck.json" target="_blank">
   <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
 
@@ -222,6 +222,45 @@ Last step, the E-mail. For this template we chose to send assessment via E-Mail.
 For the body of the E-Mail you can follow this example:
 
 <img src="https://i.ibb.co/D1hhFkc/email-11.jpg" alt="Email" title="Email">
+
+<h3>CostManagement monitoring with Azure OpenAI Integration: Configuration</h3>
+
+| **Parameters** | **Information** | **Note** |
+| ------------- | ------------- | ------------- |
+| replace-with-sub-id | The Subscription ID where we want to monitor the costs | Get this value from your Azure Services  |
+| api-key | The API code for manage your OpenAI service | Get this value from your OpenAI Service |
+| apy-key-connections | The API code for manage your OpenAI service | Get this value from your OpenAI Service |
+| changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
+| changemodelname | Insert the OpenAI model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
+
+
+<h3>Required Connector</h3>
+
+After the deployment we can proceed with the configuration. The first step is to set all the required parameters following the examples below. Configure the Subscription ID inside the "Query ultimi 30 giorni" connectors:
+
+<img src="https://i.ibb.co/7zWxzCk/1.jpg" alt="SubID" title="SubID">
+
+Now configure the URI inside the "Download report actual month" connector:
+
+<img src="https://i.ibb.co/7NgFKMs/2.jpg" alt="downloadreport" title="downloadreport">
+
+Do the same for the "Query -60 -30 giorni precedenti" and "Download report last month" connectors:
+
+<img src="https://i.ibb.co/WF7NmFx/3.jpg" alt="query1" title="query1">
+<img src="https://i.ibb.co/M5bCDBR/4.jpg" alt="query2" title="query2">
+
+Put your api key for OpenAI connection inside the variable "Api-Key":
+
+<img src="https://i.ibb.co/6HfLgZT/5.jpg" alt="api" title="api">
+
+In the example below we have a "Send Email V2" connector for send the final report to the required people for Cost Management revision. If you want to follow the same approach configure the module following the same example:
+
+<img src="https://i.ibb.co/nctFHZH/6.jpg" alt="email1" title="email1">
+<img src="https://i.ibb.co/K0N6Ck8/7.jpg" alt="email2" title="email2">
+
+Please ensure to have enabled Managed Identity for the Logic App with the required permission in order to access to the subscription:
+
+<img src="https://i.ibb.co/ZWP22tq/8.jpg" alt="identity" title="identity">
 
 
 <h2>DISCLAIMER</h2>
