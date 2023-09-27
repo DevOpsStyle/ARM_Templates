@@ -239,7 +239,6 @@ For the body of the E-Mail you can follow this example:
 | changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 | changemodelname | Insert the OpenAI model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 
-
 <h3>Required Connector</h3>
 
 In order to configure in the right way the solution follow the steps below. As first step please configure the required recurrence:
@@ -258,7 +257,7 @@ At this point we need to configure the Ask to OpenAI module replacing the requir
 
 <img src="https://i.ibb.co/nz0Qq24/OpenAI.jpg" alt="OpenAI" title="OpenAI">
 
-In the example below we have a "Send Email V2" connector for send the final report to the required people for Cost Management revision. If you want to follow the same approach configure the module following the same example:
+In the example below we have a "Send Email V2" connector for send the final report to the required people for Cost Management revision. If you want to follow the same approach configure the module following the same example adding them at the end of the Logic App:
 
 <img src="https://i.ibb.co/DKJwTsW/email.jpg" alt="email" title="email">
 
