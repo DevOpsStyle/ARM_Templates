@@ -48,6 +48,16 @@ This template can be used for the deployment of a Cost Management Logic App usin
   <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
 
+<h2>OpenAI Smart Update Analysis</h2>
+
+<a href="https://github.com/DevOpsStyle/ARM_Templates#OpenAI-Smart-Update-Analysis" target="_blank">Configuration</a>
+
+This template can be used for the deployment of different Azure VMs and join these to AD (Only Windows).
+
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2FSmartUpdateAnalysis.json" target="_blank">
+  <img src="https://aka.ms/deploytoazurebutton"/>
+</a>
+
 <h3>Deploy Azure VM and join to legacy Domain: Configuration</h3>
 
 | **Parameters** | **Information** | **Note** |
@@ -136,7 +146,6 @@ As already shared, the variable Question is the string that will be sent to Open
 | changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 | changemodelname | Insert the model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 
-
 <h3>Required Identity</h3>
 <h4>Managed Identity</h4>
 
@@ -171,7 +180,6 @@ When the data elaboration is completed you can send results using e-mail. In ord
 | apy-key-connections | The API code for manage your OpenAI service | Get this value from your OpenAI Service |
 | changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 | changemodelname | Insert the OpenAI model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
-
 
 <h3>Required Connector</h3>
 
@@ -222,6 +230,42 @@ Last step, the E-mail. For this template we chose to send assessment via E-Mail.
 For the body of the E-Mail you can follow this example:
 
 <img src="https://i.ibb.co/D1hhFkc/email-11.jpg" alt="Email" title="Email">
+
+<h3>OpenAI Smart Update Analysis: Configuration</h3>
+
+| **Parameters** | **Information** | **Note** |
+| ------------- | ------------- | ------------- |
+| api-key | The API code for manage your OpenAI service | Get this value from your OpenAI Service |
+| changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
+| changemodelname | Insert the OpenAI model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
+
+
+<h3>Required Connector</h3>
+
+In order to configure in the right way the solution follow the steps below. As first step please configure the required recurrence:
+
+<img src="https://i.ibb.coFKd2qDV/recurrence.jpg" alt="recurrence" title="recurrence">
+
+Now configure the HTTP request to the Graph Explorer enabling the authentication via System Assigned Managed Identity. Please remind that the Managed Identity need to have the righ permission on the subscription for read the resources:
+
+<img src="https://i.ibb.co/dDhzNwZ/managed-identity.jpg" alt="managed-identity" title="managed-identity">
+
+Now is the time to set the Api Key for the connection with Azure Open AI Service:
+
+<img src="https://i.ibb.co/NWLntGz/api-key.jpg" alt="api-key" title="api-key">
+
+At this point we need to configure the Ask to OpenAI module replacing the required parameters:
+
+<img src="https://i.ibb.co/nz0Qq24/OpenAI.jpg" alt="OpenAI" title="OpenAI">
+
+In the example below we have a "Send Email V2" connector for send the final report to the required people for Cost Management revision. If you want to follow the same approach configure the module following the same example:
+
+<img src="https://i.ibb.co/DKJwTsW/email.jpg" alt="email" title="email">
+
+Please ensure to have enabled Managed Identity for the Logic App with the required permission in order to access to the subscription:
+
+<img src="https://i.ibb.co/ZWP22tq/8.jpg" alt="identity" title="identity">
+
 
 <h3>CostManagement monitoring with Azure OpenAI Integration: Configuration</h3>
 
