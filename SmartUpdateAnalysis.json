@@ -1,0 +1,529 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_OpenAIsmartupdate_name": {
+            "defaultValue": "OpenAIsmartupdate",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('workflows_OpenAIsmartupdate_name')]",
+            "location": "[resourceGroup().location]",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "triggers": {
+                        "Recurrence": {
+                            "recurrence": {
+                                "frequency": "Week",
+                                "interval": 1
+                            },
+                            "evaluatedRecurrence": {
+                                "frequency": "Week",
+                                "interval": 1
+                            },
+                            "type": "Recurrence"
+                        }
+                    },
+                    "actions": {
+                        "Api-Key": {
+                            "runAfter": {
+                                "Parse_JSON": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "Api-Key",
+                                        "type": "string",
+                                        "value": "Replace with API Key"
+                                    }
+                                ]
+                            }
+                        },
+                        "Create_Report_I": {
+                            "runAfter": {
+                                "For_each_update": [
+                                    "Succeeded",
+                                    "Failed"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "Report",
+                                        "type": "string",
+                                        "value": "@{replace(string(variables('Updated Summary')), '\",\"','')}"
+                                    }
+                                ]
+                            }
+                        },
+                        "Create_Report_II": {
+                            "runAfter": {
+                                "Create_Report_I": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "Remove square I",
+                                        "type": "string",
+                                        "value": "@{replace(variables('Report'), '[\"','')}"
+                                    }
+                                ]
+                            }
+                        },
+                        "Create_Report_III": {
+                            "runAfter": {
+                                "Create_Report_II": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "Remove square II",
+                                        "type": "string",
+                                        "value": "@{replace(variables('Remove square I'), '\"]','')}"
+                                    }
+                                ]
+                            }
+                        },
+                        "For_each_update": {
+                            "foreach": "@body('Parse_JSON')?['data']",
+                            "actions": {
+                                "Condition": {
+                                    "actions": {
+                                        "Ask_to_OpenAI": {
+                                            "runAfter": {},
+                                            "type": "Http",
+                                            "inputs": {
+                                                "body": {
+                                                    "max_tokens": 800,
+                                                    "prompt": "Using the output below, create a report of the virtual machines that are to be updated and the name of the software with a short description of it.:\nVM Name: @{split(body('format_Item')?['id'], '/')[8]}.\nPatch Name: @{body('format_Item')?['properties']?['patchName']}.\nReply following this format:\nVM Name:\nPatch Name: \nDescription:."
+                                                },
+                                                "headers": {
+                                                    "Content-Type": "application/json",
+                                                    "api-key": "@variables('Api-Key')"
+                                                },
+                                                "method": "POST",
+                                                "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/completions?api-version=2022-12-01"
+                                            }
+                                        },
+                                        "For_each_response": {
+                                            "foreach": "@body('Parse_OpenAI_response')?['choices']",
+                                            "actions": {
+                                                "Append_to_array_variable": {
+                                                    "runAfter": {},
+                                                    "type": "AppendToArrayVariable",
+                                                    "inputs": {
+                                                        "name": "Updated Summary",
+                                                        "value": "- @{items('For_each_response')?['text']}</br>\n</br>"
+                                                    }
+                                                }
+                                            },
+                                            "runAfter": {
+                                                "Parse_OpenAI_response": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "Foreach"
+                                        },
+                                        "Parse_OpenAI_response": {
+                                            "runAfter": {
+                                                "Ask_to_OpenAI": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ParseJson",
+                                            "inputs": {
+                                                "content": "@body('Ask_to_OpenAI')",
+                                                "schema": {
+                                                    "properties": {
+                                                        "body": {
+                                                            "properties": {
+                                                                "choices": {
+                                                                    "items": {
+                                                                        "properties": {
+                                                                            "finish_reason": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "index": {
+                                                                                "type": "integer"
+                                                                            },
+                                                                            "logprobs": {},
+                                                                            "text": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "text",
+                                                                            "index",
+                                                                            "finish_reason",
+                                                                            "logprobs"
+                                                                        ],
+                                                                        "type": "object"
+                                                                    },
+                                                                    "type": "array"
+                                                                },
+                                                                "created": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "id": {
+                                                                    "type": "string"
+                                                                },
+                                                                "model": {
+                                                                    "type": "string"
+                                                                },
+                                                                "object": {
+                                                                    "type": "string"
+                                                                },
+                                                                "usage": {
+                                                                    "properties": {
+                                                                        "completion_tokens": {
+                                                                            "type": "integer"
+                                                                        },
+                                                                        "prompt_tokens": {
+                                                                            "type": "integer"
+                                                                        },
+                                                                        "total_tokens": {
+                                                                            "type": "integer"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "headers": {
+                                                            "properties": {
+                                                                "Access-Control-Allow-Origin": {
+                                                                    "type": "string"
+                                                                },
+                                                                "Cache-Control": {
+                                                                    "type": "string"
+                                                                },
+                                                                "Content-Length": {
+                                                                    "type": "string"
+                                                                },
+                                                                "Content-Type": {
+                                                                    "type": "string"
+                                                                },
+                                                                "Date": {
+                                                                    "type": "string"
+                                                                },
+                                                                "Strict-Transport-Security": {
+                                                                    "type": "string"
+                                                                },
+                                                                "X-Content-Type-Options": {
+                                                                    "type": "string"
+                                                                },
+                                                                "X-Request-ID": {
+                                                                    "type": "string"
+                                                                },
+                                                                "apim-request-id": {
+                                                                    "type": "string"
+                                                                },
+                                                                "openai-model": {
+                                                                    "type": "string"
+                                                                },
+                                                                "openai-processing-ms": {
+                                                                    "type": "string"
+                                                                },
+                                                                "x-accel-buffering": {
+                                                                    "type": "string"
+                                                                },
+                                                                "x-ms-client-request-id": {
+                                                                    "type": "string"
+                                                                },
+                                                                "x-ms-region": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "statusCode": {
+                                                            "type": "integer"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "runAfter": {
+                                        "format_Item": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "expression": {
+                                        "and": [
+                                            {
+                                                "not": {
+                                                    "equals": [
+                                                        "@length(body('format_Item')?['properties']?['patchName'])",
+                                                        "@null"
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "type": "If"
+                                },
+                                "format_Item": {
+                                    "runAfter": {},
+                                    "type": "ParseJson",
+                                    "inputs": {
+                                        "content": "@items('For_each_update')",
+                                        "schema": {
+                                            "properties": {
+                                                "assessmentActivityId": {
+                                                    "type": "string"
+                                                },
+                                                "configurationStatus": {
+                                                    "properties": {
+                                                        "lastModifiedTime": {
+                                                            "type": "string"
+                                                        },
+                                                        "patchModeConfiguration": {
+                                                            "properties": {
+                                                                "error": {
+                                                                    "properties": {
+                                                                        "code": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "details": {
+                                                                            "type": "array"
+                                                                        },
+                                                                        "message": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                },
+                                                                "status": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "vmGuestPatchReadiness": {
+                                                            "properties": {
+                                                                "detectedVMGuestPatchSupportState": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "errorDetails": {
+                                                    "properties": {
+                                                        "code": {
+                                                            "type": "string"
+                                                        },
+                                                        "details": {
+                                                            "type": "array"
+                                                        },
+                                                        "message": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "hotpatchStatus": {
+                                                    "properties": {
+                                                        "error": {
+                                                            "properties": {
+                                                                "code": {
+                                                                    "type": "string"
+                                                                },
+                                                                "details": {
+                                                                    "type": "array"
+                                                                },
+                                                                "message": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "hotpatchEnablementStatus": {
+                                                            "type": "string"
+                                                        },
+                                                        "hotpatchReadinessStatus": {
+                                                            "type": "string"
+                                                        },
+                                                        "lastRefreshedTime": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "osType": {
+                                                    "type": "string"
+                                                },
+                                                "rebootPending": {
+                                                    "type": "boolean"
+                                                },
+                                                "startDateTime": {
+                                                    "type": "string"
+                                                },
+                                                "startedBy": {
+                                                    "type": "string"
+                                                },
+                                                "status": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Update_Summary_variable": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "Get_Update_Status_from_Azure_Resouce_Manager_Graph": {
+                            "runAfter": {},
+                            "type": "Http",
+                            "inputs": {
+                                "authentication": {
+                                    "type": "ManagedServiceIdentity"
+                                },
+                                "body": {
+                                    "query": "patchassessmentresources"
+                                },
+                                "headers": {
+                                    "Content-Type": "application/json"
+                                },
+                                "method": "POST",
+                                "queries": {
+                                    "api-version": "2021-03-01"
+                                },
+                                "uri": "https://management.azure.com/providers/Microsoft.ResourceGraph/resources"
+                            }
+                        },
+                        "Parse_JSON": {
+                            "runAfter": {
+                                "Get_Update_Status_from_Azure_Resouce_Manager_Graph": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ParseJson",
+                            "inputs": {
+                                "content": "@body('Get_Update_Status_from_Azure_Resouce_Manager_Graph')",
+                                "schema": {
+                                    "properties": {
+                                        "extendedLocation": {},
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "identity": {},
+                                        "kind": {
+                                            "type": "string"
+                                        },
+                                        "location": {
+                                            "type": "string"
+                                        },
+                                        "managedBy": {
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "plan": {},
+                                        "properties": {
+                                            "properties": {
+                                                "classifications": {
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": "array"
+                                                },
+                                                "kbId": {
+                                                    "type": "string"
+                                                },
+                                                "lastModifiedDateTime": {
+                                                    "type": "string"
+                                                },
+                                                "patchId": {
+                                                    "type": "string"
+                                                },
+                                                "patchName": {
+                                                    "type": "string"
+                                                },
+                                                "publishedDateTime": {
+                                                    "type": "string"
+                                                },
+                                                "rebootBehavior": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "resourceGroup": {
+                                            "type": "string"
+                                        },
+                                        "sku": {},
+                                        "subscriptionId": {
+                                            "type": "string"
+                                        },
+                                        "tags": {},
+                                        "tenantId": {
+                                            "type": "string"
+                                        },
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "zones": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "Update_Summary_variable": {
+                            "runAfter": {
+                                "Api-Key": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "Updated Summary",
+                                        "type": "array"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {}
+            }
+        }
+    ]
+}
