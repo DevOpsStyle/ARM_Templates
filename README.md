@@ -50,7 +50,7 @@ This template can be used for the deployment of a Cost Management Logic App usin
 
 <h2>OpenAI Smart Update Analysis</h2>
 
-<a href="https://github.com/DevOpsStyle/ARM_Templates#OpenAI-Smart-Update-Analysis" target="_blank">Configuration</a>
+<a href="https://github.com/DevOpsStyle/ARM_Templates#openai-smart-update-analysis-configuration" target="_blank">Configuration</a>
 
 This template can be used for the deployment of different Azure VMs and join these to AD (Only Windows).
 
@@ -244,7 +244,7 @@ For the body of the E-Mail you can follow this example:
 
 In order to configure in the right way the solution follow the steps below. As first step please configure the required recurrence:
 
-<img src="https://i.ibb.coFKd2qDV/recurrence.jpg" alt="recurrence" title="recurrence">
+<img src="https://i.ibb.co/FKd2qDV/recurrence.jpg" alt="recurrence" title="recurrence">
 
 Now configure the HTTP request to the Graph Explorer enabling the authentication via System Assigned Managed Identity. Please remind that the Managed Identity need to have the righ permission on the subscription for read the resources:
 
