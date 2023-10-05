@@ -304,7 +304,7 @@ Put your api key for OpenAI connection inside the variable "Api-Key":
 In the example below we have a "Send Email V2" connector for send the final report to the required people for Cost Management revision. If you want to follow the same approach configure the module following the same example:
 
 <img src="https://i.ibb.co/nctFHZH/6.jpg" alt="email1" title="email1">
-<img src="https://i.ibb.co/K0N6Ck8/7.jpg" alt="email2" title="email2">
+<img src="https://i.ibb.co/kH95VF3/costmanagementquery.png" alt="email2" title="email2">
 
 Please ensure to have enabled Managed Identity for the Logic App with the required permission in order to access to the subscription:
 
