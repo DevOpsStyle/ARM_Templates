@@ -26,34 +26,17 @@
                     "triggers": {
                         "Recurrence": {
                             "recurrence": {
-                                "frequency": "Week",
+                                "frequency": "Day",
                                 "interval": 1
                             },
                             "evaluatedRecurrence": {
-                                "frequency": "Week",
+                                "frequency": "Day",
                                 "interval": 1
                             },
                             "type": "Recurrence"
                         }
                     },
                     "actions": {
-                        "Api-Key": {
-                            "runAfter": {
-                                "Parse_JSON": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "Api-Key",
-                                        "type": "string",
-                                        "value": "Replace with API Key"
-                                    }
-                                ]
-                            }
-                        },
                         "Create_Report_I": {
                             "runAfter": {
                                 "For_each_update": [
@@ -107,7 +90,7 @@
                             }
                         },
                         "For_each_update": {
-                            "foreach": "@body('Parse_JSON')?['data']",
+                            "foreach": "@body('Parse_Response')?['data']",
                             "actions": {
                                 "Condition": {
                                     "actions": {
@@ -117,7 +100,7 @@
                                             "inputs": {
                                                 "body": {
                                                     "max_tokens": 800,
-                                                    "prompt": "Using the output below, create a report of the virtual machines that are to be updated and the name of the software with a short description of it.:\nVM Name: @{split(body('format_Item')?['id'], '/')[8]}.\nPatch Name: @{body('format_Item')?['properties']?['patchName']}.\nReply following this format:\nVM Name:\nPatch Name: \nDescription:."
+                                                    "prompt": "Using the output below, create a report of the virtual machines that are to be updated and the name of the software with a short description of it.: VM Name: @{split(body('format_Item')?['id'], '/')[8]}. Patch Name: @{body('format_Item')?['properties']?['patchName']}. Reply in Italian following this format: VM Name: . Patch Name: . Description: ."
                                                 },
                                                 "headers": {
                                                     "Content-Type": "application/json",
@@ -405,7 +388,7 @@
                             },
                             "type": "Foreach"
                         },
-                        "Get_Update_Status_from_Azure_Resouce_Manager_Graph": {
+                        "Get_Updates_status": {
                             "runAfter": {},
                             "type": "Http",
                             "inputs": {
@@ -425,15 +408,32 @@
                                 "uri": "https://management.azure.com/providers/Microsoft.ResourceGraph/resources"
                             }
                         },
-                        "Parse_JSON": {
+                        "Open_AI_Api-Key": {
                             "runAfter": {
-                                "Get_Update_Status_from_Azure_Resouce_Manager_Graph": [
+                                "Parse_Response": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "Api-Key",
+                                        "type": "string",
+                                        "value": "Replace with OpenAI API KEY"
+                                    }
+                                ]
+                            }
+                        },
+                        "Parse_Response": {
+                            "runAfter": {
+                                "Get_Updates_status": [
                                     "Succeeded"
                                 ]
                             },
                             "type": "ParseJson",
                             "inputs": {
-                                "content": "@body('Get_Update_Status_from_Azure_Resouce_Manager_Graph')",
+                                "content": "@body('Get_Updates_status')",
                                 "schema": {
                                     "properties": {
                                         "extendedLocation": {},
@@ -505,7 +505,7 @@
                         },
                         "Update_Summary_variable": {
                             "runAfter": {
-                                "Api-Key": [
+                                "Open_AI_Api-Key": [
                                     "Succeeded"
                                 ]
                             },

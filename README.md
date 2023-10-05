@@ -257,9 +257,10 @@ At this point we need to configure the Ask to OpenAI module replacing the requir
 
 <img src="https://i.ibb.co/nz0Qq24/OpenAI.jpg" alt="OpenAI" title="OpenAI">
 
-In the example below we have a "Send Email V2" connector for send the final report to the required people for Cost Management revision. If you want to follow the same approach configure the module following the same example adding them at the end of the Logic App:
+In the example below we have a "Send Email V2" connector for send the final report to the required people for Cost Management revision. If you want to follow the same approach configure the module following the same example adding them at the end of the Logic App. Make sure to use the correct variable in the body of the email in order to have them correctly formatted:
 
 <img src="https://i.ibb.co/DKJwTsW/email.jpg" alt="email" title="email">
+<img src="https://i.ibb.co/d7nV1SQ/finalemail.png" alt="finalemail" title="finalemail">
 
 Please ensure to have enabled Managed Identity for the Logic App with the required permission in order to access to the subscription:
 
