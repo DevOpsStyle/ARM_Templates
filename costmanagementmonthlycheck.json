@@ -2,8 +2,8 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "workflows_costmanagementmonthlycheck_name": {
-            "defaultValue": "costmanagementmonthlycheck",
+        "workflows_CostManagementMonthlyCheck_name": {
+            "defaultValue": "CostManagementMonthlyCheck",
             "type": "String"
         }
     },
@@ -12,7 +12,7 @@
         {
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
-            "name": "[parameters('workflows_costmanagementmonthlycheck_name')]",
+            "name": "[parameters('workflows_CostManagementMonthlyCheck_name')]",
             "location": "[resourceGroup().location]",
             "identity": {
                 "type": "SystemAssigned"
@@ -22,12 +22,16 @@
                 "definition": {
                     "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
                     "contentVersion": "1.0.0.0",
-                    "parameters": {},
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
                     "triggers": {
                         "manual": {
                             "type": "Request",
-                            "kind": "Http",
-                            "inputs": {}
+                            "kind": "Http"
                         }
                     },
                     "actions": {
@@ -227,9 +231,8 @@
                             },
                             "type": "Http",
                             "inputs": {
-                                "authentication": {
-                                    "type": "ManagedServiceIdentity"
-                                },
+                                "uri": "https://management.azure.com/subscriptions/replace-with-sub-id/providers/Microsoft.CostManagement/generateCostDetailsReport?api-version=2023-03-01",
+                                "method": "POST",
                                 "body": {
                                     "metric": "ActualCost",
                                     "timePeriod": {
@@ -237,8 +240,9 @@
                                         "start": "@{variables('olddate')}"
                                     }
                                 },
-                                "method": "POST",
-                                "uri": "https://management.azure.com/subscriptions/replace-with-sub-id/providers/Microsoft.CostManagement/generateCostDetailsReport?api-version=2023-03-01"
+                                "authentication": {
+                                    "type": "ManagedServiceIdentity"
+                                }
                             }
                         },
                         "Download_report_last_month": {
@@ -249,9 +253,8 @@
                             },
                             "type": "Http",
                             "inputs": {
-                                "authentication": {
-                                    "type": "ManagedServiceIdentity"
-                                },
+                                "uri": "https://management.azure.com/subscriptions/replace-with-sub-id/providers/Microsoft.CostManagement/generateCostDetailsReport?api-version=2023-03-01",
+                                "method": "POST",
                                 "body": {
                                     "metric": "ActualCost",
                                     "timePeriod": {
@@ -259,11 +262,12 @@
                                         "start": "@{variables('olddate')}"
                                     }
                                 },
-                                "method": "POST",
-                                "uri": "https://management.azure.com/subscriptions/replace-with-sub-id/providers/Microsoft.CostManagement/generateCostDetailsReport?api-version=2023-03-01"
+                                "authentication": {
+                                    "type": "ManagedServiceIdentity"
+                                }
                             }
                         },
-                        "For_each": {
+                        "For_each_OpenAI_Response": {
                             "foreach": "@body('Parse_JSON')?['choices']",
                             "actions": {},
                             "runAfter": {
@@ -277,7 +281,6 @@
                             "foreach": "@body('Actual_Month_Report')?['manifest']?['blobs']",
                             "actions": {
                                 "Set_variable_ActualMothDownload": {
-                                    "runAfter": {},
                                     "type": "SetVariable",
                                     "inputs": {
                                         "name": "ActualMonthDownload",
@@ -296,7 +299,6 @@
                             "foreach": "@body('Last_Month_Report')?['manifest']?['blobs']",
                             "actions": {
                                 "Set_variable_LastMothDownload": {
-                                    "runAfter": {},
                                     "type": "SetVariable",
                                     "inputs": {
                                         "name": "LastMonthDownload",
@@ -513,22 +515,78 @@
                                                 "choices": {
                                                     "items": {
                                                         "properties": {
+                                                            "content_filter_results": {
+                                                                "properties": {
+                                                                    "hate": {
+                                                                        "properties": {
+                                                                            "filtered": {
+                                                                                "type": "boolean"
+                                                                            },
+                                                                            "severity": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    "self_harm": {
+                                                                        "properties": {
+                                                                            "filtered": {
+                                                                                "type": "boolean"
+                                                                            },
+                                                                            "severity": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    "sexual": {
+                                                                        "properties": {
+                                                                            "filtered": {
+                                                                                "type": "boolean"
+                                                                            },
+                                                                            "severity": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    "violence": {
+                                                                        "properties": {
+                                                                            "filtered": {
+                                                                                "type": "boolean"
+                                                                            },
+                                                                            "severity": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
                                                             "finish_reason": {
                                                                 "type": "string"
                                                             },
                                                             "index": {
                                                                 "type": "integer"
                                                             },
-                                                            "logprobs": {},
-                                                            "text": {
-                                                                "type": "string"
+                                                            "message": {
+                                                                "properties": {
+                                                                    "content": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "role": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "type": "object"
                                                             }
                                                         },
                                                         "required": [
-                                                            "text",
                                                             "index",
                                                             "finish_reason",
-                                                            "logprobs"
+                                                            "message",
+                                                            "content_filter_results"
                                                         ],
                                                         "type": "object"
                                                     },
@@ -545,6 +603,70 @@
                                                 },
                                                 "object": {
                                                     "type": "string"
+                                                },
+                                                "prompt_filter_results": {
+                                                    "items": {
+                                                        "properties": {
+                                                            "content_filter_results": {
+                                                                "properties": {
+                                                                    "hate": {
+                                                                        "properties": {
+                                                                            "filtered": {
+                                                                                "type": "boolean"
+                                                                            },
+                                                                            "severity": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    "self_harm": {
+                                                                        "properties": {
+                                                                            "filtered": {
+                                                                                "type": "boolean"
+                                                                            },
+                                                                            "severity": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    "sexual": {
+                                                                        "properties": {
+                                                                            "filtered": {
+                                                                                "type": "boolean"
+                                                                            },
+                                                                            "severity": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    "violence": {
+                                                                        "properties": {
+                                                                            "filtered": {
+                                                                                "type": "boolean"
+                                                                            },
+                                                                            "severity": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "prompt_index": {
+                                                                "type": "integer"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "prompt_index",
+                                                            "content_filter_results"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    "type": "array"
                                                 },
                                                 "usage": {
                                                     "properties": {
@@ -580,28 +702,34 @@
                                                 "Date": {
                                                     "type": "string"
                                                 },
-                                                "Openai-Model": {
-                                                    "type": "string"
-                                                },
-                                                "Openai-Processing-Ms": {
-                                                    "type": "string"
-                                                },
                                                 "Strict-Transport-Security": {
                                                     "type": "string"
                                                 },
-                                                "X-Accel-Buffering": {
-                                                    "type": "string"
-                                                },
                                                 "X-Content-Type-Options": {
-                                                    "type": "string"
-                                                },
-                                                "X-Ms-Client-Request-Id": {
                                                     "type": "string"
                                                 },
                                                 "X-Request-ID": {
                                                     "type": "string"
                                                 },
                                                 "apim-request-id": {
+                                                    "type": "string"
+                                                },
+                                                "azureml-model-group": {
+                                                    "type": "string"
+                                                },
+                                                "azureml-model-session": {
+                                                    "type": "string"
+                                                },
+                                                "openai-model": {
+                                                    "type": "string"
+                                                },
+                                                "openai-processing-ms": {
+                                                    "type": "string"
+                                                },
+                                                "x-accel-buffering": {
+                                                    "type": "string"
+                                                },
+                                                "x-ms-client-request-id": {
                                                     "type": "string"
                                                 },
                                                 "x-ms-region": {
@@ -626,16 +754,25 @@
                             },
                             "type": "Http",
                             "inputs": {
-                                "body": {
-                                    "max_tokens": 500,
-                                    "prompt": " @{variables('Question')}"
-                                },
+                                "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/chat/completions?api-version=2023-07-01-preview",
+                                "method": "POST",
                                 "headers": {
                                     "Content-Type": "application/json",
                                     "api-key": "@variables('Api-Key')"
                                 },
-                                "method": "POST",
-                                "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/completions?api-version=2022-12-01"
+                                "body": {
+                                    "max_tokens": 800,
+                                    "messages": [
+                                        {
+                                            "content": "You are a Cost Analyzer Assistant.",
+                                            "role": "user"
+                                        },
+                                        {
+                                            "content": "@variables('Question')",
+                                            "role": "user"
+                                        }
+                                    ]
+                                }
                             }
                         },
                         "Query_-60_-30_giorni_precedenti": {
@@ -646,9 +783,8 @@
                             },
                             "type": "Http",
                             "inputs": {
-                                "authentication": {
-                                    "type": "ManagedServiceIdentity"
-                                },
+                                "uri": "https://management.azure.com/subscriptions/replace-with-sub-id/providers/Microsoft.CostManagement/query?api-version=2023-03-01",
+                                "method": "POST",
                                 "body": {
                                     "dataSet": {
                                         "aggregation": {
@@ -682,8 +818,9 @@
                                     "timeframe": "Custom",
                                     "type": "ActualCost"
                                 },
-                                "method": "POST",
-                                "uri": "https://management.azure.com/subscriptions/replace-with-sub-id/providers/Microsoft.CostManagement/query?api-version=2023-03-01"
+                                "authentication": {
+                                    "type": "ManagedServiceIdentity"
+                                }
                             }
                         },
                         "Query_ultimi_30_giorni": {
@@ -694,9 +831,8 @@
                             },
                             "type": "Http",
                             "inputs": {
-                                "authentication": {
-                                    "type": "ManagedServiceIdentity"
-                                },
+                                "uri": "https://management.azure.com/subscriptions/replace-with-sub-id/providers/Microsoft.CostManagement/query?api-version=2023-03-01",
+                                "method": "POST",
                                 "body": {
                                     "dataSet": {
                                         "aggregation": {
@@ -730,8 +866,9 @@
                                     "timeframe": "Custom",
                                     "type": "ActualCost"
                                 },
-                                "method": "POST",
-                                "uri": "https://management.azure.com/subscriptions/replace-with-sub-id/providers/Microsoft.CostManagement/query?api-version=2023-03-01"
+                                "authentication": {
+                                    "type": "ManagedServiceIdentity"
+                                }
                             }
                         },
                         "Risultati_ultimi_-60_-30_giorni": {
@@ -984,7 +1121,7 @@
                                     {
                                         "name": "Api-Key",
                                         "type": "string",
-                                        "value": "replace-with-apy-key"
+                                        "value": "Replace with OpenAI API KEY"
                                     }
                                 ]
                             }
@@ -1001,7 +1138,7 @@
                                     {
                                         "name": "Question",
                                         "type": "string",
-                                        "value": "Last month resources cost: @{body('Risultati_ultimi_-60_-30_giorni')?['properties']?['rows']}. Current month resources cost: @{body('Risultati_ultimi_30_giorni')?['properties']?['rows']}. Describe only most important differences of costs between two months. following the example:\n\"Azure firewall this month cost 900$ compared to 450$ of last months, an increase of 50%\""
+                                        "value": "Last month resources cost: @{body('Risultati_ultimi_-60_-30_giorni')?['properties']?['rows']}. Current month resources cost: @{body('Risultati_ultimi_30_giorni')?['properties']?['rows']}. Describe only most important differences of costs between two months following the example:\n\"Azure firewall this month cost 900$ compared to 450$ of last months, an increase of 50%\""
                                     }
                                 ]
                             }
@@ -1033,7 +1170,11 @@
                     },
                     "outputs": {}
                 },
-                "parameters": {}
+                "parameters": {
+                    "$connections": {
+                        "value": {}
+                    }
+                }
             }
         }
     ]
