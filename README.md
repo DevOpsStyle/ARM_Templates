@@ -293,6 +293,10 @@ Do the same for the "Query -60 -30 giorni precedenti" and "Download report last 
 <img src="https://i.ibb.co/WF7NmFx/3.jpg" alt="query1" title="query1">
 <img src="https://i.ibb.co/M5bCDBR/4.jpg" alt="query2" title="query2">
 
+Please ensure that every query have the authentication configured with the system assigned managed identity:
+
+<img src="https://i.ibb.co/T4Kc6mh/costmanagedidentity.png" alt="costmanagedidentity" title="costmanagedidentity">
+
 Put your api key for OpenAI connection inside the variable "Api-Key":
 
 <img src="https://i.ibb.co/6HfLgZT/5.jpg" alt="api" title="api">
