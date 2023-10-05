@@ -100,7 +100,7 @@
                                             "inputs": {
                                                 "body": {
                                                     "max_tokens": 800,
-                                                    "prompt": "Using the output below, create a report of the virtual machines that are to be updated and the name of the software with a short description of it.: VM Name: @{split(body('format_Item')?['id'], '/')[8]}. Patch Name: @{body('format_Item')?['properties']?['patchName']}. Reply in Italian following this format: VM Name: . Patch Name: . Description: ."
+                                                    "prompt": "Using the output below, create a report of the virtual machines that are to be updated and the name of the software with a short description of it.: VM Name: @{split(body('format_Item')?['id'], '/')[8]}. Patch Name: @{body('format_Item')?['properties']?['patchName']}. Reply following this format: VM Name: . Patch Name: . Description: ."
                                                 },
                                                 "headers": {
                                                     "Content-Type": "application/json",
