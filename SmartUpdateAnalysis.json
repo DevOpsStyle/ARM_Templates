@@ -22,7 +22,12 @@
                 "definition": {
                     "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
                     "contentVersion": "1.0.0.0",
-                    "parameters": {},
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
                     "triggers": {
                         "Recurrence": {
                             "recurrence": {
@@ -37,6 +42,23 @@
                         }
                     },
                     "actions": {
+                        "Api-Key": {
+                            "runAfter": {
+                                "Parse_JSON": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "Api-Key",
+                                        "type": "string",
+                                        "value": "replace with OpenAI API KEY"
+                                    }
+                                ]
+                            }
+                        },
                         "Create_Report_I": {
                             "runAfter": {
                                 "For_each_update": [
@@ -90,31 +112,38 @@
                             }
                         },
                         "For_each_update": {
-                            "foreach": "@body('Parse_Response')?['data']",
+                            "foreach": "@body('Parse_JSON')?['data']",
                             "actions": {
                                 "Condition": {
                                     "actions": {
                                         "Ask_to_OpenAI": {
-                                            "runAfter": {},
                                             "type": "Http",
                                             "inputs": {
-                                                "body": {
-                                                    "max_tokens": 800,
-                                                    "prompt": "Using the output below, create a report of the virtual machines that are to be updated and the name of the software with a short description of it.: VM Name: @{split(body('format_Item')?['id'], '/')[8]}. Patch Name: @{body('format_Item')?['properties']?['patchName']}. Reply following this format: VM Name: . Patch Name: . Description: ."
-                                                },
+                                                "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/chat/completions?api-version=2023-07-01-preview",
+                                                "method": "POST",
                                                 "headers": {
                                                     "Content-Type": "application/json",
                                                     "api-key": "@variables('Api-Key')"
                                                 },
-                                                "method": "POST",
-                                                "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/completions?api-version=2022-12-01"
+                                                "body": {
+                                                    "max_tokens": 800,
+                                                    "messages": [
+                                                        {
+                                                            "content": "You are a System Administrator.",
+                                                            "role": "user"
+                                                        },
+                                                        {
+                                                            "content": "Using the output below, create a report of the virtual machines that are to be updated and the name of the software with a short description of it.: VM Name: @{split(body('format_Item')?['id'], '/')[8]}. Patch Name: @{body('format_Item')?['properties']?['patchName']}. Reply in Italian following this format: VM Name: . Patch Name: . Description: .",
+                                                            "role": "user"
+                                                        }
+                                                    ]
+                                                }
                                             }
                                         },
                                         "For_each_response": {
                                             "foreach": "@body('Parse_OpenAI_response')?['choices']",
                                             "actions": {
                                                 "Append_to_array_variable": {
-                                                    "runAfter": {},
                                                     "type": "AppendToArrayVariable",
                                                     "inputs": {
                                                         "name": "Updated Summary",
@@ -256,6 +285,9 @@
                                             "Succeeded"
                                         ]
                                     },
+                                    "else": {
+                                        "actions": {}
+                                    },
                                     "expression": {
                                         "and": [
                                             {
@@ -271,7 +303,6 @@
                                     "type": "If"
                                 },
                                 "format_Item": {
-                                    "runAfter": {},
                                     "type": "ParseJson",
                                     "inputs": {
                                         "content": "@items('For_each_update')",
@@ -388,52 +419,35 @@
                             },
                             "type": "Foreach"
                         },
-                        "Get_Updates_status": {
+                        "Get_Update_Status": {
                             "runAfter": {},
                             "type": "Http",
                             "inputs": {
-                                "authentication": {
-                                    "type": "ManagedServiceIdentity"
+                                "uri": "https://management.azure.com/providers/Microsoft.ResourceGraph/resources",
+                                "method": "POST",
+                                "headers": {
+                                    "Content-Type": "application/json"
+                                },
+                                "queries": {
+                                    "api-version": "2021-03-01"
                                 },
                                 "body": {
                                     "query": "patchassessmentresources"
                                 },
-                                "headers": {
-                                    "Content-Type": "application/json"
-                                },
-                                "method": "POST",
-                                "queries": {
-                                    "api-version": "2021-03-01"
-                                },
-                                "uri": "https://management.azure.com/providers/Microsoft.ResourceGraph/resources"
+                                "authentication": {
+                                    "type": "ManagedServiceIdentity"
+                                }
                             }
                         },
-                        "Open_AI_Api-Key": {
+                        "Parse_JSON": {
                             "runAfter": {
-                                "Parse_Response": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "Api-Key",
-                                        "type": "string",
-                                        "value": "Replace with OpenAI API KEY"
-                                    }
-                                ]
-                            }
-                        },
-                        "Parse_Response": {
-                            "runAfter": {
-                                "Get_Updates_status": [
+                                "Get_Update_Status": [
                                     "Succeeded"
                                 ]
                             },
                             "type": "ParseJson",
                             "inputs": {
-                                "content": "@body('Get_Updates_status')",
+                                "content": "@body('Get_Update_Status')",
                                 "schema": {
                                     "properties": {
                                         "extendedLocation": {},
@@ -505,7 +519,7 @@
                         },
                         "Update_Summary_variable": {
                             "runAfter": {
-                                "Open_AI_Api-Key": [
+                                "Api-Key": [
                                     "Succeeded"
                                 ]
                             },
@@ -522,7 +536,11 @@
                     },
                     "outputs": {}
                 },
-                "parameters": {}
+                "parameters": {
+                    "$connections": {
+                        "value": {}
+                    }
+                }
             }
         }
     ]
