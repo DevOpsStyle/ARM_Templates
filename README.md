@@ -278,7 +278,6 @@ Please ensure to have enabled Managed Identity for the Logic App with the requir
 
 <img src="https://i.ibb.co/ZWP22tq/8.jpg" alt="identity" title="identity">
 
-
 <h3>CostManagement monitoring with Azure OpenAI Integration: Configuration</h3>
 
 | **Parameters** | **Information** | **Note** |
@@ -288,7 +287,6 @@ Please ensure to have enabled Managed Identity for the Logic App with the requir
 | apy-key-connections | The API code for manage your OpenAI service | Get this value from your OpenAI Service |
 | changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 | changemodelname | Insert the OpenAI model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
-
 
 <h3>Required Connector</h3>
 
@@ -321,7 +319,6 @@ In the example below we have a "Send Email V2" connector for send the final repo
 Please ensure to have enabled Managed Identity for the Logic App with the required permission in order to access to the subscription:
 
 <img src="https://i.ibb.co/ZWP22tq/8.jpg" alt="identity" title="identity">
-
 
 <h2>DISCLAIMER</h2>
 
