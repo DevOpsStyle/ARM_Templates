@@ -8,6 +8,8 @@ This template can be used for the deployment of different Azure VMs and join the
   <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
 
+-------------------------------------------------------------------------------------
+
 <h2>ChatGPT Sentinel Integration</h2>
 
 <a href="https://github.com/DevOpsStyle/ARM_Templates#chatgpt-sentinel-integration-configuration" target="_blank">Configuration</a>
@@ -17,6 +19,8 @@ This template can be used for the deployment of a Logic App in order to be trigg
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2Fchatgptsentinel.json" target="_blank">
   <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
+
+-------------------------------------------------------------------------------------
 
 <h2>ChatGPT Advisor Cost Integration</h2>
 
@@ -28,6 +32,8 @@ This template can be used for the deployment of a Logic App in order to be trigg
   <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
 
+-------------------------------------------------------------------------------------
+
 <h2>ChatGPT Tenant Subscription Resources Assessment</h2>
 
 <a href="https://github.com/DevOpsStyle/ARM_Templates#chatgpt-tenant-subscription-resources-assessment-1" target="_blank">Configuration</a>
@@ -37,6 +43,8 @@ This template can be used for the deployment of a Logic App which can help durin
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2FTenantSubAssessment.json" target="_blank">
   <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
+
+-------------------------------------------------------------------------------------
 
 <h2>CostManagement monitoring with Azure OpenAI Integration</h2>
 
@@ -48,6 +56,8 @@ This template can be used for the deployment of a Cost Management Logic App usin
   <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
 
+-------------------------------------------------------------------------------------
+
 <h2>OpenAI Smart Update Analysis</h2>
 
 <a href="https://github.com/DevOpsStyle/ARM_Templates#openai-smart-update-analysis-configuration" target="_blank">Configuration</a>
@@ -57,6 +67,8 @@ This template can be used for the deployment of different Azure VMs and join the
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Fmain%2FSmartUpdateAnalysis.json" target="_blank">
   <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
+
+-------------------------------------------------------------------------------------
 
 <h3>Deploy Azure VM and join to legacy Domain: Configuration</h3>
 
