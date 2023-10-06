@@ -145,22 +145,78 @@
                                                                 "choices": {
                                                                     "items": {
                                                                         "properties": {
+                                                                            "content_filter_results": {
+                                                                                "properties": {
+                                                                                    "hate": {
+                                                                                        "properties": {
+                                                                                            "filtered": {
+                                                                                                "type": "boolean"
+                                                                                            },
+                                                                                            "severity": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "self_harm": {
+                                                                                        "properties": {
+                                                                                            "filtered": {
+                                                                                                "type": "boolean"
+                                                                                            },
+                                                                                            "severity": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "sexual": {
+                                                                                        "properties": {
+                                                                                            "filtered": {
+                                                                                                "type": "boolean"
+                                                                                            },
+                                                                                            "severity": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "violence": {
+                                                                                        "properties": {
+                                                                                            "filtered": {
+                                                                                                "type": "boolean"
+                                                                                            },
+                                                                                            "severity": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
                                                                             "finish_reason": {
                                                                                 "type": "string"
                                                                             },
                                                                             "index": {
                                                                                 "type": "integer"
                                                                             },
-                                                                            "logprobs": {},
-                                                                            "text": {
-                                                                                "type": "string"
+                                                                            "message": {
+                                                                                "properties": {
+                                                                                    "content": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "role": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
                                                                             }
                                                                         },
                                                                         "required": [
-                                                                            "text",
                                                                             "index",
                                                                             "finish_reason",
-                                                                            "logprobs"
+                                                                            "message",
+                                                                            "content_filter_results"
                                                                         ],
                                                                         "type": "object"
                                                                     },
@@ -178,6 +234,70 @@
                                                                 "object": {
                                                                     "type": "string"
                                                                 },
+                                                                "prompt_filter_results": {
+                                                                    "items": {
+                                                                        "properties": {
+                                                                            "content_filter_results": {
+                                                                                "properties": {
+                                                                                    "hate": {
+                                                                                        "properties": {
+                                                                                            "filtered": {
+                                                                                                "type": "boolean"
+                                                                                            },
+                                                                                            "severity": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "self_harm": {
+                                                                                        "properties": {
+                                                                                            "filtered": {
+                                                                                                "type": "boolean"
+                                                                                            },
+                                                                                            "severity": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "sexual": {
+                                                                                        "properties": {
+                                                                                            "filtered": {
+                                                                                                "type": "boolean"
+                                                                                            },
+                                                                                            "severity": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "violence": {
+                                                                                        "properties": {
+                                                                                            "filtered": {
+                                                                                                "type": "boolean"
+                                                                                            },
+                                                                                            "severity": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "prompt_index": {
+                                                                                "type": "integer"
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "prompt_index",
+                                                                            "content_filter_results"
+                                                                        ],
+                                                                        "type": "object"
+                                                                    },
+                                                                    "type": "array"
+                                                                },
                                                                 "usage": {
                                                                     "properties": {
                                                                         "completion_tokens": {
@@ -194,56 +314,6 @@
                                                                 }
                                                             },
                                                             "type": "object"
-                                                        },
-                                                        "headers": {
-                                                            "properties": {
-                                                                "Access-Control-Allow-Origin": {
-                                                                    "type": "string"
-                                                                },
-                                                                "Cache-Control": {
-                                                                    "type": "string"
-                                                                },
-                                                                "Content-Length": {
-                                                                    "type": "string"
-                                                                },
-                                                                "Content-Type": {
-                                                                    "type": "string"
-                                                                },
-                                                                "Date": {
-                                                                    "type": "string"
-                                                                },
-                                                                "Strict-Transport-Security": {
-                                                                    "type": "string"
-                                                                },
-                                                                "X-Content-Type-Options": {
-                                                                    "type": "string"
-                                                                },
-                                                                "X-Request-ID": {
-                                                                    "type": "string"
-                                                                },
-                                                                "apim-request-id": {
-                                                                    "type": "string"
-                                                                },
-                                                                "openai-model": {
-                                                                    "type": "string"
-                                                                },
-                                                                "openai-processing-ms": {
-                                                                    "type": "string"
-                                                                },
-                                                                "x-accel-buffering": {
-                                                                    "type": "string"
-                                                                },
-                                                                "x-ms-client-request-id": {
-                                                                    "type": "string"
-                                                                },
-                                                                "x-ms-region": {
-                                                                    "type": "string"
-                                                                }
-                                                            },
-                                                            "type": "object"
-                                                        },
-                                                        "statusCode": {
-                                                            "type": "integer"
                                                         }
                                                     },
                                                     "type": "object"
