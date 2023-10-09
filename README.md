@@ -322,4 +322,4 @@ Please ensure to have enabled Managed Identity for the Logic App with the requir
 
 <h2>DISCLAIMER</h2>
 
-All models listed should be understood as a basic configuration in which the customer can create its own logical application.
+All models listed should be understood as a basic configuration in which the customer can create its own logical application. Please keep in mind that Microsoft can change the function of OpenAI Models, and in this case you need to configure again the interaction with the OpenAI model. Actually models used for this solution are GPT 3 (davinci) and GPT 3.5. Any Customization is responsability of customers.
