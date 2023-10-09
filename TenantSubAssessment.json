@@ -2,8 +2,8 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "workflows_ResourceAssessmenttoedit_name": {
-            "defaultValue": "ResourcesAssessment",
+        "workflows_AzureOpenAISubAssessment_name": {
+            "defaultValue": "AzureOpenAISubAssessment",
             "type": "String"
         }
     },
@@ -12,7 +12,7 @@
         {
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
-            "name": "[parameters('workflows_ResourceAssessmenttoedit_name')]",
+            "name": "[parameters('workflows_AzureOpenAISubAssessment_name')]",
             "location": "[resourceGroup().location]",
             "identity": {
                 "type": "SystemAssigned"
@@ -39,7 +39,7 @@
                                     {
                                         "name": "apy-key-connections",
                                         "type": "string",
-                                        "value": "Replace With API KEY"
+                                        "value": "replace with OpenAI API KEY"
                                     }
                                 ]
                             }
@@ -56,7 +56,7 @@
                                     {
                                         "name": "Api-Key-Users",
                                         "type": "string",
-                                        "value": "Replace With API KEY"
+                                        "value": "replace with OpenAI API KEY"
                                     }
                                 ]
                             }
@@ -73,23 +73,7 @@
                                     {
                                         "name": "Api-Key",
                                         "type": "string",
-                                        "value": "Replace With API KEY"
-                                    }
-                                ]
-                            }
-                        },
-                        "Create_Connection_Array_Response": {
-                            "runAfter": {
-                                "Create_Connection_Report_String": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "ConnectionsArrayRespose",
-                                        "type": "array"
+                                        "value": "replace with OpenAI API KEY"
                                     }
                                 ]
                             }
@@ -269,7 +253,7 @@
                             }
                         },
                         "For_Each_RG": {
-                            "foreach": "@variables('ConnectionsArrayRespose')",
+                            "foreach": "@{variables('ConnectionsArrayRespose')} please replace",
                             "actions": {
                                 "For_Any_Responses": {
                                     "foreach": "@body('Parse_Connections_Response')?['value']",
@@ -290,22 +274,78 @@
                                                                 "choices": {
                                                                     "items": {
                                                                         "properties": {
+                                                                            "content_filter_results": {
+                                                                                "properties": {
+                                                                                    "hate": {
+                                                                                        "properties": {
+                                                                                            "filtered": {
+                                                                                                "type": "boolean"
+                                                                                            },
+                                                                                            "severity": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "self_harm": {
+                                                                                        "properties": {
+                                                                                            "filtered": {
+                                                                                                "type": "boolean"
+                                                                                            },
+                                                                                            "severity": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "sexual": {
+                                                                                        "properties": {
+                                                                                            "filtered": {
+                                                                                                "type": "boolean"
+                                                                                            },
+                                                                                            "severity": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "violence": {
+                                                                                        "properties": {
+                                                                                            "filtered": {
+                                                                                                "type": "boolean"
+                                                                                            },
+                                                                                            "severity": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
                                                                             "finish_reason": {
                                                                                 "type": "string"
                                                                             },
                                                                             "index": {
                                                                                 "type": "integer"
                                                                             },
-                                                                            "logprobs": {},
-                                                                            "text": {
-                                                                                "type": "string"
+                                                                            "message": {
+                                                                                "properties": {
+                                                                                    "content": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "role": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
                                                                             }
                                                                         },
                                                                         "required": [
-                                                                            "text",
                                                                             "index",
                                                                             "finish_reason",
-                                                                            "logprobs"
+                                                                            "message",
+                                                                            "content_filter_results"
                                                                         ],
                                                                         "type": "object"
                                                                     },
@@ -323,6 +363,70 @@
                                                                 "object": {
                                                                     "type": "string"
                                                                 },
+                                                                "prompt_filter_results": {
+                                                                    "items": {
+                                                                        "properties": {
+                                                                            "content_filter_results": {
+                                                                                "properties": {
+                                                                                    "hate": {
+                                                                                        "properties": {
+                                                                                            "filtered": {
+                                                                                                "type": "boolean"
+                                                                                            },
+                                                                                            "severity": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "self_harm": {
+                                                                                        "properties": {
+                                                                                            "filtered": {
+                                                                                                "type": "boolean"
+                                                                                            },
+                                                                                            "severity": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "sexual": {
+                                                                                        "properties": {
+                                                                                            "filtered": {
+                                                                                                "type": "boolean"
+                                                                                            },
+                                                                                            "severity": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "violence": {
+                                                                                        "properties": {
+                                                                                            "filtered": {
+                                                                                                "type": "boolean"
+                                                                                            },
+                                                                                            "severity": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "prompt_index": {
+                                                                                "type": "integer"
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "prompt_index",
+                                                                            "content_filter_results"
+                                                                        ],
+                                                                        "type": "object"
+                                                                    },
+                                                                    "type": "array"
+                                                                },
                                                                 "usage": {
                                                                     "properties": {
                                                                         "completion_tokens": {
@@ -339,56 +443,6 @@
                                                                 }
                                                             },
                                                             "type": "object"
-                                                        },
-                                                        "headers": {
-                                                            "properties": {
-                                                                "Access-Control-Allow-Origin": {
-                                                                    "type": "string"
-                                                                },
-                                                                "Cache-Control": {
-                                                                    "type": "string"
-                                                                },
-                                                                "Content-Length": {
-                                                                    "type": "string"
-                                                                },
-                                                                "Content-Type": {
-                                                                    "type": "string"
-                                                                },
-                                                                "Date": {
-                                                                    "type": "string"
-                                                                },
-                                                                "Openai-Model": {
-                                                                    "type": "string"
-                                                                },
-                                                                "Openai-Processing-Ms": {
-                                                                    "type": "string"
-                                                                },
-                                                                "Strict-Transport-Security": {
-                                                                    "type": "string"
-                                                                },
-                                                                "X-Accel-Buffering": {
-                                                                    "type": "string"
-                                                                },
-                                                                "X-Content-Type-Options": {
-                                                                    "type": "string"
-                                                                },
-                                                                "X-Ms-Client-Request-Id": {
-                                                                    "type": "string"
-                                                                },
-                                                                "X-Request-ID": {
-                                                                    "type": "string"
-                                                                },
-                                                                "apim-request-id": {
-                                                                    "type": "string"
-                                                                },
-                                                                "x-ms-region": {
-                                                                    "type": "string"
-                                                                }
-                                                            },
-                                                            "type": "object"
-                                                        },
-                                                        "statusCode": {
-                                                            "type": "integer"
                                                         }
                                                     },
                                                     "type": "object"
@@ -403,7 +457,7 @@
                                                     "type": "AppendToArrayVariable",
                                                     "inputs": {
                                                         "name": "ConnectionsArrayRespose",
-                                                        "value": "@{items('For_Each_Connection_Status')?['text']} </br>\n</br>"
+                                                        "value": "- @{items('For_each_connection_status')?['message']?['content']}</br>\n</br>"
                                                     }
                                                 }
                                             },
@@ -418,8 +472,11 @@
                                             "runAfter": {},
                                             "type": "Http",
                                             "inputs": {
+                                                "authentication": {
+                                                    "type": "ManagedServiceIdentity"
+                                                },
                                                 "method": "GET",
-                                                "uri": "https://management.azure.com/subscriptions/replacewithsubid/resourceGroups/@{items('For_Each_RG')?['name']}/providers/Microsoft.Network/connections/@{items('For_Any_Responses')?['name']}?api-version=2022-09-01"
+                                                "uri": "https://management.azure.com/subscriptions/replace-with-sub-id/resourceGroups/@{items('For_Each_RG')?['name']}/providers/Microsoft.Network/connections/@{items('For_Any_Responses')?['name']}?api-version=2022-09-01"
                                             }
                                         },
                                         "Invoke_OpenAI_Help": {
@@ -431,15 +488,24 @@
                                             "type": "Http",
                                             "inputs": {
                                                 "body": {
-                                                    "max_tokens": 1400,
-                                                    "prompt": "@variables('ConnectionQuestion')"
+                                                    "max_tokens": 800,
+                                                    "messages": [
+                                                        {
+                                                            "content": "You are a System Network Administrator.",
+                                                            "role": "user"
+                                                        },
+                                                        {
+                                                            "content": "@variables('ConnectionQuestion')",
+                                                            "role": "user"
+                                                        }
+                                                    ]
                                                 },
                                                 "headers": {
                                                     "Content-Type": "application/json",
                                                     "api-key": "@variables('apy-key-connections')"
                                                 },
                                                 "method": "POST",
-                                                "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/completions?api-version=2022-12-01"
+                                                "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/chat/completions?api-version=2023-07-01-preview"
                                             }
                                         },
                                         "Set_variable_Question": {
@@ -466,8 +532,11 @@
                                     "runAfter": {},
                                     "type": "Http",
                                     "inputs": {
+                                        "authentication": {
+                                            "type": "ManagedServiceIdentity"
+                                        },
                                         "method": "GET",
-                                        "uri": "https://management.azure.com/subscriptions/replacewithsubid/resourceGroups/@{items('For_Each_RG')?['name']}/providers/Microsoft.Network/connections?api-version=2022-09-01"
+                                        "uri": "https://management.azure.com/subscriptions/replace-with-sub-id/resourceGroups/@{items('For_Each_RG')?['name']}/providers/Microsoft.Network/connections?api-version=2022-09-01"
                                     }
                                 },
                                 "Parse_Connections_Response": {
@@ -649,14 +718,14 @@
                                 }
                             },
                             "runAfter": {
-                                "Create_Connection_Array_Response": [
+                                "Initialize_variable": [
                                     "Succeeded"
                                 ]
                             },
                             "type": "Foreach"
                         },
                         "For_each_Resource": {
-                            "foreach": "@variables('Report')",
+                            "foreach": "@{variables('Report')} please replace",
                             "actions": {
                                 "Delay": {
                                     "runAfter": {},
@@ -676,7 +745,7 @@
                                             "type": "AppendToArrayVariable",
                                             "inputs": {
                                                 "name": "Report",
-                                                "value": "@{items('For_Each_Response')?['text']}</br>\n</br>"
+                                                "value": "@{items('For_each_response')?['message']?['content']}</br>\n</br>"
                                             }
                                         }
                                     },
@@ -698,50 +767,177 @@
                                         "content": "@body('Send_Query_to_Azure_OpenAI')",
                                         "schema": {
                                             "properties": {
-                                                "choices": {
-                                                    "items": {
-                                                        "properties": {
-                                                            "finish_reason": {},
-                                                            "index": {
-                                                                "type": "integer"
-                                                            },
-                                                            "logprobs": {},
-                                                            "text": {
-                                                                "type": "string"
-                                                            }
-                                                        },
-                                                        "required": [
-                                                            "text",
-                                                            "index",
-                                                            "finish_reason",
-                                                            "logprobs"
-                                                        ],
-                                                        "type": "object"
-                                                    },
-                                                    "type": "array"
-                                                },
-                                                "created": {
-                                                    "type": "integer"
-                                                },
-                                                "id": {
-                                                    "type": "string"
-                                                },
-                                                "model": {
-                                                    "type": "string"
-                                                },
-                                                "object": {
-                                                    "type": "string"
-                                                },
-                                                "usage": {
+                                                "body": {
                                                     "properties": {
-                                                        "completion_tokens": {
+                                                        "choices": {
+                                                            "items": {
+                                                                "properties": {
+                                                                    "content_filter_results": {
+                                                                        "properties": {
+                                                                            "hate": {
+                                                                                "properties": {
+                                                                                    "filtered": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "severity": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "self_harm": {
+                                                                                "properties": {
+                                                                                    "filtered": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "severity": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "sexual": {
+                                                                                "properties": {
+                                                                                    "filtered": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "severity": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "violence": {
+                                                                                "properties": {
+                                                                                    "filtered": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "severity": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    "finish_reason": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "index": {
+                                                                        "type": "integer"
+                                                                    },
+                                                                    "message": {
+                                                                        "properties": {
+                                                                            "content": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "role": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "index",
+                                                                    "finish_reason",
+                                                                    "message",
+                                                                    "content_filter_results"
+                                                                ],
+                                                                "type": "object"
+                                                            },
+                                                            "type": "array"
+                                                        },
+                                                        "created": {
                                                             "type": "integer"
                                                         },
-                                                        "prompt_tokens": {
-                                                            "type": "integer"
+                                                        "id": {
+                                                            "type": "string"
                                                         },
-                                                        "total_tokens": {
-                                                            "type": "integer"
+                                                        "model": {
+                                                            "type": "string"
+                                                        },
+                                                        "object": {
+                                                            "type": "string"
+                                                        },
+                                                        "prompt_filter_results": {
+                                                            "items": {
+                                                                "properties": {
+                                                                    "content_filter_results": {
+                                                                        "properties": {
+                                                                            "hate": {
+                                                                                "properties": {
+                                                                                    "filtered": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "severity": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "self_harm": {
+                                                                                "properties": {
+                                                                                    "filtered": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "severity": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "sexual": {
+                                                                                "properties": {
+                                                                                    "filtered": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "severity": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "violence": {
+                                                                                "properties": {
+                                                                                    "filtered": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "severity": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    "prompt_index": {
+                                                                        "type": "integer"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "prompt_index",
+                                                                    "content_filter_results"
+                                                                ],
+                                                                "type": "object"
+                                                            },
+                                                            "type": "array"
+                                                        },
+                                                        "usage": {
+                                                            "properties": {
+                                                                "completion_tokens": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "prompt_tokens": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "total_tokens": {
+                                                                    "type": "integer"
+                                                                }
+                                                            },
+                                                            "type": "object"
                                                         }
                                                     },
                                                     "type": "object"
@@ -760,15 +956,24 @@
                                     "type": "Http",
                                     "inputs": {
                                         "body": {
-                                            "max_tokens": 1400,
-                                            "prompt": "Create a detailed report on what type of resources I have using this output:@{items('For_each_Resource')}. Explain what type of resource is, the resource name, in what resource group is and how the resource works. Explain to me if is a IaaS, PaaS or SaaS resource. If possibile send me documentation from Microsoft Docs and information about the billing of the resource."
+                                            "max_tokens": 800,
+                                            "messages": [
+                                                {
+                                                    "content": "You are a System Administrator.",
+                                                    "role": "user"
+                                                },
+                                                {
+                                                    "content": "Create a detailed report on what type of resources I have using this output:@{items('For_each_Resource')}. Explain what type of resource is, the resource name, in what resource group is and how the resource works. Explain to me if is a IaaS, PaaS or SaaS resource. If possibile send me documentation from Microsoft Docs and information about the billing of the resource.",
+                                                    "role": "user"
+                                                }
+                                            ]
                                         },
                                         "headers": {
                                             "Content-Type": "application/json",
                                             "api-key": "@variables('Api-Key')"
                                         },
                                         "method": "POST",
-                                        "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/completions?api-version=2022-12-01"
+                                        "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/chat/completions?api-version=2023-07-01-preview"
                                     }
                                 }
                             },
@@ -798,7 +1003,7 @@
                                             "type": "AppendToArrayVariable",
                                             "inputs": {
                                                 "name": "ReportUsers",
-                                                "value": "- @{items('For_each_output')?['text']}</br>\n</br>"
+                                                "value": "- @{items('For_each_output')?['message']?['content']}</br>\n</br>"
                                             }
                                         }
                                     },
@@ -818,15 +1023,24 @@
                                     "type": "Http",
                                     "inputs": {
                                         "body": {
-                                            "max_tokens": 1400,
-                                            "prompt": " @{items('For_each_User')}. Give me more information about the user in the output. If possibile add information about his unique identifier."
+                                            "max_tokens": 800,
+                                            "messages": [
+                                                {
+                                                    "content": "You are a System Administrator.",
+                                                    "role": "user"
+                                                },
+                                                {
+                                                    "content": " @{items('For_each_User')}. Give me more information about the user in the output. If possibile add information about his unique identifier.",
+                                                    "role": "user"
+                                                }
+                                            ]
                                         },
                                         "headers": {
                                             "Content-Type": "application/json",
                                             "api-key": "@variables('Api-Key-Users')"
                                         },
                                         "method": "POST",
-                                        "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/completions?api-version=2022-12-01"
+                                        "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/chat/completions?api-version=2023-07-01-preview"
                                     }
                                 },
                                 "Parse_JSON_2": {
@@ -840,50 +1054,177 @@
                                         "content": "@body('HTTP')",
                                         "schema": {
                                             "properties": {
-                                                "choices": {
-                                                    "items": {
-                                                        "properties": {
-                                                            "finish_reason": {},
-                                                            "index": {
-                                                                "type": "integer"
-                                                            },
-                                                            "logprobs": {},
-                                                            "text": {
-                                                                "type": "string"
-                                                            }
-                                                        },
-                                                        "required": [
-                                                            "text",
-                                                            "index",
-                                                            "finish_reason",
-                                                            "logprobs"
-                                                        ],
-                                                        "type": "object"
-                                                    },
-                                                    "type": "array"
-                                                },
-                                                "created": {
-                                                    "type": "integer"
-                                                },
-                                                "id": {
-                                                    "type": "string"
-                                                },
-                                                "model": {
-                                                    "type": "string"
-                                                },
-                                                "object": {
-                                                    "type": "string"
-                                                },
-                                                "usage": {
+                                                "body": {
                                                     "properties": {
-                                                        "completion_tokens": {
+                                                        "choices": {
+                                                            "items": {
+                                                                "properties": {
+                                                                    "content_filter_results": {
+                                                                        "properties": {
+                                                                            "hate": {
+                                                                                "properties": {
+                                                                                    "filtered": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "severity": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "self_harm": {
+                                                                                "properties": {
+                                                                                    "filtered": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "severity": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "sexual": {
+                                                                                "properties": {
+                                                                                    "filtered": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "severity": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "violence": {
+                                                                                "properties": {
+                                                                                    "filtered": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "severity": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    "finish_reason": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "index": {
+                                                                        "type": "integer"
+                                                                    },
+                                                                    "message": {
+                                                                        "properties": {
+                                                                            "content": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "role": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "index",
+                                                                    "finish_reason",
+                                                                    "message",
+                                                                    "content_filter_results"
+                                                                ],
+                                                                "type": "object"
+                                                            },
+                                                            "type": "array"
+                                                        },
+                                                        "created": {
                                                             "type": "integer"
                                                         },
-                                                        "prompt_tokens": {
-                                                            "type": "integer"
+                                                        "id": {
+                                                            "type": "string"
                                                         },
-                                                        "total_tokens": {
-                                                            "type": "integer"
+                                                        "model": {
+                                                            "type": "string"
+                                                        },
+                                                        "object": {
+                                                            "type": "string"
+                                                        },
+                                                        "prompt_filter_results": {
+                                                            "items": {
+                                                                "properties": {
+                                                                    "content_filter_results": {
+                                                                        "properties": {
+                                                                            "hate": {
+                                                                                "properties": {
+                                                                                    "filtered": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "severity": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "self_harm": {
+                                                                                "properties": {
+                                                                                    "filtered": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "severity": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "sexual": {
+                                                                                "properties": {
+                                                                                    "filtered": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "severity": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "violence": {
+                                                                                "properties": {
+                                                                                    "filtered": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "severity": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    "prompt_index": {
+                                                                        "type": "integer"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "prompt_index",
+                                                                    "content_filter_results"
+                                                                ],
+                                                                "type": "object"
+                                                            },
+                                                            "type": "array"
+                                                        },
+                                                        "usage": {
+                                                            "properties": {
+                                                                "completion_tokens": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "prompt_tokens": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "total_tokens": {
+                                                                    "type": "integer"
+                                                                }
+                                                            },
+                                                            "type": "object"
                                                         }
                                                     },
                                                     "type": "object"
@@ -1172,6 +1513,22 @@
                                 },
                                 "method": "GET",
                                 "uri": "https://graph.microsoft.com/v1.0/users"
+                            }
+                        },
+                        "Initialize_variable": {
+                            "runAfter": {
+                                "Create_Connection_Report_String": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "ConnectionsArrayRespose",
+                                        "type": "array"
+                                    }
+                                ]
                             }
                         },
                         "NumerOfUsers": {
