@@ -313,8 +313,8 @@ Put your api key for OpenAI connection inside the variable "Api-Key":
 
 In the example below we have a "Compose" module used for the email preparation. You can edit the contents following your requirement. The URL string in yellow represent the URL of your logo yo use inside the email:
 
-<img src="https://i.ibb.co/qsWj7Qs/compose-2.png" alt="Compose" title="Compose">
 <img src="https://i.ibb.co/N9xdL7v/compose.png" alt="Compose2" title="Compose2">
+<img src="https://i.ibb.co/qsWj7Qs/compose-2.png" alt="Compose" title="Compose">
 
 Finished to edit the Compose module the next step is to attach the "Send Email V2" Module after the compose with the Compose output inside:
 
