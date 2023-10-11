@@ -48,7 +48,7 @@ This template can be used for the deployment of a Logic App which can help durin
 
 <h2>CostManagement monitoring with Azure OpenAI Integration V2</h2>
 
-<a href="https://github.com/DevOpsStyle/ARM_Templates#CostManagement-monitoring-with-Azure-OpenAI-Integration-configuration" target="_blank">Configuration</a>
+<a href="https://github.com/DevOpsStyle/ARM_Templates#costmanagement-monitoring-with-azure-openai-integration-v2-configuration" target="_blank">Configuration</a>
 
 This template can be used for the deployment of a Cost Management Logic App using Azure OpenAI.
 
