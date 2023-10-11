@@ -46,7 +46,7 @@ This template can be used for the deployment of a Logic App which can help durin
 
 -------------------------------------------------------------------------------------
 
-<h2>CostManagement monitoring with Azure OpenAI Integration</h2>
+<h2>CostManagement monitoring with Azure OpenAI Integration V2</h2>
 
 <a href="https://github.com/DevOpsStyle/ARM_Templates#CostManagement-monitoring-with-Azure-OpenAI-Integration-configuration" target="_blank">Configuration</a>
 
@@ -278,7 +278,7 @@ Please ensure to have enabled Managed Identity for the Logic App with the requir
 
 <img src="https://i.ibb.co/ZWP22tq/8.jpg" alt="identity" title="identity">
 
-<h3>CostManagement monitoring with Azure OpenAI Integration: Configuration</h3>
+<h3>CostManagement monitoring with Azure OpenAI Integration V2: Configuration</h3>
 
 | **Parameters** | **Information** | **Note** |
 | ------------- | ------------- | ------------- |
@@ -311,10 +311,14 @@ Put your api key for OpenAI connection inside the variable "Api-Key":
 
 <img src="https://i.ibb.co/6HfLgZT/5.jpg" alt="api" title="api">
 
-In the example below we have a "Send Email V2" connector for send the final report to the required people for Cost Management revision. If you want to follow the same approach configure the module following the same example:
+In the example below we have a "Compose" module used for the email preparation. You can edit the contents following your requirement. The URL string in yellow represent the URL of your logo yo use inside the email:
 
-<img src="https://i.ibb.co/nctFHZH/6.jpg" alt="email1" title="email1">
-<img src="https://i.ibb.co/kH95VF3/costmanagementquery.png" alt="email2" title="email2">
+<img src="https://i.ibb.co/qsWj7Qs/compose-2.png" alt="Compose" title="Compose">
+<img src="https://i.ibb.co/N9xdL7v/compose.png" alt="Compose2" title="Compose2">
+
+Finished to edit the Compose module the next step is to attach the "Send Email V2" Module after the compose with the Compose output inside:
+
+<img src="https://i.ibb.co/MG4GQJd/email.png" alt="email" title="email">
 
 Please ensure to have enabled Managed Identity for the Logic App with the required permission in order to access to the subscription:
 
