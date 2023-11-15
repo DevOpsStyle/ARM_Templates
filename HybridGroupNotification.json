@@ -7,7 +7,7 @@
             "type": "String"
         },
         "connections_azureblob_externalid": {
-            "defaultValue": "/subscriptions/1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30/resourceGroups/LAB/providers/Microsoft.Web/connections/azureblob",
+            "defaultValue": "/subscriptions/replacewithsubid/resourceGroups/replacewithRGname/providers/Microsoft.Web/connections",
             "type": "String"
         }
     },
