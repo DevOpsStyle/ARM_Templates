@@ -1,0 +1,699 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_HybridGroupMembershipNotification_name": {
+            "defaultValue": "HybridGroupMembershipNotification",
+            "type": "String"
+        },
+        "connections_azureblob_externalid": {
+            "defaultValue": "/subscriptions/1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30/resourceGroups/LAB/providers/Microsoft.Web/connections/azureblob",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('workflows_HybridGroupMembershipNotification_name')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "manual": {
+                            "type": "Request",
+                            "kind": "Http",
+                            "inputs": {}
+                        }
+                    },
+                    "actions": {
+                        "AddedUsers": {
+                            "runAfter": {
+                                "DeltaMembers": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "AddedUsers",
+                                        "type": "array"
+                                    }
+                                ]
+                            }
+                        },
+                        "Condition": {
+                            "actions": {
+                                "Create_blob_(V2)": {
+                                    "runAfter": {
+                                        "For_each": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "body": "@body('Parse_JSON')?['@odata.deltaLink']",
+                                        "headers": {
+                                            "ReadFileMetadataFromServer": true
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azureblob_1']['connectionId']"
+                                            }
+                                        },
+                                        "method": "post",
+                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('https://groupdeltastorageaccount.blob.core.windows.net/'))}/files",
+                                        "queries": {
+                                            "folderPath": "/deltacontainer",
+                                            "name": "LastDeltaUrl",
+                                            "queryParametersSingleEncoded": true
+                                        }
+                                    },
+                                    "runtimeConfiguration": {
+                                        "contentTransfer": {
+                                            "transferMode": "Chunked"
+                                        }
+                                    }
+                                },
+                                "For_each": {
+                                    "foreach": "@body('Parse_JSON')?['value']",
+                                    "actions": {
+                                        "Check_Group_Name": {
+                                            "actions": {
+                                                "For_Each_Member": {
+                                                    "foreach": "@items('For_each')?['members@delta']",
+                                                    "actions": {
+                                                        "Condition_2": {
+                                                            "actions": {
+                                                                "Append_to_array_variable": {
+                                                                    "runAfter": {},
+                                                                    "type": "AppendToArrayVariable",
+                                                                    "inputs": {
+                                                                        "name": "RemovedUsers",
+                                                                        "value": "@body('Get_User_Informations')?['displayName']"
+                                                                    }
+                                                                }
+                                                            },
+                                                            "runAfter": {
+                                                                "Get_User_Informations": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "else": {
+                                                                "actions": {
+                                                                    "Append_to_array_variable_2": {
+                                                                        "runAfter": {},
+                                                                        "type": "AppendToArrayVariable",
+                                                                        "inputs": {
+                                                                            "name": "AddedUsers",
+                                                                            "value": "@body('Get_User_Informations')?['displayName']"
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "expression": {
+                                                                "and": [
+                                                                    {
+                                                                        "equals": [
+                                                                            "@body('Parse_JSON_2')?['@removed']?['reason']",
+                                                                            "deleted"
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "type": "If"
+                                                        },
+                                                        "Get_User_Display_Name": {
+                                                            "runAfter": {
+                                                                "Set_variable_DeltaMembers": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "Http",
+                                                            "inputs": {
+                                                                "authentication": {
+                                                                    "audience": "https://graph.microsoft.com",
+                                                                    "clientId": "replace with client id",
+                                                                    "secret": "replace with secret",
+                                                                    "tenant": "replace with tenant id",
+                                                                    "type": "ActiveDirectoryOAuth"
+                                                                },
+                                                                "headers": {
+                                                                    "Content-Type": "application/json"
+                                                                },
+                                                                "method": "GET",
+                                                                "uri": "https://graph.microsoft.com/v1.0/users/@{variables('DeltaMembers')}"
+                                                            }
+                                                        },
+                                                        "Get_User_Informations": {
+                                                            "runAfter": {
+                                                                "Get_User_Display_Name": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "ParseJson",
+                                                            "inputs": {
+                                                                "content": "@body('Get_User_Display_Name')",
+                                                                "schema": {
+                                                                    "properties": {
+                                                                        "body": {
+                                                                            "properties": {
+                                                                                "@@odata.context": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "businessPhones": {
+                                                                                    "type": "array"
+                                                                                },
+                                                                                "displayName": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "givenName": {},
+                                                                                "id": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "jobTitle": {},
+                                                                                "mail": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "mobilePhone": {},
+                                                                                "officeLocation": {},
+                                                                                "preferredLanguage": {},
+                                                                                "surname": {},
+                                                                                "userPrincipalName": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        },
+                                                                        "headers": {
+                                                                            "properties": {
+                                                                                "Cache-Control": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "Content-Type": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "Date": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "OData-Version": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "Strict-Transport-Security": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "Transfer-Encoding": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "Vary": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "client-request-id": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "request-id": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "x-ms-ags-diagnostic": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "x-ms-resource-unit": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        },
+                                                                        "statusCode": {
+                                                                            "type": "integer"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            }
+                                                        },
+                                                        "Parse_JSON_2": {
+                                                            "runAfter": {},
+                                                            "type": "ParseJson",
+                                                            "inputs": {
+                                                                "content": "@items('For_Each_Member')",
+                                                                "schema": {
+                                                                    "properties": {
+                                                                        "@@odata.type": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "@@removed": {
+                                                                            "properties": {
+                                                                                "reason": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        },
+                                                                        "id": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            }
+                                                        },
+                                                        "Set_variable_DeltaMembers": {
+                                                            "runAfter": {
+                                                                "Parse_JSON_2": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "DeltaMembers",
+                                                                "value": "@body('Parse_JSON_2')?['id']"
+                                                            }
+                                                        }
+                                                    },
+                                                    "runAfter": {},
+                                                    "type": "Foreach"
+                                                }
+                                            },
+                                            "runAfter": {},
+                                            "expression": {
+                                                "and": [
+                                                    {
+                                                        "equals": [
+                                                            "@items('For_each')?['displayName']",
+                                                            "replace with group name"
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            "type": "If"
+                                        }
+                                    },
+                                    "runAfter": {
+                                        "Parse_JSON": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Foreach"
+                                },
+                                "HTTP": {
+                                    "runAfter": {},
+                                    "type": "Http",
+                                    "inputs": {
+                                        "authentication": {
+                                            "audience": "https://graph.microsoft.com",
+                                            "clientId": "replace with clientid ",
+                                            "secret": "replace with secret",
+                                            "tenant": "replace with tenant id",
+                                            "type": "ActiveDirectoryOAuth"
+                                        },
+                                        "headers": {
+                                            "Content-Type": "application/json"
+                                        },
+                                        "method": "GET",
+                                        "uri": "@variables('DeltaURL')"
+                                    }
+                                },
+                                "Parse_JSON": {
+                                    "runAfter": {
+                                        "HTTP": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ParseJson",
+                                    "inputs": {
+                                        "content": "@body('HTTP')",
+                                        "schema": {
+                                            "properties": {
+                                                "body": {
+                                                    "properties": {
+                                                        "@@odata.context": {
+                                                            "type": "string"
+                                                        },
+                                                        "@@odata.deltaLink": {
+                                                            "type": "string"
+                                                        },
+                                                        "value": {
+                                                            "items": {
+                                                                "properties": {
+                                                                    "description": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "displayName": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "id": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "members@delta": {
+                                                                        "items": {
+                                                                            "properties": {
+                                                                                "@@odata.type": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "id": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "required": [
+                                                                                "@@odata.type",
+                                                                                "id"
+                                                                            ],
+                                                                            "type": "object"
+                                                                        },
+                                                                        "type": "array"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "displayName",
+                                                                    "description",
+                                                                    "id",
+                                                                    "members@delta"
+                                                                ],
+                                                                "type": "object"
+                                                            },
+                                                            "type": "array"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "headers": {
+                                                    "properties": {
+                                                        "Cache-Control": {
+                                                            "type": "string"
+                                                        },
+                                                        "Content-Type": {
+                                                            "type": "string"
+                                                        },
+                                                        "Date": {
+                                                            "type": "string"
+                                                        },
+                                                        "OData-Version": {
+                                                            "type": "string"
+                                                        },
+                                                        "Preference-Applied": {
+                                                            "type": "string"
+                                                        },
+                                                        "Strict-Transport-Security": {
+                                                            "type": "string"
+                                                        },
+                                                        "Transfer-Encoding": {
+                                                            "type": "string"
+                                                        },
+                                                        "Vary": {
+                                                            "type": "string"
+                                                        },
+                                                        "client-request-id": {
+                                                            "type": "string"
+                                                        },
+                                                        "request-id": {
+                                                            "type": "string"
+                                                        },
+                                                        "x-ms-ags-diagnostic": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "statusCode": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "RemovedUsers": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "else": {
+                                "actions": {
+                                    "Create_blob_(V2)_2": {
+                                        "runAfter": {
+                                            "Parse_JSON_1": [
+                                                "Succeeded"
+                                            ]
+                                        },
+                                        "type": "ApiConnection",
+                                        "inputs": {
+                                            "body": "@body('Parse_JSON_1')?['@odata.deltaLink']",
+                                            "headers": {
+                                                "ReadFileMetadataFromServer": true
+                                            },
+                                            "host": {
+                                                "connection": {
+                                                    "name": "@parameters('$connections')['azureblob_1']['connectionId']"
+                                                }
+                                            },
+                                            "method": "post",
+                                            "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('enter storage endpoint'))}/files",
+                                            "queries": {
+                                                "folderPath": "enter folder path",
+                                                "name": "enter blob name",
+                                                "queryParametersSingleEncoded": true
+                                            }
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    },
+                                    "HTTP_1": {
+                                        "runAfter": {},
+                                        "type": "Http",
+                                        "inputs": {
+                                            "authentication": {
+                                                "audience": "https://graph.microsoft.com",
+                                                "clientId": "replace with client id",
+                                                "secret": "replace with secret",
+                                                "tenant": "replace with tenant id",
+                                                "type": "ActiveDirectoryOAuth"
+                                            },
+                                            "headers": {
+                                                "Content-Type": "application/json"
+                                            },
+                                            "method": "GET",
+                                            "uri": "https://graph.microsoft.com/v1.0/groups/delta?$select=displayName,description,members&$deltaToken=latest"
+                                        }
+                                    },
+                                    "Parse_JSON_1": {
+                                        "runAfter": {
+                                            "HTTP_1": [
+                                                "Succeeded"
+                                            ]
+                                        },
+                                        "type": "ParseJson",
+                                        "inputs": {
+                                            "content": "@body('HTTP_1')",
+                                            "schema": {
+                                                "properties": {
+                                                    "@@odata.context": {
+                                                        "type": "string"
+                                                    },
+                                                    "@@odata.deltaLink": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "items": {
+                                                            "properties": {
+                                                                "description": {
+                                                                    "type": "string"
+                                                                },
+                                                                "displayName": {
+                                                                    "type": "string"
+                                                                },
+                                                                "id": {
+                                                                    "type": "string"
+                                                                },
+                                                                "members@delta": {
+                                                                    "items": {
+                                                                        "properties": {
+                                                                            "@@odata.type": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "@@removed": {
+                                                                                "properties": {
+                                                                                    "reason": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "id": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "@@odata.type",
+                                                                            "id",
+                                                                            "@@removed"
+                                                                        ],
+                                                                        "type": "object"
+                                                                    },
+                                                                    "type": "array"
+                                                                }
+                                                            },
+                                                            "required": [
+                                                                "displayName",
+                                                                "description",
+                                                                "id",
+                                                                "members@delta"
+                                                            ],
+                                                            "type": "object"
+                                                        },
+                                                        "type": "array"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "expression": {
+                                "and": [
+                                    {
+                                        "startsWith": [
+                                            "@variables('DeltaURL')",
+                                            "https"
+                                        ]
+                                    }
+                                ]
+                            },
+                            "type": "If"
+                        },
+                        "DeltaMembers": {
+                            "runAfter": {
+                                "FileContent": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "DeltaMembers",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "FileContent": {
+                            "runAfter": {
+                                "Get_blob_content_(V2)": [
+                                    "Succeeded",
+                                    "Failed"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "DeltaURL",
+                                        "type": "string",
+                                        "value": "@{body('Get_blob_content_(V2)')}"
+                                    }
+                                ]
+                            }
+                        },
+                        "Get_blob_content_(V2)": {
+                            "runAfter": {},
+                            "metadata": {
+                                "JTJmZGVsdGFjb250YWluZXIlMmZMYXN0RGVsdGFVcmw=": "/deltacontainer/LastDeltaUrl"
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob_1']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('enter storage endpoint'))}/files/@{encodeURIComponent(encodeURIComponent('enter blob name'))}/content",
+                                "queries": {
+                                    "inferContentType": true
+                                }
+                            }
+                        },
+                        "RemovedUsers": {
+                            "runAfter": {
+                                "AddedUsers": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "RemovedUsers",
+                                        "type": "array"
+                                    }
+                                ]
+                            }
+                        },
+                        "UsersAddedToGroup": {
+                            "runAfter": {
+                                "UsersRemovedToGroup": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "UsersAddedToGroup",
+                                        "type": "string",
+                                        "value": "@{variables('AddedUsers')}"
+                                    }
+                                ]
+                            }
+                        },
+                        "UsersRemovedToGroup": {
+                            "runAfter": {
+                                "Condition": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "UsersRemovedToGroup",
+                                        "type": "string",
+                                        "value": "@{variables('RemovedUsers')}"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "azureblob_1": {
+                                "connectionId": "[parameters('connections_azureblob_externalid')]",
+                                "connectionName": "azureblob",
+                                "id": "/subscriptions/1fcd2976-cf81-4af9-b8b9-f0fe8d3c6c30/providers/Microsoft.Web/locations/northcentralus/managedApis/azureblob"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
