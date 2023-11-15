@@ -110,6 +110,10 @@ Remember to change the group name inside the foreach block in order to check onl
 
 <img src="https://i.ibb.co/VgsHD4b/groupname.png" alt="groupname" title="groupname">
 
+The last step is to add and customise the Send e-mail form (V2) to send an e-mail with the requested information. You can customise it as you wish.
+
+<img src="https://i.ibb.co/MG4GQJd/email.png" alt="email" title="email">
+
 <h3>Deploy Azure VM and join to legacy Domain: Configuration</h3>
 
 | **Parameters** | **Information** | **Note** |
