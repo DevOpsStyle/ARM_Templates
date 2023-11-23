@@ -41,15 +41,24 @@
                             "type": "Http",
                             "inputs": {
                                 "body": {
-                                    "max_tokens": 1400,
-                                    "prompt": "@{variables('question')}"
+                                    "max_tokens": 800,
+                                    "messages": [
+                                      {
+                                        "content": "You are a Security Engineer working in the SOC Team.",
+                                        "role": "user"
+                                      },
+                                      {
+                                        "content": "@{variables('question')}",
+                                        "role": "user"
+                                      }
+                                    ]
                                 },
                                 "headers": {
                                     "Content-Type": "application/json",
                                     "api-key": "@variables('api-key')"
                                 },
                                 "method": "POST",
-                                "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/completions?api-version=2022-12-01"
+                                "uri": "https://changeendpointname.openai.azure.com/openai/deployments/changemodelname/chat/completions?api-version=2023-07-01-preview"
                             }
                         },
                         "Initialize_variable": {
