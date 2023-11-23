@@ -164,37 +164,34 @@ P.S. In case you have some open point... yes I called the VM "OldVM".
 
 | **Parameters** | **Information** | **Note** |
 | ------------- | ------------- | ------------- |
+| replacewithsubid | Connection setting during deployment | Replace with your Subscription ID |
+| replacewithRGname | Connection setting during deployment | Replace with the selected RG Name for the deployment |
 | Question  | Insert the Question for OpenAI  | The parameter is inside the first "Initialize Variable". Put your question in the "value" attribute |
 | api-key | The API code for manage your OpenAI service | The parameter is inside the second "Initialize Variable". Put your question in the "value" attribute  |
 | changeendpointname | Insert the OpenAI endpoint name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 | changemodelname | Insert the model name | You can found the value inside the OpenAI resource inside Azure Cognitive Service |
 
 <h3>Required Connector</h3>
-<h4>Sentinel Connector</h4>
 
-When the deployment is completed go in your Logic App and create the Sentinel connector based on Sentinel Incident following the screen below:
+Durint the deployment please change the required value inside the connection string with the subscription id and the resource group name. After that, when the deployment is completed, please follow the documentation:
 
-<img src="https://i.ibb.co/8gLdy3Q/trigger-1.jpg" alt="InitialTrigger" title="InitialTrigger">
+<img src="https://i.ibb.co/WfFw1zR/sentinel-connection.png" alt="Connection" title="Connection">
 
-The last configuration is in the "for each" cycle. Click on "Add an Action" and select "Add a comment to incident (V3)" following the screen below:
+Configure the Question as you like. You can found a standard configuration by default:
 
-<img src="https://i.ibb.co/B3pwXBr/trigger-2.jpg" alt="ForCicle" title="ForCicle">
+<img src="https://i.ibb.co/g6h4gQ7/question.png" alt="question" title="question">
 
-Now configure the connector following the screen:
+Configure the Api Key with the value inside your OpenAI Service:
 
-<img src="https://i.ibb.co/3FJ42TP/trigger-3.jpg" alt="AddComment" title="AddComment">
+<img src="https://i.ibb.co/yRjjnVW/api-key.png" alt="api-key" title="api-key">
 
-<h4>Http Connector</h4>
+Now configure the HTTP Connector for OpenAI Connection following this configuration:
 
-Change the URI string inside the HTTP block. Insert the endpoint name and model name following the example below (In my example the endpoint name is OPENAISERVICE and the model name is SUPPORTENGINEER):
+<img src="https://i.ibb.co/mHtbp6J/HTTP.png" alt="HTTP" title="HTTP">
 
-<img src="https://i.ibb.co/bF6J2MY/trigger-4-http.jpg" alt="Uri" title="Uri">
+The last configuration is about the "Add Content to Incident (V3)". Follow the exaple below:
 
-<h3>Question</h3>
-
-As already shared, the variable Question is the string that will be sent to OpenAI's private endpoint service. This represents the 'human question' to be addressed to the artificial intelligence. Write the Question following what you need to ask. Below an example:
-
-<img src="https://i.ibb.co/3FJ42TP/trigger-5.jpg" alt="Uri" title="Uri">
+<img src="https://i.ibb.co/2yrrfV4/comments.png" alt="comments" title="comments">
 
 <h3>ChatGPT Advisor Cost Integration: Configuration</h3>
 
