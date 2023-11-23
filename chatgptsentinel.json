@@ -100,7 +100,6 @@
                             "inputs": {
                                 "content": "@body('HTTP')",
                                 "schema": {
-                                    {
                                         "properties": {
                                             "body": {
                                                 "properties": {
@@ -344,7 +343,6 @@
                     "outputs": {}
                 },
                 "parameters": {}
-            }
+            }]
         }
-    ]
-}
+    
