@@ -406,7 +406,7 @@
                                     {
                                         "name": "olddate",
                                         "type": "string",
-                                        "value": "@{subtractFromTime(utcNow('yyyy-MM-dd'),30,'Day','yyyy-MM-dd')}"
+                                        "value": "@{subtractFromTime(utcNow('yyyy-MM-dd'),1,'month','yyyy-MM-dd')}"
                                     }
                                 ]
                             }
