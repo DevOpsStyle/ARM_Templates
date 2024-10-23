@@ -119,7 +119,7 @@
                         "value": "[parameters('openAIResourceGroup')]"
                     },
                     "resourceGroupId": {
-                        "value": "[resourceId('Microsoft.Resources/resourceGroups', parameters('openAIResourceGroup'))]"
+                        "value": "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('openAIResourceGroup'))]"
                     },
                     "ipRules": {
                         "value": []
