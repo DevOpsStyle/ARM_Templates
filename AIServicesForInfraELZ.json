@@ -1,0 +1,213 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "openAIResourceGroup": {
+            "type": "string",
+            "metadata": {
+                "description": "Resource group for the OpenAI resource."
+            }
+        },
+        "bingResourceGroup": {
+            "type": "string",
+            "metadata": {
+                "description": "Resource group for the Bing resource."
+            }
+        },
+        "sqlBPAResourceGroup": {
+            "type": "string",
+            "metadata": {
+                "description": "Resource group for the SQL BPA Logic App."
+            }
+        },
+        "openAILocation": {
+            "type": "string",
+            "metadata": {
+                "description": "Location for the OpenAI resource."
+            }
+        },
+        "bingLocation": {
+            "type": "string",
+            "metadata": {
+                "description": "Location for the Bing resource."
+            }
+        },
+        "sqlBPALocation": {
+            "type": "string",
+            "metadata": {
+                "description": "Location for the SQL BPA Logic App."
+            }
+        },
+        "openAIName": {
+            "type": "string",
+            "defaultValue": "AzureOpenAIResource2024",
+            "metadata": {
+                "description": "Name for the OpenAI resource. Must be globally unique."
+            }
+        },
+        "virtualNetworkType": {
+            "type": "string",
+            "defaultValue": "External",
+            "metadata": {
+                "description": "External: Private DNS zone will not be created. Internal: Private DNS zone created."
+            }
+        },
+        "bingName": {
+            "type": "string",
+            "defaultValue": "bingsearch",
+            "metadata": {
+                "description": "Name for the Bing resource."
+            }
+        },
+        "skuOpenAI": {
+            "type": "string",
+            "defaultValue": "S0",
+            "metadata": {
+                "description": "SKU for the OpenAI resource."
+            }
+        },
+        "skuBing": {
+            "type": "string",
+            "defaultValue": "F1",
+            "metadata": {
+                "description": "SKU for the Bing resource."
+            }
+        },
+        "workflows_SQL_BPA_ReadLink_Generalized_name": {
+            "defaultValue": "OpenAI-SQL-BPA",
+            "type": "String",
+            "metadata": {
+                "description": "Logic App Name for SQL-BPA."
+            }
+        },
+        "connections_azuremonitorlogs_externalid": {
+            "defaultValue": "/subscriptions/replacewithsubid/resourceGroups/replacewithRG/providers/Microsoft.Web/connections/azuremonitorlogs",
+            "type": "String"
+        },
+        "connections_office365_externalid": {
+            "defaultValue": "/subscriptions/replacewithsubid/resourceGroups/replacewithRG/providers/Microsoft.Web/connections/office365",
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "DeployOpenAI",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://path/to/your/templateOpenAI.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "name": {
+                        "value": "[parameters('openAIName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('openAILocation')]"
+                    },
+                    "sku": {
+                        "value": "[parameters('skuOpenAI')]"
+                    },
+                    "virtualNetworkType": {
+                        "value": "[parameters('virtualNetworkType')]"
+                    },
+                    "tagValues": {
+                        "value": {}
+                    }
+                },
+                "resourceGroup": "[parameters('openAIResourceGroup')]"
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "DeployBing",
+            "dependsOn": [
+                "[resourceId(parameters('openAIResourceGroup'), 'Microsoft.Resources/deployments', 'DeployOpenAI')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://path/to/your/templateBing.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "name": {
+                        "value": "[parameters('bingName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('bingLocation')]"
+                    },
+                    "sku": {
+                        "value": "[parameters('skuBing')]"
+                    },
+                    "tagValues": {
+                        "value": {}
+                    }
+                },
+                "resourceGroup": "[parameters('bingResourceGroup')]"
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "DeploySQLBPA",
+            "dependsOn": [
+                "[resourceId(parameters('bingResourceGroup'), 'Microsoft.Resources/deployments', 'DeployBing')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/sim-1one/OpenAI-CoreIntegration/refs/heads/main/Arc-SQL%20BPA/SQLBPA-V2.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "workflows_SQL_BPA_ReadLink_Generalized_name": {
+                        "value": "[parameters('workflows_SQL_BPA_ReadLink_Generalized_name')]"
+                    },
+                    "location": {
+                        "value": "[parameters('sqlBPALocation')]"
+                    },
+                    "connections_azuremonitorlogs_externalid": {
+                        "value": "[parameters('connections_azuremonitorlogs_externalid')]"
+                    },
+                    "connections_office365_externalid": {
+                        "value": "[parameters('connections_office365_externalid')]"
+                    },
+                    "tagValues": {
+                        "value": {}
+                    }
+                },
+                "resourceGroup": "[parameters('sqlBPAResourceGroup')]"
+            }
+        }
+    ],
+    "outputs": {
+        "openAIResourceGroup": {
+            "type": "string",
+            "value": "[parameters('openAIResourceGroup')]"
+        },
+        "openAILocation": {
+            "type": "string",
+            "value": "[parameters('openAILocation')]"
+        },
+        "bingResourceGroup": {
+            "type": "string",
+            "value": "[parameters('bingResourceGroup')]"
+        },
+        "bingLocation": {
+            "type": "string",
+            "value": "[parameters('bingLocation')]"
+        },
+        "sqlBPAResourceGroup": {
+            "type": "string",
+            "value": "[parameters('sqlBPAResourceGroup')]"
+        },
+        "sqlBPALocation": {
+            "type": "string",
+            "value": "[parameters('sqlBPALocation')]"
+        }
+    }
+}
