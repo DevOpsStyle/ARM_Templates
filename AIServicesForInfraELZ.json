@@ -115,6 +115,9 @@
                     "virtualNetworkType": {
                         "value": "[parameters('virtualNetworkType')]"
                     },
+                    "resourceGroupName": {
+                        "value": "[parameters('openAIResourceGroup')]"
+                    },
                     "ipRules": {
                         "value": []
                     },
