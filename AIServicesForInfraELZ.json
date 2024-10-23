@@ -106,6 +106,9 @@
                             }
                         }
                     },
+                    "ipRules": {
+                        "value": []
+                    },
                     "location": {
                         "value": "[parameters('openAILocation')]"
                     },
