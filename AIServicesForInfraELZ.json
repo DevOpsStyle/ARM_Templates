@@ -26,18 +26,6 @@
                 "description": "Location for the OpenAI resource."
             }
         },
-        "bingLocation": {
-            "type": "string",
-            "metadata": {
-                "description": "Location for the Bing resource."
-            }
-        },
-        "sqlBPALocation": {
-            "type": "string",
-            "metadata": {
-                "description": "Location for the SQL BPA Logic App."
-            }
-        },
         "openAIName": {
             "type": "string",
             "defaultValue": "AzureOpenAIResource2024",
@@ -104,6 +92,9 @@
                     "name": {
                         "value": "[parameters('openAIName')]"
                     },
+                    "vnet":{
+                        "value": "[parameters('openAIName')]"
+                    },
                     "location": {
                         "value": "[parameters('openAILocation')]"
                     },
@@ -138,7 +129,7 @@
                         "value": "[parameters('bingName')]"
                     },
                     "location": {
-                        "value": "[parameters('bingLocation')]"
+                        "value": "global"
                     },
                     "sku": {
                         "value": "[parameters('skuBing')]"
@@ -167,17 +158,11 @@
                     "workflows_SQL_BPA_ReadLink_Generalized_name": {
                         "value": "[parameters('workflows_SQL_BPA_ReadLink_Generalized_name')]"
                     },
-                    "location": {
-                        "value": "[parameters('sqlBPALocation')]"
-                    },
                     "connections_azuremonitorlogs_externalid": {
                         "value": "[parameters('connections_azuremonitorlogs_externalid')]"
                     },
                     "connections_office365_externalid": {
                         "value": "[parameters('connections_office365_externalid')]"
-                    },
-                    "tagValues": {
-                        "value": {}
                     }
                 },
                 "resourceGroup": "[parameters('sqlBPAResourceGroup')]"
@@ -197,17 +182,9 @@
             "type": "string",
             "value": "[parameters('bingResourceGroup')]"
         },
-        "bingLocation": {
-            "type": "string",
-            "value": "[parameters('bingLocation')]"
-        },
         "sqlBPAResourceGroup": {
             "type": "string",
             "value": "[parameters('sqlBPAResourceGroup')]"
-        },
-        "sqlBPALocation": {
-            "type": "string",
-            "value": "[parameters('sqlBPALocation')]"
         }
     }
 }
