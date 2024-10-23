@@ -128,7 +128,7 @@
                         "value": []
                     },
                     "privateDnsZone": {
-                        "value": "[parameters('openAIName')]"
+                        "value": "privatelink.openai.azure.com"
                     },
                     "tagValues": {
                         "value": {}
