@@ -121,13 +121,16 @@
                     "privateEndpoints": {
                         "value": []
                     },
+                    "privateDnsZone": {
+                        "value": "[parameters('openAIName')]"
+                    },
                     "tagValues": {
                         "value": {}
                     }
                 },
                 "resourceGroup": "[parameters('openAIResourceGroup')]"
             }
-        },        
+        },            
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
