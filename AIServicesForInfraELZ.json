@@ -92,8 +92,19 @@
                     "name": {
                         "value": "[parameters('openAIName')]"
                     },
-                    "vnet":{
-                        "value": "[parameters('openAIName')]"
+                    "vnet": {
+                        "value": {
+                            "name": "myOpenAIVNet",
+                            "addressPrefixes": [
+                                "10.0.0.0/16"
+                            ],
+                            "subnets": {
+                                "subnet": {
+                                    "name": "mySubnet",
+                                    "addressPrefix": "10.0.0.0/24"
+                                }
+                            }
+                        }
                     },
                     "location": {
                         "value": "[parameters('openAILocation')]"
