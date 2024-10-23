@@ -42,7 +42,7 @@
         },
         "virtualNetworkType": {
             "type": "string",
-            "defaultValue": "External",
+            "defaultValue": "None",
             "metadata": {
                 "description": "External: Private DNS zone will not be created. Internal: Private DNS zone created."
             }
