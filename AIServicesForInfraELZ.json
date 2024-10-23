@@ -33,18 +33,18 @@
                 "description": "Name for the OpenAI resource. Must be globally unique."
             }
         },
-        "virtualNetworkType": {
-            "type": "string",
-            "defaultValue": "External",
-            "metadata": {
-                "description": "External: Private DNS zone will not be created. Internal: Private DNS zone created."
-            }
-        },
         "bingName": {
             "type": "string",
             "defaultValue": "bingsearch",
             "metadata": {
                 "description": "Name for the Bing resource."
+            }
+        },
+        "virtualNetworkType": {
+            "type": "string",
+            "defaultValue": "External",
+            "metadata": {
+                "description": "External: Private DNS zone will not be created. Internal: Private DNS zone created."
             }
         },
         "skuOpenAI": {
@@ -94,7 +94,7 @@
                     },
                     "vnet": {
                         "value": {
-                            "name": "myOpenAIVNet",
+                            "name": "myVNet",
                             "addressPrefixes": [
                                 "10.0.0.0/16"
                             ],
@@ -106,9 +106,6 @@
                             }
                         }
                     },
-                    "ipRules": {
-                        "value": []
-                    },
                     "location": {
                         "value": "[parameters('openAILocation')]"
                     },
@@ -118,13 +115,19 @@
                     "virtualNetworkType": {
                         "value": "[parameters('virtualNetworkType')]"
                     },
+                    "ipRules": {
+                        "value": []
+                    },
+                    "privateEndpoints": {
+                        "value": []
+                    },
                     "tagValues": {
                         "value": {}
                     }
                 },
                 "resourceGroup": "[parameters('openAIResourceGroup')]"
             }
-        },
+        },        
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
