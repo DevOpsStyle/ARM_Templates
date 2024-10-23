@@ -151,9 +151,6 @@
                     },
                     "tagValues": {
                         "value": {}
-                    },
-                    "resourceGroup": {
-                        "value": "[parameters('bingResourceGroup')]"
                     }
                 }
             }
@@ -180,9 +177,6 @@
                     },
                     "connections_office365_externalid": {
                         "value": "[parameters('connections_office365_externalid')]"
-                    },
-                    "resourceGroup": {
-                        "value": "[parameters('sqlBPAResourceGroup')]"
                     }
                 }
             }
