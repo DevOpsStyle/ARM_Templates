@@ -1,3 +1,13 @@
+<h2>ELZ OpenAI</h2>
+
+<a href="https://github.com/DevOpsStyle/ARM_Templates#ELZ-Configuration" target="_blank">Configuration</a>
+
+This template can be used for the deployment of different Azure VMs and join these to AD (Only Windows).
+
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDevOpsStyle%2FARM_Templates%2Frefs%2Fheads%2Fmain%2FAIServicesForInfraELZ.json" target="_blank">
+  <img src="https://aka.ms/deploytoazurebutton"/>
+</a>
+
 <h2>Azure Hybrid Group Membership Notification</h2>
 
 <a href="https://github.com/DevOpsStyle/ARM_Templates#azure-hybrid-group-membership-notification-configuration" target="_blank">Configuration</a>

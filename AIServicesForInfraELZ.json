@@ -97,7 +97,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "https://path/to/your/templateOpenAI.json",
+                    "uri": "https://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/refs/heads/main/templateOpenAI.json",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -130,7 +130,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "https://path/to/your/templateBing.json",
+                    "uri": "hhttps://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/refs/heads/main/templateBingSearch.json",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
