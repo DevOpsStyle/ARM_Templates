@@ -130,7 +130,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "hhttps://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/refs/heads/main/templateBingSearch.json",
+                    "uri": "https://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/refs/heads/main/templateBingSearch.json",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
