@@ -74,14 +74,6 @@
             "metadata": {
                 "description": "Logic App Name for Cost-Monthly-Check."
             }
-        },
-        "connections_azuremonitorlogs_externalid": {
-            "defaultValue": "/subscriptions/replacewithsubid/resourceGroups/replacewithRG/providers/Microsoft.Web/connections/azuremonitorlogs",
-            "type": "String"
-        },
-        "connections_office365_externalid": {
-            "defaultValue": "/subscriptions/replacewithsubid/resourceGroups/replacewithRG/providers/Microsoft.Web/connections/office365",
-            "type": "String"
         }
     },
     "resources": [
@@ -191,10 +183,10 @@
                         "value": "[parameters('workflows_SQL_BPA_ReadLink_Generalized_name')]"
                     },
                     "connections_azuremonitorlogs_externalid": {
-                        "value": "[parameters('connections_azuremonitorlogs_externalid')]"
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuremonitorlogs')]"
                     },
                     "connections_office365_externalid": {
-                        "value": "[parameters('connections_office365_externalid')]"
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/office365')]"
                     }
                 }
             }
@@ -214,8 +206,7 @@
                 },
                 "parameters": {
                     "workflows_OpenAICostMngmtMonthlyCheck_name": {
-                        "defaultValue": "[parameters('workflows_OpenAICostMngmtMonthlyCheck_name')]",
-                        "type": "String"
+                        "value": "[parameters('workflows_OpenAICostMngmtMonthlyCheck_name')]"
                     }
                 }
             }
