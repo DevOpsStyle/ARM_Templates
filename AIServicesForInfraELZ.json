@@ -205,8 +205,7 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/resourceGroups', parameters('LogicAppsRG'))]",
-        "[resourceId('Microsoft.Resources/deployments', 'DeployBing')]"
+        "[resourceId('Microsoft.Resources/resourceGroups', parameters('LogicAppsRG'))]"
       ]
     },
     {
