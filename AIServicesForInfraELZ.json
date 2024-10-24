@@ -188,7 +188,7 @@
       "apiVersion": "2019-10-01",
       "name": "DeploySQLBPA",
       "dependsOn": [
-        "resourceId('Microsoft.Resources/resourceGroups', parameters('LogicAppsRG'))]",
+        "[resourceId('Microsoft.Resources/resourceGroups', parameters('LogicAppsRG'))]",
         "[resourceId('Microsoft.Resources/deployments', 'DeployBing')]"
       ],
       "properties": {
