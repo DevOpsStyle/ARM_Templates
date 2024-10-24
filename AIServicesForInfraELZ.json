@@ -213,8 +213,8 @@
       "apiVersion": "2019-10-01",
       "name": "DeployCostMonthlyCheck",
       "dependsOn": [
-        "[resourceId('Microsoft.Resources.resourceGroups', parameters('LogicAppsRG'))]",
-        "[resourceId('Microsoft.Resources.developments', 'DeploySQLBPA')]"
+        "[resourceId('Microsoft.Resources/resourceGroups', parameters('LogicAppsRG'))]",
+        "[resourceId('Microsoft.Resources/deployments', 'DeploySQLBPA')]"
       ],
       "properties": {
         "mode": "Incremental",
