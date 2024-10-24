@@ -81,37 +81,18 @@
     },
     "resources": [
       {
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2019-10-01",
-        "name": "CreateResourceGroups",
-        "properties": {
-          "mode": "Incremental",
-          "templateLink": {
-            "uri": "https://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/refs/heads/main/resourcegroupcreate.json",
-            "contentVersion": "1.0.0.0"
-          },
-          "parameters": {
-            "openAIResourceGroup": {
-              "value": "[parameters('openAIResourceGroup')]"
-            },
-            "bingResourceGroup": {
-              "value": "[parameters('bingResourceGroup')]"
-            },
-            "LogicAppsRG": {
-              "value": "[parameters('LogicAppsRG')]"
-            },
-            "location": {
-              "value": "[parameters('openAILocation')]"
-            }
-          }
-        }
+        "type": "Microsoft.Resources/resourceGroups",
+        "apiVersion": "2022-09-01",
+        "name": "[parameters('openAIResourceGroup')]",
+        "location": "[parameters('openAILocation')]",
+        "properties": {}
       },
       {
         "type": "Microsoft.Resources/deployments",
         "apiVersion": "2019-10-01",
         "name": "DeployOpenAI",
         "dependsOn": [
-          "[resourceId('Microsoft.Resources/deployments', 'CreateResourceGroups')]"
+          "[resourceId('Microsoft.Resources/resourceGroups/ 'parameters('openAIResourceGroup'))]"
         ],
         "properties": {
           "mode": "Incremental",
@@ -157,11 +138,18 @@
         }
       },
       {
+        "type": "Microsoft.Resources/resourceGroups",
+        "apiVersion": "2022-09-01",
+        "name": "[parameters('bingResourceGroup)]",
+        "location": "[resourceGroup().location]",
+        "properties": {}
+      },
+      {
         "type": "Microsoft.Resources/deployments",
         "apiVersion": "2019-10-01",
         "name": "DeployBing",
         "dependsOn": [
-          "[resourceId('Microsoft.Resources/deployments', 'CreateResourceGroups')]",
+          "[resourceId('Microsoft.Resources/resourceGroups/ 'parameters('bingResourceGroup'))]",
           "[resourceId('Microsoft.Resources/deployments', 'DeployOpenAI')]"
         ],
         "properties": {
@@ -187,11 +175,18 @@
         }
       },
       {
+        "type": "Microsoft.Resources/resourceGroups",
+        "apiVersion": "2022-09-01",
+        "name": "[parameters('LogicAppsRG')]",
+        "location": "[resourceGroup().location]",
+        "properties": {}
+      },
+      {
         "type": "Microsoft.Resources/deployments",
         "apiVersion": "2019-10-01",
         "name": "DeploySQLBPA",
         "dependsOn": [
-          "[resourceId('Microsoft.Resources/deployments', 'CreateResourceGroups')]",
+          "[resourceId('Microsoft.Resources/resourceGroups/ 'parameters('LogicAppsRG'))]",
           "[resourceId('Microsoft.Resources/deployments', 'DeployBing')]"
         ],
         "properties": {
@@ -214,11 +209,18 @@
         }
       },
       {
+        "type": "Microsoft.Resources/resourceGroups",
+        "apiVersion": "2022-09-01",
+        "name": "[parameters('LogicAppsRG')]",
+        "location": "[resourceGroup().location]",
+        "properties": {}
+      },
+      {
         "type": "Microsoft.Resources/deployments",
         "apiVersion": "2019-10-01",
         "name": "DeployCostMonthlyCheck",
         "dependsOn": [
-          "[resourceId('Microsoft.Resources/deployments', 'CreateResourceGroups')]",
+          "[resourceId('Microsoft.Resources/resourceGroups/ 'parameters('LogicAppsRG'))]",
           "[resourceId('Microsoft.Resources/deployments', 'DeploySQLBPA')]"
         ],
         "properties": {
