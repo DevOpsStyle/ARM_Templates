@@ -87,7 +87,7 @@
         "properties": {
           "mode": "Incremental",
           "templateLink": {
-            "uri": "https://path-to-your-resource-group-template.json",
+            "uri": "https://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/refs/heads/main/resourcegroupcreate.json",
             "contentVersion": "1.0.0.0"
           },
           "parameters": {
