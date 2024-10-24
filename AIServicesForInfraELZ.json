@@ -16,6 +16,7 @@
         },
         "LogicAppsRG": {
             "type": "string",
+            "defaultValue": "LogicAppsforAI",
             "metadata": {
                 "description": "Resource group for the SQL BPA Logic App."
             }
