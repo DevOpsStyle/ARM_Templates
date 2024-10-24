@@ -66,14 +66,14 @@
         },
         "workflows_SQL_BPA_ReadLink_Generalized_name": {
             "defaultValue": "OpenAI-SQL-BPA",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Logic App Name for SQL-BPA."
             }
         },
         "workflows_OpenAICostMngmtMonthlyCheck_name": {
             "defaultValue": "OpenAI-Cost-Monthly-Check",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Logic App Name for Cost-Monthly-Check."
             }
@@ -83,8 +83,15 @@
         {
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2021-04-01",
-            "location": "[parameters('openAILocation')]",
+            "location": "[resourceGroup().location]",
             "name": "[parameters('LogicAppsRG')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2021-04-01",
+            "location": "[resourceGroup().location]",
+            "name": "[parameters('bingResourceGroup')]",
             "properties": {}
         },
         {
@@ -92,13 +99,6 @@
             "apiVersion": "2021-04-01",
             "location": "[parameters('openAILocation')]",
             "name": "[parameters('openAIResourceGroup')]",
-            "properties": {}
-        },
-        {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2021-04-01",
-            "location": "[parameters('openAILocation')]",
-            "name": "[parameters('bingResourceGroup')]",
             "properties": {}
         },
         {
@@ -157,7 +157,8 @@
             "name": "DeployBing",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', parameters('bingResourceGroup'))]",
-                "[resourceId(parameters('openAIResourceGroup'), 'Microsoft.Resources/deployments', 'DeployOpenAI')]"
+                "[resourceId('Microsoft.Resources/resourceGroups', parameters('openAIResourceGroup'))]",
+                "[resourceId('Microsoft.Resources/deployments', 'DeployOpenAI')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -187,7 +188,7 @@
             "name": "DeploySQLBPA",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', parameters('LogicAppsRG'))]",
-                "[resourceId(parameters('bingResourceGroup'), 'Microsoft.Resources/deployments', 'DeployBing')]"
+                "[resourceId('Microsoft.Resources/deployments', 'DeployBing')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -200,10 +201,10 @@
                         "value": "[parameters('workflows_SQL_BPA_ReadLink_Generalized_name')]"
                     },
                     "connections_azuremonitorlogs_externalid": {
-                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuremonitorlogs')]"
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('LogicAppsRG'), '/providers/Microsoft.Web/connections/azuremonitorlogs')]"
                     },
                     "connections_office365_externalid": {
-                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/office365')]"
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('LogicAppsRG'), '/providers/Microsoft.Web/connections/office365')]"
                     }
                 }
             }
