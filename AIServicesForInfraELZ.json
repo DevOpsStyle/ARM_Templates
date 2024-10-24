@@ -192,8 +192,8 @@
       "apiVersion": "2019-10-01",
       "name": "DeploySQLBPA",
       "dependsOn": [
-        "[resourceId('Microsoft.Resources.developments', 'CreateResourceGroups')]",
-        "[resourceId('Microsoft.Resources.developments', 'DeployBing')]"
+        "[resourceId('Microsoft.Resources/deployments', 'CreateResourceGroups')]",
+        "[resourceId('Microsoft.Resources/deployments', 'DeployBing')]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -219,8 +219,8 @@
       "apiVersion": "2019-10-01",
       "name": "DeployCostMonthlyCheck",
       "dependsOn": [
-        "[resourceId('Microsoft.Resources.developments', 'CreateResourceGroups')]",
-        "[resourceId('Microsoft.Resources.developments', 'DeploySQLBPA')]"
+        "[resourceId('Microsoft.Resources/deployments', 'CreateResourceGroups')]",
+        "[resourceId('Microsoft.Resources/deployments', 'DeploySQLBPA')]"
       ],
       "properties": {
         "mode": "Incremental",
