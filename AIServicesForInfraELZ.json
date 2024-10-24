@@ -141,7 +141,7 @@
     {
       "type": "Microsoft.Resources/resourceGroups",
       "apiVersion": "2022-09-01",
-      "name": "[parameters('bingResourceGroup]",
+      "name": "[parameters('bingResourceGroup')]",
       "location": "[resourceGroup().location]",
       "properties": {}
     },
@@ -149,7 +149,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "DeployBing",
-      "resourceGroup": "[parameters('bingResourceGroup]",
+      "resourceGroup": "[parameters('bingResourceGroup')]",
       "dependsOn": [
         "[resourceId('Microsoft.Resources/resourceGroups', parameters('bingResourceGroup'))]",
         "[resourceId('Microsoft.Resources/deployments', 'DeployOpenAI')]"
