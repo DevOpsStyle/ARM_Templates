@@ -82,21 +82,21 @@
     "resources": [
         {
             "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2021-04-01",
+            "apiVersion": "2024-03-01",
             "location": "[resourceGroup().location]",
             "name": "[parameters('LogicAppsRG')]",
             "properties": {}
         },
         {
             "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2021-04-01",
+            "apiVersion": "2024-03-01",
             "location": "[resourceGroup().location]",
             "name": "[parameters('bingResourceGroup')]",
             "properties": {}
         },
         {
             "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2021-04-01",
+            "apiVersion": "2024-03-01",
             "location": "[parameters('openAILocation')]",
             "name": "[parameters('openAIResourceGroup')]",
             "properties": {}
