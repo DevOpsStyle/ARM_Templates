@@ -140,7 +140,7 @@
       {
         "type": "Microsoft.Resources/resourceGroups",
         "apiVersion": "2022-09-01",
-        "name": "[parameters('bingResourceGroup)]",
+        "name": "[parameters('bingResourceGroup')]",
         "location": "[resourceGroup().location]",
         "properties": {}
       },
