@@ -1,5 +1,5 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "openAIResourceGroup": {
@@ -29,6 +29,20 @@
         "description": "Location for the OpenAI resource."
       }
     },
+    "bingRGLocation": {
+      "type": "string",
+      "defaultValue": "westeurope",
+      "metadata": {
+        "description": "Location for the Bing resource."
+      }
+    },
+    "logicAppsLocation": {
+      "type": "string",
+      "defaultValue": "westeurope",
+      "metadata": {
+        "description": "Location for the Logic Apps resource."
+      }
+    },
     "openAIName": {
       "type": "string",
       "defaultValue": "AzureOpenAIResource2024",
@@ -41,13 +55,6 @@
       "defaultValue": "bingsearch",
       "metadata": {
         "description": "Name for the Bing resource."
-      }
-    },
-    "virtualNetworkType": {
-      "type": "string",
-      "defaultValue": "None",
-      "metadata": {
-        "description": "External: Private DNS zone will not be created. Internal: Private DNS zone created."
       }
     },
     "skuOpenAI": {
@@ -112,7 +119,7 @@
             "value": "[parameters('skuOpenAI')]"
           },
           "virtualNetworkType": {
-            "value": "[parameters('virtualNetworkType')]"
+            "value": "None"
           },
           "resourceGroupName": {
             "value": "[parameters('openAIResourceGroup')]"
@@ -142,7 +149,7 @@
       "type": "Microsoft.Resources/resourceGroups",
       "apiVersion": "2022-09-01",
       "name": "[parameters('bingResourceGroup')]",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('bingRGLocation')]",
       "properties": {}
     },
     {
@@ -179,17 +186,18 @@
       "type": "Microsoft.Resources/resourceGroups",
       "apiVersion": "2022-09-01",
       "name": "[parameters('LogicAppsRG')]",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('logicAppsLocation')]",
       "properties": {}
     },
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "DeploySQLBPA",
+      "resourceGroup": "[parameters('LogicAppsRG')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/sim-1one/OpenAI-CoreIntegration/refs/heads/main/Arc-SQL%20BPA/SQLBPA-V2.json",
+          "uri": "https://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/refs/heads/main/SQLBPAV2.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -201,6 +209,9 @@
           },
           "connections_office365_externalid": {
             "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('LogicAppsRG'), '/providers/Microsoft.Web/connections/office365')]"
+          },
+          "location": {
+            "value": "[parameters('logicAppsLocation')]"
           }
         }
       },
@@ -212,20 +223,24 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "DeployCostMonthlyCheck",
+      "resourceGroup": "[parameters('LogicAppsRG')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/sim-1one/OpenAI-CoreIntegration/refs/heads/main/CostMonthlyCheck/CostMonthlyCheck.json",
+          "uri": "https://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/refs/heads/main/CostMonthlyCheck.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
           "workflows_OpenAICostMngmtMonthlyCheck_name": {
             "value": "[parameters('workflows_OpenAICostMngmtMonthlyCheck_name')]"
+          },
+          "location": {
+            "value": "[parameters('logicAppsLocation')]"
           }
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', 'DeploySQLBPA')]"
+        "[resourceId('Microsoft.Resources/resourceGroups', parameters('LogicAppsRG'))]"
       ]
     }
   ],
