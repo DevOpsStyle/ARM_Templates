@@ -172,8 +172,7 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/resourceGroups', parameters('bingResourceGroup'))]",
-        "[resourceId('Microsoft.Resources/deployments', 'DeployOpenAI')]"
+        "[resourceId('Microsoft.Resources/resourceGroups', parameters('bingResourceGroup'))]"
       ]
     },
     {
