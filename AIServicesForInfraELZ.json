@@ -4,12 +4,14 @@
     "parameters": {
         "openAIResourceGroup": {
             "type": "string",
+            "defaultValue": "OpenAIRG",
             "metadata": {
                 "description": "Resource group for the OpenAI resource."
             }
         },
         "bingResourceGroup": {
             "type": "string",
+            "defaultValue": "BingAIRG",
             "metadata": {
                 "description": "Resource group for the Bing resource."
             }
@@ -83,6 +85,20 @@
             "apiVersion": "2021-04-01",
             "location": "[parameters('openAILocation')]",
             "name": "[parameters('LogicAppsRG')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2021-04-01",
+            "location": "[parameters('openAILocation')]",
+            "name": "[parameters('openAIResourceGroup')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2021-04-01",
+            "location": "[parameters('openAILocation')]",
+            "name": "[parameters('bingResourceGroup')]",
             "properties": {}
         },
         {
