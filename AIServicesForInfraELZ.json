@@ -92,9 +92,6 @@
       "apiVersion": "2022-09-01",
       "name": "DeployOpenAI",
       "resourceGroup": "[parameters('openAIResourceGroup')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/resourceGroups', parameters('openAIResourceGroup'))]"
-      ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -136,7 +133,10 @@
             "value": {}
           }
         }
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/resourceGroups', parameters('openAIResourceGroup'))]"
+      ]
     },
     {
       "type": "Microsoft.Resources/resourceGroups",
@@ -150,10 +150,6 @@
       "apiVersion": "2019-10-01",
       "name": "DeployBing",
       "resourceGroup": "[parameters('bingResourceGroup')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/resourceGroups', parameters('bingResourceGroup'))]",
-        "[resourceId('Microsoft.Resources/deployments', 'DeployOpenAI')]"
-      ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -174,7 +170,11 @@
             "value": {}
           }
         }
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/resourceGroups', parameters('bingResourceGroup'))]",
+        "[resourceId('Microsoft.Resources/deployments', 'DeployOpenAI')]"
+      ]
     },
     {
       "type": "Microsoft.Resources/resourceGroups",
@@ -187,10 +187,6 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "DeploySQLBPA",
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/resourceGroups', parameters('LogicAppsRG'))]",
-        "[resourceId('Microsoft.Resources/deployments', 'DeployBing')]"
-      ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -208,15 +204,16 @@
             "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('LogicAppsRG'), '/providers/Microsoft.Web/connections/office365')]"
           }
         }
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/resourceGroups', parameters('LogicAppsRG'))]",
+        "[resourceId('Microsoft.Resources/deployments', 'DeployBing')]"
+      ]
     },
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "DeployCostMonthlyCheck",
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', 'DeploySQLBPA')]"
-      ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -228,7 +225,10 @@
             "value": "[parameters('workflows_OpenAICostMngmtMonthlyCheck_name')]"
           }
         }
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'DeploySQLBPA')]"
+      ]
     }
   ],
   "outputs": {
