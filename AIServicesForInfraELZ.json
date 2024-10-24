@@ -14,7 +14,7 @@
                 "description": "Resource group for the Bing resource."
             }
         },
-        "sqlBPAResourceGroup": {
+        "LogicAppsRG": {
             "type": "string",
             "metadata": {
                 "description": "Resource group for the SQL BPA Logic App."
@@ -95,28 +95,7 @@
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2021-04-01",
             "location": "[parameters('openAILocation')]",
-            "name": "[parameters('openAIResourceGroup')]",
-            "properties": {}
-        },
-        {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2021-04-01",
-            "location": "[parameters('openAILocation')]",
-            "name": "[parameters('bingResourceGroup')]",
-            "properties": {}
-        },
-        {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2021-04-01",
-            "location": "[parameters('openAILocation')]",
-            "name": "[parameters('sqlBPAResourceGroup')]",
-            "properties": {}
-        },
-        {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2021-04-01",
-            "location": "[parameters('openAILocation')]",
-            "name": "[parameters('CostMonthlyCheckResourceGroup')]",
+            "name": "[parameters('LogicAppsRG')]",
             "properties": {}
         },
         {
@@ -204,7 +183,7 @@
             "apiVersion": "2019-10-01",
             "name": "DeploySQLBPA",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', parameters('sqlBPAResourceGroup'))]",
+                "[resourceId('Microsoft.Resources/resourceGroups', parameters('LogicAppsRG'))]",
                 "[resourceId(parameters('bingResourceGroup'), 'Microsoft.Resources/deployments', 'DeployBing')]"
             ],
             "properties": {
@@ -231,7 +210,7 @@
             "apiVersion": "2019-10-01",
             "name": "DeployCostMonthlyCheck",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', parameters('CostMonthlyCheckResourceGroup'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', parameters('LogicAppsRG'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -263,11 +242,7 @@
         },
         "sqlBPAResourceGroup": {
             "type": "string",
-            "value": "[parameters('sqlBPAResourceGroup')]"
-        },
-        "CostMonthlyCheckResourceGroup": {
-            "type": "string",
-            "value": "[parameters('sqlBPAResourceGroup')]"
+            "value": "[parameters('LogicAppsRG')]"
         }
     }
 }
