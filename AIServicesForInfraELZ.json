@@ -20,12 +20,6 @@
                 "description": "Resource group for the SQL BPA Logic App."
             }
         },
-        "CostMonthlyCheckResourceGroup": {
-            "type": "string",
-            "metadata": {
-                "description": "Resource group for the SQL BPA Logic App."
-            }
-        },
         "openAILocation": {
             "type": "string",
             "metadata": {
