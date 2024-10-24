@@ -201,7 +201,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "https://github.com/sim-1one/OpenAI-CoreIntegration/blob/main/CostMonthlyCheck/CostMonthlyCheck.json",
+                    "uri": "hhttps://raw.githubusercontent.com/sim-1one/OpenAI-CoreIntegration/refs/heads/main/CostMonthlyCheck/CostMonthlyCheck.json",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
