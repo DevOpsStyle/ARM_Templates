@@ -187,7 +187,7 @@
       "name": "DeploySQLBPA",
       "dependsOn": [
         "[resourceId('Microsoft.Resources/resourceGroups', parameters('LogicAppsRG'))]",
-        "[resourceId('Microsoft.Resources.developments', 'DeployBing')]"
+        "[resourceId('Microsoft.Resources/deployments', 'DeployBing')]"
       ],
       "properties": {
         "mode": "Incremental",
