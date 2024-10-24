@@ -1,0 +1,82 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "openAIResourceGroup": {
+        "type": "string",
+        "defaultValue": "OpenAIRG",
+        "metadata": {
+          "description": "Resource group for the OpenAI resource."
+        }
+      },
+      "bingResourceGroup": {
+        "type": "string",
+        "defaultValue": "BingAIRG",
+        "metadata": {
+          "description": "Resource group for the Bing resource."
+        }
+      },
+      "LogicAppsRG": {
+        "type": "string",
+        "defaultValue": "LogicAppsforAI",
+        "metadata": {
+          "description": "Resource group for the SQL BPA Logic App."
+        }
+      },
+      "location": {
+        "type": "string",
+        "defaultValue": "westeurope",
+        "metadata": {
+          "description": "Location for the resource groups."
+        }
+      },
+      "tags": {
+        "type": "object",
+        "defaultValue": {},
+        "metadata": {
+          "description": "Tags to be applied to the resource groups."
+        }
+      }
+    },
+    "resources": [
+      {
+        "type": "Microsoft.Resources/resourceGroups",
+        "apiVersion": "2024-03-01",
+        "location": "[parameters('location')]",
+        "name": "[parameters('openAIResourceGroup')]",
+        "tags": "[parameters('tags')]",
+        "properties": {}
+      },
+      {
+        "type": "Microsoft.Resources/resourceGroups",
+        "apiVersion": "2024-03-01",
+        "location": "[parameters('location')]",
+        "name": "[parameters('bingResourceGroup')]",
+        "tags": "[parameters('tags')]",
+        "properties": {}
+      },
+      {
+        "type": "Microsoft.Resources/resourceGroups",
+        "apiVersion": "2024-03-01",
+        "location": "[parameters('location')]",
+        "name": "[parameters('LogicAppsRG')]",
+        "tags": "[parameters('tags')]",
+        "properties": {}
+      }
+    ],
+    "outputs": {
+      "openAIResourceGroup": {
+        "type": "string",
+        "value": "[parameters('openAIResourceGroup')]"
+      },
+      "bingResourceGroup": {
+        "type": "string",
+        "value": "[parameters('bingResourceGroup')]"
+      },
+      "LogicAppsRG": {
+        "type": "string",
+        "value": "[parameters('LogicAppsRG')]"
+      }
+    }
+  }
+  

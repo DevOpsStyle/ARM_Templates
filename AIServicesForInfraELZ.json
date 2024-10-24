@@ -2,250 +2,256 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "openAIResourceGroup": {
-            "type": "string",
-            "defaultValue": "OpenAIRG",
-            "metadata": {
-                "description": "Resource group for the OpenAI resource."
-            }
-        },
-        "bingResourceGroup": {
-            "type": "string",
-            "defaultValue": "BingAIRG",
-            "metadata": {
-                "description": "Resource group for the Bing resource."
-            }
-        },
-        "LogicAppsRG": {
-            "type": "string",
-            "defaultValue": "LogicAppsforAI",
-            "metadata": {
-                "description": "Resource group for the SQL BPA Logic App."
-            }
-        },
-        "openAILocation": {
-            "type": "string",
-            "metadata": {
-                "description": "Location for the OpenAI resource."
-            }
-        },
-        "openAIName": {
-            "type": "string",
-            "defaultValue": "AzureOpenAIResource2024",
-            "metadata": {
-                "description": "Name for the OpenAI resource. Must be globally unique."
-            }
-        },
-        "bingName": {
-            "type": "string",
-            "defaultValue": "bingsearch",
-            "metadata": {
-                "description": "Name for the Bing resource."
-            }
-        },
-        "virtualNetworkType": {
-            "type": "string",
-            "defaultValue": "None",
-            "metadata": {
-                "description": "External: Private DNS zone will not be created. Internal: Private DNS zone created."
-            }
-        },
-        "skuOpenAI": {
-            "type": "string",
-            "defaultValue": "S0",
-            "metadata": {
-                "description": "SKU for the OpenAI resource."
-            }
-        },
-        "skuBing": {
-            "type": "string",
-            "defaultValue": "F1",
-            "metadata": {
-                "description": "SKU for the Bing resource."
-            }
-        },
-        "workflows_SQL_BPA_ReadLink_Generalized_name": {
-            "defaultValue": "OpenAI-SQL-BPA",
-            "type": "string",
-            "metadata": {
-                "description": "Logic App Name for SQL-BPA."
-            }
-        },
-        "workflows_OpenAICostMngmtMonthlyCheck_name": {
-            "defaultValue": "OpenAI-Cost-Monthly-Check",
-            "type": "string",
-            "metadata": {
-                "description": "Logic App Name for Cost-Monthly-Check."
-            }
+      "openAIResourceGroup": {
+        "type": "string",
+        "defaultValue": "OpenAIRG",
+        "metadata": {
+          "description": "Resource group for the OpenAI resource."
         }
+      },
+      "bingResourceGroup": {
+        "type": "string",
+        "defaultValue": "BingAIRG",
+        "metadata": {
+          "description": "Resource group for the Bing resource."
+        }
+      },
+      "LogicAppsRG": {
+        "type": "string",
+        "defaultValue": "LogicAppsforAI",
+        "metadata": {
+          "description": "Resource group for the SQL BPA Logic App."
+        }
+      },
+      "openAILocation": {
+        "type": "string",
+        "metadata": {
+          "description": "Location for the OpenAI resource."
+        }
+      },
+      "openAIName": {
+        "type": "string",
+        "defaultValue": "AzureOpenAIResource2024",
+        "metadata": {
+          "description": "Name for the OpenAI resource. Must be globally unique."
+        }
+      },
+      "bingName": {
+        "type": "string",
+        "defaultValue": "bingsearch",
+        "metadata": {
+          "description": "Name for the Bing resource."
+        }
+      },
+      "virtualNetworkType": {
+        "type": "string",
+        "defaultValue": "None",
+        "metadata": {
+          "description": "External: Private DNS zone will not be created. Internal: Private DNS zone created."
+        }
+      },
+      "skuOpenAI": {
+        "type": "string",
+        "defaultValue": "S0",
+        "metadata": {
+          "description": "SKU for the OpenAI resource."
+        }
+      },
+      "skuBing": {
+        "type": "string",
+        "defaultValue": "F1",
+        "metadata": {
+          "description": "SKU for the Bing resource."
+        }
+      },
+      "workflows_SQL_BPA_ReadLink_Generalized_name": {
+        "defaultValue": "OpenAI-SQL-BPA",
+        "type": "string",
+        "metadata": {
+          "description": "Logic App Name for SQL-BPA."
+        }
+      },
+      "workflows_OpenAICostMngmtMonthlyCheck_name": {
+        "defaultValue": "OpenAI-Cost-Monthly-Check",
+        "type": "string",
+        "metadata": {
+          "description": "Logic App Name for Cost-Monthly-Check."
+        }
+      }
     },
     "resources": [
-        {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2024-03-01",
-            "location": "[resourceGroup().location]",
-            "name": "[parameters('LogicAppsRG')]",
-            "properties": {}
-        },
-        {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2024-03-01",
-            "location": "[resourceGroup().location]",
-            "name": "[parameters('bingResourceGroup')]",
-            "properties": {}
-        },
-        {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2024-03-01",
-            "location": "[parameters('openAILocation')]",
-            "name": "[parameters('openAIResourceGroup')]",
-            "properties": {}
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2019-10-01",
-            "name": "DeployOpenAI",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', parameters('openAIResourceGroup'))]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "https://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/refs/heads/main/templateOpenAI.json",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "name": {
-                        "value": "[parameters('openAIName')]"
-                    },
-                    "vnet": {
-                        "value": {}
-                    },
-                    "location": {
-                        "value": "[parameters('openAILocation')]"
-                    },
-                    "sku": {
-                        "value": "[parameters('skuOpenAI')]"
-                    },
-                    "virtualNetworkType": {
-                        "value": "[parameters('virtualNetworkType')]"
-                    },
-                    "resourceGroupName": {
-                        "value": "[parameters('openAIResourceGroup')]"
-                    },
-                    "resourceGroupId": {
-                        "value": "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('openAIResourceGroup'))]"
-                    },
-                    "ipRules": {
-                        "value": []
-                    },
-                    "privateEndpoints": {
-                        "value": []
-                    },
-                    "privateDnsZone": {
-                        "value": "privatelink.openai.azure.com"
-                    },
-                    "tagValues": {
-                        "value": {}
-                    }
-                }
+      {
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2019-10-01",
+        "name": "CreateResourceGroups",
+        "properties": {
+          "mode": "Incremental",
+          "templateLink": {
+            "uri": "https://path-to-your-resource-group-template.json",
+            "contentVersion": "1.0.0.0"
+          },
+          "parameters": {
+            "openAIResourceGroup": {
+              "value": "[parameters('openAIResourceGroup')]"
+            },
+            "bingResourceGroup": {
+              "value": "[parameters('bingResourceGroup')]"
+            },
+            "LogicAppsRG": {
+              "value": "[parameters('LogicAppsRG')]"
+            },
+            "location": {
+              "value": "[parameters('openAILocation')]"
             }
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2019-10-01",
-            "name": "DeployBing",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', parameters('bingResourceGroup'))]",
-                "[resourceId('Microsoft.Resources/resourceGroups', parameters('openAIResourceGroup'))]",
-                "[resourceId('Microsoft.Resources/deployments', 'DeployOpenAI')]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "https://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/refs/heads/main/templateBingSearch.json",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "name": {
-                        "value": "[parameters('bingName')]"
-                    },
-                    "location": {
-                        "value": "global"
-                    },
-                    "sku": {
-                        "value": "[parameters('skuBing')]"
-                    },
-                    "tagValues": {
-                        "value": {}
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2019-10-01",
-            "name": "DeploySQLBPA",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', parameters('LogicAppsRG'))]",
-                "[resourceId('Microsoft.Resources/deployments', 'DeployBing')]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "https://raw.githubusercontent.com/sim-1one/OpenAI-CoreIntegration/refs/heads/main/Arc-SQL%20BPA/SQLBPA-V2.json",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "workflows_SQL_BPA_ReadLink_Generalized_name": {
-                        "value": "[parameters('workflows_SQL_BPA_ReadLink_Generalized_name')]"
-                    },
-                    "connections_azuremonitorlogs_externalid": {
-                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('LogicAppsRG'), '/providers/Microsoft.Web/connections/azuremonitorlogs')]"
-                    },
-                    "connections_office365_externalid": {
-                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('LogicAppsRG'), '/providers/Microsoft.Web/connections/office365')]"
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2019-10-01",
-            "name": "DeployCostMonthlyCheck",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', parameters('LogicAppsRG'))]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "https://raw.githubusercontent.com/sim-1one/OpenAI-CoreIntegration/refs/heads/main/CostMonthlyCheck/CostMonthlyCheck.json",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "workflows_OpenAICostMngmtMonthlyCheck_name": {
-                        "value": "[parameters('workflows_OpenAICostMngmtMonthlyCheck_name')]"
-                    }
-                }
-            }
+          }
         }
+      },
+      {
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2019-10-01",
+        "name": "DeployOpenAI",
+        "dependsOn": [
+          "[resourceId('Microsoft.Resources/deployments', 'CreateResourceGroups')]"
+        ],
+        "properties": {
+          "mode": "Incremental",
+          "templateLink": {
+            "uri": "https://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/refs/heads/main/templateOpenAI.json",
+            "contentVersion": "1.0.0.0"
+          },
+          "parameters": {
+            "name": {
+              "value": "[parameters('openAIName')]"
+            },
+            "vnet": {
+              "value": {}
+            },
+            "location": {
+              "value": "[parameters('openAILocation')]"
+            },
+            "sku": {
+              "value": "[parameters('skuOpenAI')]"
+            },
+            "virtualNetworkType": {
+              "value": "[parameters('virtualNetworkType')]"
+            },
+            "resourceGroupName": {
+              "value": "[parameters('openAIResourceGroup')]"
+            },
+            "resourceGroupId": {
+              "value": "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('openAIResourceGroup'))]"
+            },
+            "ipRules": {
+              "value": []
+            },
+            "privateEndpoints": {
+              "value": []
+            },
+            "privateDnsZone": {
+              "value": "privatelink.openai.azure.com"
+            },
+            "tagValues": {
+              "value": {}
+            }
+          }
+        }
+      },
+      {
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2019-10-01",
+        "name": "DeployBing",
+        "dependsOn": [
+          "[resourceId('Microsoft.Resources/deployments', 'CreateResourceGroups')]",
+          "[resourceId('Microsoft.Resources/deployments', 'DeployOpenAI')]"
+        ],
+        "properties": {
+          "mode": "Incremental",
+          "templateLink": {
+            "uri": "https://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/refs/heads/main/templateBingSearch.json",
+            "contentVersion": "1.0.0.0"
+          },
+          "parameters": {
+            "name": {
+              "value": "[parameters('bingName')]"
+            },
+            "location": {
+              "value": "global"
+            },
+            "sku": {
+              "value": "[parameters('skuBing')]"
+            },
+            "tagValues": {
+              "value": {}
+            }
+          }
+        }
+      },
+      {
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2019-10-01",
+        "name": "DeploySQLBPA",
+        "dependsOn": [
+          "[resourceId('Microsoft.Resources/deployments', 'CreateResourceGroups')]",
+          "[resourceId('Microsoft.Resources/deployments', 'DeployBing')]"
+        ],
+        "properties": {
+          "mode": "Incremental",
+          "templateLink": {
+            "uri": "https://raw.githubusercontent.com/sim-1one/OpenAI-CoreIntegration/refs/heads/main/Arc-SQL%20BPA/SQLBPA-V2.json",
+            "contentVersion": "1.0.0.0"
+          },
+          "parameters": {
+            "workflows_SQL_BPA_ReadLink_Generalized_name": {
+              "value": "[parameters('workflows_SQL_BPA_ReadLink_Generalized_name')]"
+            },
+            "connections_azuremonitorlogs_externalid": {
+              "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('LogicAppsRG'), '/providers/Microsoft.Web/connections/azuremonitorlogs')]"
+            },
+            "connections_office365_externalid": {
+              "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('LogicAppsRG'), '/providers/Microsoft.Web/connections/office365')]"
+            }
+          }
+        }
+      },
+      {
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2019-10-01",
+        "name": "DeployCostMonthlyCheck",
+        "dependsOn": [
+          "[resourceId('Microsoft.Resources/deployments', 'CreateResourceGroups')]",
+          "[resourceId('Microsoft.Resources/deployments', 'DeploySQLBPA')]"
+        ],
+        "properties": {
+          "mode": "Incremental",
+          "templateLink": {
+            "uri": "https://raw.githubusercontent.com/sim-1one/OpenAI-CoreIntegration/refs/heads/main/CostMonthlyCheck/CostMonthlyCheck.json",
+            "contentVersion": "1.0.0.0"
+          },
+          "parameters": {
+            "workflows_OpenAICostMngmtMonthlyCheck_name": {
+              "value": "[parameters('workflows_OpenAICostMngmtMonthlyCheck_name')]"
+            }
+          }
+        }
+      }
     ],
     "outputs": {
-        "openAIResourceGroup": {
-            "type": "string",
-            "value": "[parameters('openAIResourceGroup')]"
-        },
-        "openAILocation": {
-            "type": "string",
-            "value": "[parameters('openAILocation')]"
-        },
-        "bingResourceGroup": {
-            "type": "string",
-            "value": "[parameters('bingResourceGroup')]"
-        },
-        "sqlBPAResourceGroup": {
-            "type": "string",
-            "value": "[parameters('LogicAppsRG')]"
-        }
+      "openAIResourceGroup": {
+        "type": "string",
+        "value": "[parameters('openAIResourceGroup')]"
+      },
+      "openAILocation": {
+        "type": "string",
+        "value": "[parameters('openAILocation')]"
+      },
+      "bingResourceGroup": {
+        "type": "string",
+        "value": "[parameters('bingResourceGroup')]"
+      },
+      "sqlBPAResourceGroup": {
+        "type": "string",
+        "value": "[parameters('LogicAppsRG')]"
+      }
     }
-}
+  }
+  
