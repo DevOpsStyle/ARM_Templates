@@ -20,6 +20,12 @@
                 "description": "Resource group for the SQL BPA Logic App."
             }
         },
+        "CostMonthlyCheckResourceGroup": {
+            "type": "string",
+            "metadata": {
+                "description": "Resource group for the SQL BPA Logic App."
+            }
+        },
         "openAILocation": {
             "type": "string",
             "metadata": {
@@ -68,6 +74,13 @@
                 "description": "Logic App Name for SQL-BPA."
             }
         },
+        "workflows_OpenAICostMngmtMonthlyCheck_name": {
+            "defaultValue": "OpenAI-Cost-Monthly-Check",
+            "type": "String",
+            "metadata": {
+                "description": "Logic App Name for Cost-Monthly-Check."
+            }
+        },
         "connections_azuremonitorlogs_externalid": {
             "defaultValue": "/subscriptions/replacewithsubid/resourceGroups/replacewithRG/providers/Microsoft.Web/connections/azuremonitorlogs",
             "type": "String"
@@ -79,9 +92,40 @@
     },
     "resources": [
         {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2021-04-01",
+            "location": "[parameters('openAILocation')]",
+            "name": "[parameters('openAIResourceGroup')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2021-04-01",
+            "location": "[parameters('openAILocation')]",
+            "name": "[parameters('bingResourceGroup')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2021-04-01",
+            "location": "[parameters('openAILocation')]",
+            "name": "[parameters('sqlBPAResourceGroup')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2021-04-01",
+            "location": "[parameters('openAILocation')]",
+            "name": "[parameters('CostMonthlyCheckResourceGroup')]",
+            "properties": {}
+        },
+        {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "DeployOpenAI",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', parameters('openAIResourceGroup'))]"
+            ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -124,12 +168,13 @@
                     }
                 }
             }
-        },            
+        },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "DeployBing",
             "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', parameters('bingResourceGroup'))]",
                 "[resourceId(parameters('openAIResourceGroup'), 'Microsoft.Resources/deployments', 'DeployOpenAI')]"
             ],
             "properties": {
@@ -159,6 +204,7 @@
             "apiVersion": "2019-10-01",
             "name": "DeploySQLBPA",
             "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', parameters('sqlBPAResourceGroup'))]",
                 "[resourceId(parameters('bingResourceGroup'), 'Microsoft.Resources/deployments', 'DeployBing')]"
             ],
             "properties": {
@@ -179,6 +225,27 @@
                     }
                 }
             }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "DeployCostMonthlyCheck",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', parameters('CostMonthlyCheckResourceGroup'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://github.com/sim-1one/OpenAI-CoreIntegration/blob/main/CostMonthlyCheck/CostMonthlyCheck.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "workflows_OpenAICostMngmtMonthlyCheck_name": {
+                        "defaultValue": "[parameters('workflows_OpenAICostMngmtMonthlyCheck_name')]",
+                        "type": "String"
+                    }
+                }
+            }
         }
     ],
     "outputs": {
@@ -195,6 +262,10 @@
             "value": "[parameters('bingResourceGroup')]"
         },
         "sqlBPAResourceGroup": {
+            "type": "string",
+            "value": "[parameters('sqlBPAResourceGroup')]"
+        },
+        "CostMonthlyCheckResourceGroup": {
             "type": "string",
             "value": "[parameters('sqlBPAResourceGroup')]"
         }
