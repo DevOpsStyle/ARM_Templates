@@ -92,7 +92,7 @@
         "apiVersion": "2019-10-01",
         "name": "DeployOpenAI",
         "dependsOn": [
-          "[resourceId('Microsoft.Resources/resourceGroups/ 'parameters('openAIResourceGroup'))]"
+          "[resourceId('Microsoft.Resources/resourceGroups/ parameters('openAIResourceGroup'))]"
         ],
         "properties": {
           "mode": "Incremental",
