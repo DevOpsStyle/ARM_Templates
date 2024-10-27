@@ -25,6 +25,7 @@
     },
     "openAILocation": {
       "type": "string",
+      "defaultValue": "westeurope",
       "metadata": {
         "description": "Location for the OpenAI resource."
       }
