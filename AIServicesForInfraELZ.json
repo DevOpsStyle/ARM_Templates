@@ -312,7 +312,7 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
-      "name": "DeployBing",
+      "name": "DeployFunction",
       "resourceGroup": "[parameters('FunctionRG')]",
       "properties": {
         "mode": "Incremental",
@@ -361,7 +361,7 @@
             "value": "ASP-OpenAIFunctionApps-b7a4"
         },
         "serverFarmResourceGroup": {
-            "value": "OpenAIFunctionApps"
+            "value": "[parameters('FunctionRG')]"
         },
         "alwaysOn": {
             "value": false
