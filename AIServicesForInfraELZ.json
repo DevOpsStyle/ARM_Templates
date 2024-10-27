@@ -84,6 +84,7 @@
       "metadata": {
         "description": "Logic App Name for Update-Management."
       }
+    }
   },
   "resources": [
     {
@@ -285,5 +286,4 @@
       "value": "[parameters('LogicAppsRG')]"
     }
   }
-}
 }
