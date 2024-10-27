@@ -92,7 +92,7 @@
         "description": "RG used for the function App"
       }
     },
-    "FunctionnRGLocation": {
+    "FunctionRGLocation": {
       "defaultValue": "westeurope",
       "type": "string",
       "metadata": {
@@ -306,7 +306,7 @@
       "type": "Microsoft.Resources/resourceGroups",
       "apiVersion": "2022-09-01",
       "name": "[parameters('FunctionRG')]",
-      "location": "[parameters('FunctionnRGLocation')]",
+      "location": "[parameters('FunctionRGLocation')]",
       "properties": {}
     },
     {
