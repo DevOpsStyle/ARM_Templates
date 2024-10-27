@@ -84,42 +84,7 @@
       "metadata": {
         "description": "Logic App Name for Update-Management."
       }
-    },
-    "FunctionRG": {
-      "defaultValue": "FunctionRGAI",
-      "type": "string",
-      "metadata": {
-        "description": "RG used for the function App"
-      }
-    },
-    "FunctionnRGLocation": {
-      "defaultValue": "westeurope",
-      "type": "string",
-      "metadata": {
-        "description": "RG used for the function App"
-      }
-    },
-    "FunctionName": {
-      "defaultValue": "OpenAISmartDocsFA",
-      "type": "string",
-      "metadata": {
-        "description": "Function Name to Create."
-      }
-    },
-    "FunctionLocation": {
-      "defaultValue": "westeurope",
-      "type": "string",
-      "metadata": {
-        "description": "Function location."
-      }
-    },
-    "StorageAccountNameFunction": {
-      "defaultValue": "aisafunctionapp2024",
-      "type": "string",
-      "metadata": {
-        "description": "Storage account name for the function app. The name must be unique."
-      }
-    } 
+    }
   },
   "resources": [
     {
@@ -301,86 +266,12 @@
       "dependsOn": [
         "[resourceId('Microsoft.Resources/resourceGroups', parameters('LogicAppsRG'))]"
       ]
-    },
-    {
-      "type": "Microsoft.Resources/resourceGroups",
-      "apiVersion": "2022-09-01",
-      "name": "[parameters('FunctionRG')]",
-      "location": "[parameters('FunctionnRGLocation')]",
-      "properties": {}
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2019-10-01",
-      "name": "DeployBing",
-      "resourceGroup": "[parameters('FunctionRG')]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/refs/heads/main/CreateFunction.json",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-        "subscriptionId": {
-            "value": "[subscription().subscriptionId]"
-        },
-        "name": {
-            "value": "[parameters('FunctionName')]"
-        },
-        "location": {
-            "value": "[parameters('FunctionLocation')]"
-        },
-        "ftpsState": {
-            "value": "FtpsOnly"
-        },
-        "storageAccountName": {
-            "value": "[parameters('StorageAccountNameFunction')]"
-        },
-        "sku": {
-            "value": "Dynamic"
-        },
-        "skuCode": {
-            "value": "Y1"
-        },
-        "workerSize": {
-            "value": "0"
-        },
-        "workerSizeId": {
-            "value": "0"
-        },
-        "numberOfWorkers": {
-            "value": "1"
-        },
-        "use32BitWorkerProcess": {
-            "value": false
-        },
-        "linuxFxVersion": {
-            "value": "Python|3.11"
-        },
-        "hostingPlanName": {
-            "value": "ASP-OpenAIFunctionApps-b7a4"
-        },
-        "serverFarmResourceGroup": {
-            "value": "OpenAIFunctionApps"
-        },
-        "alwaysOn": {
-            "value": false
-        }
-      }
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/resourceGroups', parameters('FunctionRG'))]"
-      ]
     }
   ],
   "outputs": {
     "openAIResourceGroup": {
       "type": "string",
       "value": "[parameters('openAIResourceGroup')]"
-    },
-    "FunctionRG": {
-      "type": "string",
-      "value": "[parameters('FunctionRG')]"
     },
     "openAILocation": {
       "type": "string",
