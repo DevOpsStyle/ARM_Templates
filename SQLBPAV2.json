@@ -25,7 +25,7 @@
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
             "name": "[parameters('workflows_SQL_BPA_ReadLink_Generalized_name')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "identity": {
                 "type": "SystemAssigned"
             },

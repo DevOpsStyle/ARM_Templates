@@ -84,7 +84,13 @@
       "metadata": {
         "description": "Logic App Name for Cost-Monthly-Check."
       }
-    }
+    },
+    "workflows_OpenAIsmartupdate_name": {
+      "defaultValue": "OpenAI-Update-Management",
+      "type": "string",
+      "metadata": {
+        "description": "Logic App Name for Update-Management."
+      }
   },
   "resources": [
     {
@@ -242,6 +248,30 @@
       "dependsOn": [
         "[resourceId('Microsoft.Resources/resourceGroups', parameters('LogicAppsRG'))]"
       ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
+      "name": "DeployUpdateManagement",
+      "resourceGroup": "[parameters('LogicAppsRG')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/DevOpsStyle/ARM_Templates/refs/heads/main/UpdateManagement.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "workflows_OpenAIsmartupdate_name": {
+            "value": "[parameters('workflows_OpenAIsmartupdate_name')]"
+          },
+          "location": {
+            "value": "[parameters('logicAppsLocation')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/resourceGroups', parameters('LogicAppsRG'))]"
+      ]
     }
   ],
   "outputs": {
@@ -262,4 +292,5 @@
       "value": "[parameters('LogicAppsRG')]"
     }
   }
+}
 }

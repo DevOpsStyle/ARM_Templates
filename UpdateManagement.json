@@ -5,6 +5,10 @@
         "workflows_OpenAIsmartupdate_name": {
             "defaultValue": "OpenAIsmartupdate",
             "type": "String"
+        },
+        "location": {
+            "defaultValue": "westeurope",
+            "type": "String"
         }
     },
     "variables": {},
