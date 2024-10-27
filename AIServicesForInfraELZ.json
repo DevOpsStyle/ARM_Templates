@@ -57,13 +57,6 @@
         "description": "Name for the Bing resource."
       }
     },
-    "skuOpenAI": {
-      "type": "string",
-      "defaultValue": "S0",
-      "metadata": {
-        "description": "SKU for the OpenAI resource."
-      }
-    },
     "skuBing": {
       "type": "string",
       "defaultValue": "F1",
@@ -122,7 +115,7 @@
             "value": "[parameters('openAILocation')]"
           },
           "sku": {
-            "value": "[parameters('skuOpenAI')]"
+            "value": "S0"
           },
           "virtualNetworkType": {
             "value": "None"
